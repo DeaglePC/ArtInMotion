@@ -1,0 +1,4 @@
+interface:
+  display_name: "逐笔油画视频"
+  short_description: "把肖像或照片分六层逐笔画成油画，推近细节并导出带配乐的竖屏视频"
+  default_prompt: "用 $oil-painting-video 把这张图做成从空白画布开始、逐笔完成的油画视频。"
