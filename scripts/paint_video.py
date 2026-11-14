@@ -3,6 +3,7 @@ import argparse
 import base64
 import functools
 import http.server
+import io
 import json
 import os
 from pathlib import Path
@@ -12,8 +13,9 @@ import sys
 import tempfile
 import threading
 
+from PIL import Image
 from playwright.sync_api import sync_playwright
-from video_intro import preview_frames
+from video_intro import choose_transitions, intro_images, preview_frames, transition_options
 
 ASSETS = Path(__file__).resolve().parents[1] / "assets"
 FPS = 30
@@ -35,6 +37,7 @@ def arguments():
     audio = parser.add_mutually_exclusive_group()
     audio.add_argument("--music", type=Path)
     audio.add_argument("--silent", action="store_true")
+    transition_options(parser)
     args = parser.parse_args()
     args.detail = args.detail or args.focus
     if not all(0 <= n <= 1 for n in (*args.focus, *args.detail)):
@@ -113,8 +116,18 @@ def encode(page, args, destination):
         try:
             if intro:
                 preview = base64.b64decode(page.evaluate("() => jpegAt(window.DUR)"))
-                for _ in range(intro):
-                    encoder.stdin.write(preview)
+                art = Image.open(io.BytesIO(preview)).convert("RGB")
+                blank = base64.b64decode(page.evaluate("() => jpegAt(0)"))
+                paper = Image.open(io.BytesIO(blank)).convert("RGB")
+                effects = choose_transitions(args.transition, args.transition_out)
+                print("Transitions:", *effects, flush=True)
+                for frame in intro_images(art, paper, intro, *effects):
+                    if frame is art:
+                        encoder.stdin.write(preview)
+                    else:
+                        buffer = io.BytesIO()
+                        frame.save(buffer, format="JPEG", quality=94)
+                        encoder.stdin.write(buffer.getvalue())
             for i in range(draw_count):
                 data = page.evaluate("t => jpegAt(t)", i * DEFAULT_SECONDS / draw_count)
                 encoder.stdin.write(base64.b64decode(data))

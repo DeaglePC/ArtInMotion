@@ -6,6 +6,7 @@ import math
 import os
 import shutil
 import subprocess
+import sys
 import tempfile
 from contextlib import ExitStack
 from pathlib import Path
@@ -14,7 +15,12 @@ import numpy as np
 from art_styles import STYLES, Mark, Study
 from drawing_audio import CONTACT, TOOL_MEDIUM, write_soundtrack
 from PIL import Image, ImageDraw, ImageOps
-from video_intro import preview_frames
+from video_intro import (
+    choose_transitions,
+    intro_images,
+    preview_frames,
+    transition_options,
+)
 
 
 def arguments():
@@ -67,6 +73,7 @@ def arguments():
     audio.add_argument(
         "--silent", action="store_true", help="Export video without audio"
     )
+    transition_options(parser)
     args = parser.parse_args()
     if args.list_styles:
         for i, (key, medium) in enumerate(STYLES.items(), 1):
@@ -434,9 +441,10 @@ def movie(path, canvas, marks, tool, ground, texture, style, args):
                     paint(preview, mark)
                 if texture is not None:
                     preview.paste(ground, (0, 0, *preview.size), texture)
-                pixels = preview.tobytes()
-                for _ in range(intro):
-                    proc.stdin.write(pixels)
+                effects = choose_transitions(args.transition, args.transition_out)
+                print("Transitions:", *effects, file=sys.stderr, flush=True)
+                for frame in intro_images(preview, canvas, intro, *effects):
+                    proc.stdin.write(frame.tobytes())
             for i, pos in enumerate(positions[intro:]):
                 t = i / max(1, draw_count - 1)
                 while completed < int(pos):
