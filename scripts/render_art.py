@@ -15,6 +15,7 @@ import numpy as np
 from art_styles import STYLES, Mark, Study
 from drawing_audio import CONTACT, TOOL_MEDIUM, write_soundtrack
 from PIL import Image, ImageDraw, ImageOps
+from sand_table import hand_shadow
 from video_intro import (
     choose_transitions,
     intro_images,
@@ -219,6 +220,8 @@ def read_plan(path):
 
 
 def paint(canvas, mark, progress=1.0):
+    if mark.shape in ("pour", "sweep", "rake", "groove"):
+        return mark.table.paint(canvas, mark, progress)
     points = mark.points
     fill = (*mark.color, mark.opacity)
     draw = ImageDraw.Draw(canvas, "RGBA")
@@ -471,7 +474,10 @@ def movie(path, canvas, marks, tool, ground, texture, style, args):
                     tip = (canvas.width * 0.5, canvas.height * 0.5)
                 if texture is not None:
                     frame.paste(ground, (0, 0, *frame.size), texture)
-                if not args.no_tool:
+                if style == "sand" and not args.no_tool:
+                    if completed < len(marks):
+                        hand_shadow(frame, tip, mark.shape == "pour")
+                elif not args.no_tool:
                     tool_overlay(
                         frame, tip, tool, mark.color if marks else (70, 60, 50)
                     )
@@ -487,7 +493,11 @@ def main():
     size, ground, tool, marks, style = (
         read_plan(args.plan) if args.plan else photo_plan(args)
     )
-    canvas = Image.new("RGB", size, ground)
+    canvas = (
+        marks[0].table.base.copy()
+        if style == "sand" and marks
+        else Image.new("RGB", size, ground)
+    )
     texture = paper_texture(size, style, args.seed)
     outputs = [p for p in (args.video, args.image) if p]
     staged = {}

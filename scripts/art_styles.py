@@ -5,6 +5,7 @@ from dataclasses import dataclass
 
 import numpy as np
 from PIL import Image
+from sand_table import SandTable
 from scipy import ndimage as nd
 from scipy.spatial import Delaunay
 from skimage import feature, measure
@@ -243,17 +244,23 @@ class Study:
         return marks
 
     def particles(self):
-        sand = self.style == "sand"
         marks = []
-        for spacing in [4, 2] if sand else [3.6]:
-            x, y = self.grid(spacing)
-            for cx, cy in zip(x, y):
-                darkness = 1 - self.gray[cy, cx] / 255
-                if self.rng.random() > (darkness**0.80 if sand else 0.94):
-                    continue
-                width = max(1, round(self.size(spacing * 1.5) * darkness**0.65))
-                color = (76, 45, 26) if sand else rgb(self.src[cy, cx] * 0.72)
-                marks.append(Mark([(int(cx), int(cy))], color, width, 205, "dot"))
+        spacing = 3.6
+        x, y = self.grid(spacing)
+        for cx, cy in zip(x, y):
+            darkness = 1 - self.gray[cy, cx] / 255
+            if self.rng.random() > 0.94:
+                continue
+            width = max(1, round(self.size(spacing * 1.5) * darkness**0.65))
+            marks.append(
+                Mark(
+                    [(int(cx), int(cy))],
+                    rgb(self.src[cy, cx] * 0.72),
+                    width,
+                    205,
+                    "dot",
+                )
+            )
         return marks
 
     def geometry(self):
@@ -363,7 +370,9 @@ class Study:
             return self.hatching()
         if self.style in ("pixel", "facets", "collage"):
             return self.geometry()
-        if self.style in ("stipple", "sand"):
+        if self.style == "sand":
+            return SandTable(self.gray, self.rng, self.ground).plan()
+        if self.style == "stipple":
             return self.particles()
         if self.style in ("flat", "block-print", "woodcut", "marbling"):
             return self.bands()
