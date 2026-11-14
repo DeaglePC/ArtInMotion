@@ -6,7 +6,7 @@
 
 [![四种转场同步演示：水墨晕染、纸角翻页、棱镜折光和柔焦显影](demo/transition-preview.gif)](demo/transition-atlas.mp4)
 
-**[看完 68 种转场 · 60 秒](demo/transition-atlas.mp4)**　·　**[戴上耳机看一幅彩铅怎样画成 · 24 秒](demo/ribbon-portrait.mp4)**
+**[用马斯克肖像挑画风 · 20 种 / 30 秒](demo/musk-style-atlas.mp4)**　·　**[看完 68 种转场 · 60 秒](demo/transition-atlas.mp4)**　·　**[戴上耳机看一幅彩铅怎样画成 · 24 秒](demo/ribbon-portrait.mp4)**
 
 ## 挑一个开场
 
@@ -49,7 +49,13 @@ python scripts/render_art.py --input demo/jensen-huang.png --style watercolor --
 
 ## 同一张参考图，20 种画法
 
-![仓库自带底稿的 20 种实际渲染，从轮廓线描到彩铅、木刻和像素画](demo/styles.jpg)
+[![马斯克同照画风选片册，每屏四幅，标有编号和中英文名称](demo/musk-style-picker.gif)](demo/musk-style-atlas.mp4)
+
+**[播放 30 秒画风对照 MP4](demo/musk-style-atlas.mp4)** · [查看另一张参考图的 20 格静态总览](demo/styles.jpg)
+
+同一张马斯克原照，同一裁切。每屏并排四种画法，先看成画，再看四幅肖像同步画出。**0:00** 看 01–04，**0:06** 看 05–08，**0:12** 看 09–12，**0:18** 看 13–16，**0:24** 看 17–20。喜欢哪一幅，就用它旁边的编号，例如 `--style 04` 选彩铅。
+
+对照视频与动图使用 Duncan.Hull / The Royal Society 的《Elon Musk Royal Society.jpg》，经统一裁切、逐笔重绘和并排编排，衍生素材同以 CC BY-SA 4.0 分享。[原照及署名](https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg) · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
 油画厚涂用笔触叠出体积，钢笔排线用线距表达明暗，拼贴则逐片放置色块。横照和竖照都会保留原构图，支持 PNG、JPEG 和 WebP 成画。
 

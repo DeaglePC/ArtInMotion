@@ -6,7 +6,7 @@
 
 [![Four transitions on the same portrait: ink bloom, page curl, prism and soft focus](demo/transition-preview.gif)](demo/transition-atlas.mp4)
 
-**[Browse all 68 transitions in 60 seconds](demo/transition-atlas.mp4)** · **[Watch the 24-second colored-pencil film with sound](demo/ribbon-portrait.mp4)**
+**[Compare 20 styles on one Musk portrait · 30 sec](demo/musk-style-atlas.mp4)** · **[Browse all 68 transitions in 60 seconds](demo/transition-atlas.mp4)** · **[Watch the 24-second colored-pencil film with sound](demo/ribbon-portrait.mp4)**
 
 ## Find an opening for your film
 
@@ -49,7 +49,13 @@ Open `renders/watercolor.mp4` to watch. For your next render, point `--input` at
 
 ## One reference, 20 ways to draw it
 
-![Actual renders of the bundled reference across all twenty presets, from contour to pixel art](demo/styles.jpg)
+[![Five-page style picker: four drawings of the same Elon Musk photograph per page, with preset numbers and bilingual labels](demo/musk-style-picker.gif)](demo/musk-style-atlas.mp4)
+
+**[Play the 30-second style comparison](demo/musk-style-atlas.mp4)** · [View all 20 presets on a second reference](demo/styles.jpg)
+
+One Elon Musk photograph, one crop. Each page opens on four finished portraits, then shows them being drawn side by side. Jump to **0:00** for 01–04, **0:06** for 05–08, **0:12** for 09–12, **0:18** for 13–16, or **0:24** for 17–20. Use the number beside any portrait to render your own photo in that style, for example `--style 04` for colored pencil.
+
+The comparison video and GIF adapt *Elon Musk Royal Society.jpg* by Duncan.Hull / The Royal Society. The photo was cropped, rendered in each medium and arranged in panels. Both adaptations are shared under CC BY-SA 4.0. [Source photograph and credit](https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg) · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
 Impasto builds volume with overlapping strokes. Hatching builds shadows with crossing lines. Collage places pieces of color one at a time. The renderer preserves the framing of landscape and portrait photos and exports stills as PNG, JPEG or WebP.
 
