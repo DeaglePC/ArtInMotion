@@ -12,6 +12,7 @@ from pathlib import Path
 
 import numpy as np
 from art_styles import STYLES, Mark, Study
+from drawing_audio import CONTACT, TOOL_MEDIUM, write_soundtrack
 from PIL import Image, ImageDraw, ImageOps
 
 
@@ -50,8 +51,17 @@ def arguments():
     parser.add_argument(
         "--no-tool", action="store_true", help="Hide the on-screen drawing tool"
     )
-    parser.add_argument(
-        "--music", type=Path, help="Optional audio, looped and trimmed to the movie"
+    audio = parser.add_mutually_exclusive_group()
+    audio.add_argument(
+        "--music",
+        type=Path,
+        help="Replace the generated piano with a local backing track",
+    )
+    audio.add_argument(
+        "--no-music", action="store_true", help="Keep drawing sounds only"
+    )
+    audio.add_argument(
+        "--silent", action="store_true", help="Export video without audio"
     )
     args = parser.parse_args()
     if args.list_styles:
@@ -296,7 +306,7 @@ def paper_texture(size, style, seed):
     return Image.fromarray(grain.clip(0, 96).astype(np.uint8))
 
 
-def movie(path, canvas, marks, tool, ground, texture, args):
+def movie(path, canvas, marks, tool, ground, texture, style, args):
     count = round(args.seconds * args.fps)
     cmd = [
         "ffmpeg",
@@ -315,20 +325,43 @@ def movie(path, canvas, marks, tool, ground, texture, args):
         "-i",
         "pipe:0",
     ]
-    if args.music:
-        cmd += [
-            "-stream_loop",
-            "-1",
-            "-i",
-            str(args.music),
-            "-map",
-            "0:v",
-            "-map",
-            "1:a:0",
-            "-c:a",
-            "aac",
-            "-shortest",
-        ]
+    opening = (
+        0.20 if args.opening_seconds is None else args.opening_seconds / args.seconds
+    )
+    positions = [
+        advance(i / max(1, count - 1), len(marks), opening) if marks else 0
+        for i in range(count)
+    ]
+    positions[-1] = len(marks)
+    if not args.silent:
+        soundtrack = path.with_suffix(".wav")
+        write_soundtrack(
+            soundtrack,
+            marks,
+            positions,
+            args.fps,
+            canvas.width,
+            style or TOOL_MEDIUM[tool],
+            args.seed,
+            not (args.no_music or args.music),
+        )
+        cmd += ["-i", str(soundtrack)]
+        if args.music:
+            cmd += [
+                "-stream_loop",
+                "-1",
+                "-i",
+                str(args.music),
+                "-filter_complex",
+                "[2:a:0]volume=0.26[music];[1:a:0][music]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.94:level=0:latency=1[mix]",
+                "-map",
+                "0:v:0",
+                "-map",
+                "[mix]",
+            ]
+        else:
+            cmd += ["-map", "0:v:0", "-map", "1:a:0"]
+        cmd += ["-c:a", "aac", "-b:a", "192k"]
     cmd += [
         "-c:v",
         "libx264",
@@ -342,17 +375,11 @@ def movie(path, canvas, marks, tool, ground, texture, args):
         "+faststart",
         str(path),
     ]
-    opening = (
-        0.20 if args.opening_seconds is None else args.opening_seconds / args.seconds
-    )
     completed = 0
     with subprocess.Popen(cmd, stdin=subprocess.PIPE) as proc:
         try:
-            for i in range(count):
+            for i, pos in enumerate(positions):
                 t = i / max(1, count - 1)
-                pos = advance(t, len(marks), opening) if marks else 0
-                if i == count - 1:
-                    pos = len(marks)
                 while completed < int(pos):
                     paint(canvas, marks[completed])
                     completed += 1
@@ -361,13 +388,12 @@ def movie(path, canvas, marks, tool, ground, texture, args):
                     mark = marks[min(completed, len(marks) - 1)]
                     if completed < len(marks):
                         fraction = pos - completed
-                        tip = paint(frame, mark, min(1, fraction / 0.86))
-                        if fraction > 0.86 and completed + 1 < len(marks):
+                        tip = paint(frame, mark, min(1, fraction / CONTACT))
+                        if fraction > CONTACT and completed + 1 < len(marks):
                             dest = marks[completed + 1].points[0]
-                            tip = (
-                                np.array(tip)
-                                + (np.array(dest) - tip) * (fraction - 0.86) / 0.14
-                            )
+                            tip = np.array(tip) + (np.array(dest) - tip) * (
+                                fraction - CONTACT
+                            ) / (1 - CONTACT)
                     else:
                         endpoint = (
                             mark.points[-1] if mark.shape == "line" else mark.points[0]
@@ -404,7 +430,7 @@ def main():
             tmp = stack.enter_context(tempfile.TemporaryDirectory(dir=p.parent))
             staged[p] = Path(tmp) / p.name
         if args.video:
-            movie(staged[args.video], canvas, marks, tool, ground, texture, args)
+            movie(staged[args.video], canvas, marks, tool, ground, texture, style, args)
         else:
             for mark in marks:
                 paint(canvas, mark)

@@ -1,0 +1,44 @@
+"""Drawing sounds follow contact, placement and lift on the shared movie timeline."""
+
+import sys
+import tempfile
+import unittest
+import wave
+from pathlib import Path
+
+import numpy as np
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from art_styles import STYLES, Mark
+from drawing_audio import MATERIALS, RATE, TOOL_MEDIUM, write_soundtrack
+
+
+class SoundtrackTest(unittest.TestCase):
+    def test_preset_coverage(self):
+        self.assertEqual(set(MATERIALS), set(STYLES))
+        self.assertEqual(set(TOOL_MEDIUM), {medium.tool for medium in STYLES.values()})
+
+    def render(self, shape, style, music=False):
+        mark = Mark([(10, 20), (50, 45)], (20, 40, 60), shape=shape)
+        # First mark runs from zero to one second, then the tool rests.
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "test.wav"
+            write_soundtrack(path, [mark], [0, 0.5, 1, 1], 2, 60, style, 42, music)
+            with wave.open(str(path)) as reader:
+                self.assertEqual(reader.getnframes(), 2 * RATE)
+                return np.frombuffer(
+                    reader.readframes(reader.getnframes()), "<i2"
+                ).reshape(-1, 2)
+
+    def test_pencil_stops_during_lift_and_hold(self):
+        samples = self.render("line", "colored-pencil")
+        self.assertGreater(samples[RATE // 2 : RATE * 3 // 4].std(), 500)
+        self.assertFalse(samples[int(RATE * 0.87) :].any())
+        mixed = self.render("line", "colored-pencil", True)
+        self.assertGreater(mixed[RATE : int(RATE * 1.4)].std(), 20)
+
+    def test_tile_taps_on_placement(self):
+        samples = self.render("tile", "pixel")
+        self.assertFalse(samples[: int(RATE * 0.85)].any())
+        self.assertGreater(samples[int(RATE * 0.86) : int(RATE * 0.93)].std(), 100)
+        self.assertFalse(samples[RATE:].any())
