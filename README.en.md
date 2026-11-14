@@ -10,15 +10,15 @@ Render a photograph into a **drawing-process MP4**, a **clean PNG, JPEG or WebP*
 
 > Install https://github.com/DeaglePC/ArtInMotion, read SKILL.md and set up its dependencies. Use my attached original photo to draw a colored-pencil portrait. Keep the framing, start slowly, and show the pencil tip throughout a 24-second movie. Run the renderer and return both the MP4 and the clean PNG.
 
-The invocation name remains `$oil-painting-video`. Any assistant with local command execution can run the same CLI from a checkout. It supports portraits, groups, landscapes and other subjects without face coordinates.
+After installation, try “Use `$art-in-motion` to render this photo in watercolor and return the finished image.” Any assistant with local command execution can run the same CLI from a checkout. It supports portraits, groups, landscapes and other subjects without face coordinates.
 
 ## Install and try it
 
-The commands below install ArtInMotion in the Codex directory named for the skill ID in `SKILL.md`, `oil-painting-video`. Other agents can clone into their own workspace.
+The commands below install ArtInMotion in the Codex directory named for the skill ID in `SKILL.md`, `art-in-motion`. Other agents can clone into their own workspace.
 
 ```sh
-git clone https://github.com/DeaglePC/ArtInMotion.git ~/.codex/skills/oil-painting-video
-cd ~/.codex/skills/oil-painting-video
+git clone https://github.com/DeaglePC/ArtInMotion.git ~/.codex/skills/art-in-motion
+cd ~/.codex/skills/art-in-motion
 ```
 
 Use Python 3.11 or 3.12. Video also needs FFmpeg with libx264 on PATH. Still-image export needs only the Python dependencies. From the repository root:

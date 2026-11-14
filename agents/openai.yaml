@@ -1,4 +1,4 @@
 interface:
   display_name: "逐笔绘画 · Art in Motion"
   short_description: "从原照直接计算笔触，以二十种画风输出绘画过程视频和静态成画"
-  default_prompt: "用 $oil-painting-video 直接参考这张照片，画一段 24 秒彩铅视频，全程显示笔尖，同时导出成画。"
+  default_prompt: "用 $art-in-motion 直接参考这张照片，画一段 24 秒彩铅视频，全程显示笔尖，同时导出成画。"
