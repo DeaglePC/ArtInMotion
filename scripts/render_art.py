@@ -382,11 +382,11 @@ def movie(path, canvas, marks, tool, ground, texture, style, args):
             intro, max(0, count - math.ceil(args.opening_seconds * args.fps / 0.95))
         )
     draw_count = count - intro
-    opening = (
-        0.20
-        if args.opening_seconds is None
-        else args.opening_seconds * args.fps / draw_count
-    )
+    opening = 0.20
+    if args.opening_seconds is not None:
+        opening = args.opening_seconds * args.fps / draw_count
+    elif style == "sand":
+        opening = min(0.20, 2.6 * args.fps / draw_count)
     positions = [0] * intro + [
         advance(i / max(1, draw_count - 1), len(marks), opening) if marks else 0
         for i in range(draw_count)

@@ -24,3 +24,16 @@
 | 书法、篆刻、装饰纹样、曼荼罗 | 自定义计划 | 由助手提供实际字形或纹样路径，安排起收笔、落印或径向重复。 |
 
 For other media, specify the ground, mark geometry, color and opacity, mark order, and visible tool. Use the [plan format](marks.md) for a single piece. For a repeatable photo treatment, add a generator that derives these marks from the input. Describe the particular visible effect that the renderer implements.
+
+## 17 号灯箱沙画
+
+以 24 秒灯箱肖像版为参照。保留原照的构图，用固定俯视镜头，让观众能同时看到手影、指痕和整张画像。
+
+1. 先预览成画，再回到暖色灯箱。复现已选样片时用柔焦显影，普通调用沿用技能的转场选择规则。
+2. 捏指手影先撒沙铺出暗部。24 秒样片的开头慢动作约 2.6 秒，然后提速铺完整体明暗。
+3. 用指腹推薄沙层露出底光，将部分沙粒堆到指痕两侧。先做宽亮面，再用指尖划出窄沟和五官边缘。砂粒密度决定透光程度。
+4. 手部用随接触点移动的背光剪影，收尾时移出画面。沙声轻，保留钢琴和干净的成画停留。
+
+```sh
+python scripts/render_art.py --input portrait.jpg --style 17 --size 720 --seconds 24 --opening-seconds 2.6 --transition focus --video renders/sand.mp4
+```
