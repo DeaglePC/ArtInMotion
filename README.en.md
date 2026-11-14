@@ -15,58 +15,58 @@ Watch the same Musk portrait take shape in each animated preview. Click a previe
 <table>
   <tr>
     <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/03-charcoal.mp4"><img src="demo/musk-styles/previews/03-charcoal.gif" width="280" alt="Drawing process in Charcoal tonal drawing"><br><strong>03 · Charcoal tonal drawing</strong></a>
+      <a href="https://deaglepc.github.io/ArtInMotion/03-charcoal.mp4"><img src="demo/musk-styles/previews/03-charcoal.webp" width="280" alt="Drawing process in Charcoal tonal drawing"><br><strong>03 · Charcoal tonal drawing</strong></a>
     </td>
     <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/05-ink-wash.mp4"><img src="demo/musk-styles/previews/05-ink-wash.gif" width="280" alt="Drawing process in Monochrome ink wash"><br><strong>05 · Monochrome ink wash</strong></a>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/07-gongbi.mp4"><img src="demo/musk-styles/previews/07-gongbi.gif" width="280" alt="Drawing process in Gongbi painting in rich color"><br><strong>07 · Gongbi painting in rich color</strong></a>
-    </td>
-    <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/08-realist.mp4"><img src="demo/musk-styles/previews/08-realist.gif" width="280" alt="Drawing process in Realist painting"><br><strong>08 · Realist painting</strong></a>
+      <a href="https://deaglepc.github.io/ArtInMotion/05-ink-wash.mp4"><img src="demo/musk-styles/previews/05-ink-wash.webp" width="280" alt="Drawing process in Monochrome ink wash"><br><strong>05 · Monochrome ink wash</strong></a>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/09-impasto.mp4"><img src="demo/musk-styles/previews/09-impasto.gif" width="280" alt="Drawing process in Impasto brushwork"><br><strong>09 · Impasto brushwork</strong></a>
+      <a href="https://deaglepc.github.io/ArtInMotion/07-gongbi.mp4"><img src="demo/musk-styles/previews/07-gongbi.webp" width="280" alt="Drawing process in Gongbi painting in rich color"><br><strong>07 · Gongbi painting in rich color</strong></a>
     </td>
     <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/10-pastel.mp4"><img src="demo/musk-styles/previews/10-pastel.gif" width="280" alt="Drawing process in Soft pastel"><br><strong>10 · Soft pastel</strong></a>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/11-crayon.mp4"><img src="demo/musk-styles/previews/11-crayon.gif" width="280" alt="Drawing process in Crayon and oil pastel"><br><strong>11 · Crayon and oil pastel</strong></a>
-    </td>
-    <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/12-flat.mp4"><img src="demo/musk-styles/previews/12-flat.gif" width="280" alt="Drawing process in Flat-color illustration and comics"><br><strong>12 · Flat-color illustration and comics</strong></a>
+      <a href="https://deaglepc.github.io/ArtInMotion/08-realist.mp4"><img src="demo/musk-styles/previews/08-realist.webp" width="280" alt="Drawing process in Realist painting"><br><strong>08 · Realist painting</strong></a>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/13-woodcut.mp4"><img src="demo/musk-styles/previews/13-woodcut.gif" width="280" alt="Drawing process in Woodcut and silhouette"><br><strong>13 · Woodcut and silhouette</strong></a>
+      <a href="https://deaglepc.github.io/ArtInMotion/09-impasto.mp4"><img src="demo/musk-styles/previews/09-impasto.webp" width="280" alt="Drawing process in Impasto brushwork"><br><strong>09 · Impasto brushwork</strong></a>
     </td>
     <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/15-stipple.mp4"><img src="demo/musk-styles/previews/15-stipple.gif" width="280" alt="Drawing process in Stippling and halftone"><br><strong>15 · Stippling and halftone</strong></a>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/16-collage.mp4"><img src="demo/musk-styles/previews/16-collage.gif" width="280" alt="Drawing process in Collage and mosaic"><br><strong>16 · Collage and mosaic</strong></a>
-    </td>
-    <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/18-marbling.mp4"><img src="demo/musk-styles/previews/18-marbling.gif" width="280" alt="Drawing process in Fluid painting and marbling"><br><strong>18 · Fluid painting and marbling</strong></a>
+      <a href="https://deaglepc.github.io/ArtInMotion/10-pastel.mp4"><img src="demo/musk-styles/previews/10-pastel.webp" width="280" alt="Drawing process in Soft pastel"><br><strong>10 · Soft pastel</strong></a>
     </td>
   </tr>
   <tr>
     <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/19-facets.mp4"><img src="demo/musk-styles/previews/19-facets.gif" width="280" alt="Drawing process in Geometric facets"><br><strong>19 · Geometric facets</strong></a>
+      <a href="https://deaglepc.github.io/ArtInMotion/11-crayon.mp4"><img src="demo/musk-styles/previews/11-crayon.webp" width="280" alt="Drawing process in Crayon and oil pastel"><br><strong>11 · Crayon and oil pastel</strong></a>
     </td>
     <td align="center">
-      <a href="https://deaglepc.github.io/ArtInMotion/20-pixel.mp4"><img src="demo/musk-styles/previews/20-pixel.gif" width="280" alt="Drawing process in Pixel and character art (pixel demo)"><br><strong>20 · Pixel and character art (pixel demo)</strong></a>
+      <a href="https://deaglepc.github.io/ArtInMotion/12-flat.mp4"><img src="demo/musk-styles/previews/12-flat.webp" width="280" alt="Drawing process in Flat-color illustration and comics"><br><strong>12 · Flat-color illustration and comics</strong></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/13-woodcut.mp4"><img src="demo/musk-styles/previews/13-woodcut.webp" width="280" alt="Drawing process in Woodcut and silhouette"><br><strong>13 · Woodcut and silhouette</strong></a>
+    </td>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/15-stipple.mp4"><img src="demo/musk-styles/previews/15-stipple.webp" width="280" alt="Drawing process in Stippling and halftone"><br><strong>15 · Stippling and halftone</strong></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/16-collage.mp4"><img src="demo/musk-styles/previews/16-collage.webp" width="280" alt="Drawing process in Collage and mosaic"><br><strong>16 · Collage and mosaic</strong></a>
+    </td>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/18-marbling.mp4"><img src="demo/musk-styles/previews/18-marbling.webp" width="280" alt="Drawing process in Fluid painting and marbling"><br><strong>18 · Fluid painting and marbling</strong></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/19-facets.mp4"><img src="demo/musk-styles/previews/19-facets.webp" width="280" alt="Drawing process in Geometric facets"><br><strong>19 · Geometric facets</strong></a>
+    </td>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/20-pixel.mp4"><img src="demo/musk-styles/previews/20-pixel.webp" width="280" alt="Drawing process in Pixel and character art (pixel demo)"><br><strong>20 · Pixel and character art (pixel demo)</strong></a>
     </td>
   </tr>
 </table>
