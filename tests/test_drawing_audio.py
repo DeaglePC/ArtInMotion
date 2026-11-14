@@ -15,7 +15,7 @@ from drawing_audio import MATERIALS, RATE, TOOL_MEDIUM, write_soundtrack
 
 class SoundtrackTest(unittest.TestCase):
     def test_preset_coverage(self):
-        self.assertEqual(set(MATERIALS), set(STYLES))
+        self.assertEqual(set(MATERIALS) | {"colored-pencil"}, set(STYLES))
         self.assertEqual(set(TOOL_MEDIUM), {medium.tool for medium in STYLES.values()})
 
     def render(self, shape, style, music=False):
@@ -32,7 +32,9 @@ class SoundtrackTest(unittest.TestCase):
 
     def test_pencil_stops_during_lift_and_hold(self):
         samples = self.render("line", "colored-pencil")
-        self.assertGreater(samples[RATE // 2 : RATE * 3 // 4].std(), 500)
+        contact = samples[: int(RATE * 0.85)].std()
+        self.assertGreater(contact, 80)
+        self.assertLess(contact, 1400)
         self.assertFalse(samples[int(RATE * 0.87) :].any())
         mixed = self.render("line", "colored-pencil", True)
         self.assertGreater(mixed[RATE : int(RATE * 1.4)].std(), 20)

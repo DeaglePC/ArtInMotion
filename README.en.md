@@ -42,6 +42,8 @@ python scripts/render_art.py --input photo.jpg --style block-print --seconds 10 
 
 Defaults are 24 seconds, 30 fps and 960 pixels on the long edge. EXIF orientation is applied and the aspect ratio is preserved to the nearest even dimensions. Set `--size 1920` for a larger canvas and `--seed` for repeatability. The first marks are drawn slowly, followed by accelerated work and a final hold. Set `--opening-seconds 6` to spend six seconds on the opening marks and `--pigment 1.25` for denser pigment when drawing from a photo. The tool stays visible, with a placement cursor for collage, sand and pixels. Use `--no-tool` to hide it. All 20 presets mix medium-specific drawing sounds with a soft synthesized piano score. Contact follows the mark timeline and the final hold leaves only music. Use `--no-music` for drawing sounds alone, `--music FILE` to replace the piano, or `--silent` for a silent MP4. The seed also controls the score. Choose unused output names. See `--help` for options.
 
+Colored pencil uses edited recordings of pencil on paper, spaced around visible gestures, with a quieter piano backing. The recording is available under CC0. [zakkolar · pencil.wav](https://freesound.org/people/zakkolar/sounds/431438/)
+
 ## Presets and authored media
 
 | No. | Preset | No. | Preset |

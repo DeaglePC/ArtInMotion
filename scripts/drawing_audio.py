@@ -1,8 +1,10 @@
 """Synthesize drawing foley and a quiet piano score against the renderer's frame clock."""
 
 import wave
+from pathlib import Path
 
 import numpy as np
+from scipy.io import wavfile
 from scipy.signal import butter, sosfilt
 
 RATE = 44100
@@ -14,7 +16,6 @@ MATERIALS = {
     "contour": (1350, 5400, 0.35, 0.19, 1400),
     "hatching": (1650, 6200, 0.62, 0.18, 1700),
     "charcoal": (310, 2800, 0.84, 0.24, 440),
-    "colored-pencil": (820, 5100, 0.68, 0.24, 1050),
     "ink-wash": (180, 1550, 0.22, 0.17, 330),
     "watercolor": (290, 2400, 0.18, 0.18, 460),
     "gongbi": (650, 3300, 0.26, 0.17, 730),
@@ -98,6 +99,88 @@ def piano_block(t, notes, duration):
     return stereo * np.clip((duration - t) / min(1.3, duration * 0.32), 0, 1)[:, None]
 
 
+def recorded_pencil(path, marks, positions, fps, width, rng, notes):
+    """Place natural-speed pencil phrases on the same timeline as the drawing."""
+    rate, pcm = wavfile.read(
+        Path(__file__).resolve().parents[1] / "assets/pencil-strokes.wav"
+    )
+    if rate != RATE or pcm.ndim != 1 or len(pcm) % RATE:
+        raise ValueError("Expected one-second mono pencil takes at the mix rate")
+    takes = pcm.reshape(-1, RATE).astype(float) / 32768
+    positions = np.asarray(positions, dtype=float)
+    frame_clock = np.arange(len(positions)) / fps
+    duration = len(positions) / fps
+    total = round(duration * RATE)
+    # At time-lapse speeds, play a few physical gestures with space between them.
+    # At readable speeds, every individual lift cuts its current gesture short.
+    events = []
+    next_time = 0.0
+    bag = []
+    while next_time < frame_clock[-1] and marks:
+        pos = np.interp(next_time, frame_clock, positions)
+        index = int(pos)
+        if index >= len(marks):
+            break
+        # Skip static frames, including the pause before first contact.
+        frame = min(int(next_time * fps), len(positions) - 2)
+        if positions[frame + 1] <= pos:
+            later = np.searchsorted(positions, pos, side="right")
+            if later >= len(positions):
+                break
+            next_time = max(next_time + 1 / RATE, frame_clock[later - 1])
+            continue
+        if pos - index >= CONTACT:
+            next_time = np.interp(index + 1, positions, frame_clock) + 1 / RATE
+            continue
+        lift = np.interp(index + CONTACT, positions, frame_clock)
+        rapid = (positions[frame + 1] - positions[frame]) * fps > 25
+        length = min(
+            rng.uniform(0.13, 0.38) if rapid else rng.uniform(0.58, 0.94),
+            (duration if rapid else lift) - next_time,
+        )
+        start = round(next_time * RATE)
+        length_samples = min(round(length * RATE), total - start)
+        if length_samples > RATE * 0.012:
+            if not bag:
+                bag = rng.permutation(len(takes)).tolist()
+            take = bag.pop()
+            gain = rng.uniform(0.65, 0.95) * (0.8 if rapid else 1.0)
+            pan = 0.40 + 0.20 * marks[index].points[0][0] / width
+            events.append((start, start + length_samples, take, gain, pan))
+        next_time += max(length, 0.006)
+        if rapid or next_time < lift - 0.002:
+            next_time += rng.uniform(0.09, 0.24) if rapid else 0.018
+
+    active = 0
+    with wave.open(str(path), "wb") as out:
+        out.setparams((2, 2, RATE, 0, "NONE", "not compressed"))
+        for offset in range(0, total, RATE):
+            stop = min(total, offset + RATE)
+            t = np.arange(offset, stop) / RATE
+            stereo = piano_block(t, notes, duration) * 0.35
+            writing = np.zeros_like(stereo)
+            while active < len(events) and events[active][1] <= offset:
+                active += 1
+            for i in range(active, len(events)):
+                start, end, take, gain, pan = events[i]
+                if start >= stop:
+                    break
+                lo, hi = max(start, offset), min(end, stop)
+                edge = np.arange(lo, hi)
+                fade = np.minimum(1, (edge - start) / (RATE * 0.010)) * np.minimum(
+                    1, (end - edge - 1) / (RATE * 0.022)
+                )
+                z = takes[take, lo - start : hi - start] * fade * gain
+                writing[lo - offset : hi - offset] += (
+                    z[:, None] * np.array([1 - pan, pan]) * 1.85
+                )
+            # Cut even an accelerated phrase at a true timeline pause or the final hold.
+            f = np.minimum((t * fps).astype(int), len(positions) - 1)
+            moving = positions[np.minimum(f + 1, len(positions) - 1)] > positions[f]
+            stereo += writing * moving[:, None]
+            out.writeframesraw((stereo.clip(-1, 1) * 32767).astype("<i2").tobytes())
+
+
 def write_soundtrack(path, marks, positions, fps, width, style, seed, with_piano):
     """Integrate contact occupancy across audio samples, even in accelerated passages."""
     rng, music_rng = [
@@ -105,6 +188,8 @@ def write_soundtrack(path, marks, positions, fps, width, style, seed, with_piano
     ]
     duration = len(positions) / fps
     notes = piano_notes(duration, music_rng) if with_piano else []
+    if style == "colored-pencil":
+        return recorded_pencil(path, marks, positions, fps, width, rng, notes)
     low, high, roughness, level, resonance = MATERIALS[style]
     band = butter(2, [low, high], btype="bandpass", fs=RATE, output="sos")
     state = np.zeros((len(band), 2))
