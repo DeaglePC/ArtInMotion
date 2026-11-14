@@ -8,9 +8,23 @@
 
 **[Compare 20 styles on one Musk portrait · 30 sec](demo/musk-style-atlas.mp4)** · **[Browse all 68 transitions in 60 seconds](demo/transition-atlas.mp4)** · **[Watch the 24-second colored-pencil film with sound](demo/ribbon-portrait.mp4)**
 
+## Make your first film with a prompt
+
+Attach a photo in Codex or another assistant that can run local skills, then send this prompt.
+
+```text
+Use $art-in-motion to turn my attached photo into a 24-second colored-pencil film. Keep the original framing.
+If the skill is missing, install it from https://github.com/DeaglePC/ArtInMotion and set up its dependencies first.
+Show the finished drawing, then transition to blank paper. Keep the pencil tip visible as it draws.
+Add pencil sounds to the first three strokes, then let the piano play on its own.
+Give me the MP4 film and the finished drawing as a PNG.
+```
+
+To try another style, follow up with “Use the same photo for a second version in style 06, watercolor, with richer color.”
+
 ## Watch the 14 full-length films
 
-Watch the same Musk portrait take shape in each animated preview. Click a preview or style name for the full 24-second film with sound. To try a style on your own photo, pass its number to `--style`.
+Watch the same Musk portrait take shape in each animated preview. Click a preview or style name for the full 24-second film with sound. To try a style on your own photo, tell the assistant its number.
 
 <table>
   <tr>
@@ -86,39 +100,13 @@ Each demo uses the same portrait so you can compare the transitions directly. Th
 
 Both renderers accept a number, an English ID or a Chinese name. Choose one effect for both directions, or pair an ink-bloom entrance with a soft-focus exit. Omit both choices to draw one at random from the effects available on your machine. The catalog includes 10 art-specific transitions and 58 FFmpeg presets. [Browse the numbered catalog](references/transitions.md)
 
-## Try it with a coding agent
-
-Attach a photo and send this to an assistant that can install skills and run local commands:
-
-> Install the skill from https://github.com/DeaglePC/ArtInMotion and set up its dependencies. Use $art-in-motion to draw my attached photo in colored pencil. Keep the framing. Make a 24-second film with a page-curl entrance (03), a soft-focus exit (08), and slow opening strokes. Return the finished MP4 and PNG.
-
-## Render your first film from the terminal
-
-Use Python 3.11 or 3.12. Movie export also needs FFmpeg on PATH with the libx264 and AAC encoders. Still-image export needs only the Python dependencies.
-
-```sh
-git clone https://github.com/DeaglePC/ArtInMotion.git ~/.codex/skills/art-in-motion
-cd ~/.codex/skills/art-in-motion
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-```
-
-On Windows, clone into your local skill directory and activate the environment with `.\.venv\Scripts\Activate.ps1` in PowerShell. From the repository root, use the bundled reference to export a watercolor movie and still together:
-
-```sh
-python scripts/render_art.py --input demo/jensen-huang.png --style watercolor --seconds 6 --size 480 --transition ink-bloom --transition-out focus --video renders/watercolor.mp4 --image renders/watercolor.png
-```
-
-Open `renders/watercolor.mp4` to watch. For your next render, point `--input` at your photo and choose new output filenames.
-
 ## One reference, 20 ways to draw it
 
 [![Five-page style picker: four drawings of the same Elon Musk photograph per page, with preset numbers and bilingual labels](demo/musk-style-picker.gif)](demo/musk-style-atlas.mp4)
 
 **[Play the 30-second style comparison](demo/musk-style-atlas.mp4)** · [View all 20 presets on a second reference](demo/styles.jpg)
 
-One Elon Musk photograph, one crop. Each page opens on four finished portraits, then shows them being drawn side by side. Jump to **0:00** for 01–04, **0:06** for 05–08, **0:12** for 09–12, **0:18** for 13–16, or **0:24** for 17–20. Use the number beside any portrait to render your own photo in that style, for example `--style 04` for colored pencil.
+One Elon Musk photograph, one crop. Each page opens on four finished portraits, then shows them being drawn side by side. Jump to **0:00** for 01–04, **0:06** for 05–08, **0:12** for 09–12, **0:18** for 13–16, or **0:24** for 17–20. Use the number beside any portrait to render your own photo in that style, for example “Draw this photo in style 04, colored pencil.”
 
 The comparison video and GIF adapt *Elon Musk Royal Society.jpg* by Duncan.Hull / The Royal Society. The photo was cropped, rendered in each medium and arranged in panels. Both adaptations are shared under CC BY-SA 4.0. [Source photograph and credit](https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg) · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
@@ -156,7 +144,7 @@ New films play drawing sounds only for the first three slow marks. The sound sto
 
 ## Classic portrait film and custom mark plans
 
-The classic oil renderer moves in for a close-up and pulls back to reveal the full painting, with a stroke counter and score. Install Chromium with `python -m playwright install chromium` and run it in a WebGL 2 environment. [Watch the classic oil film](demo/jensen-huang.mp4) · [GIF preview](demo/preview.gif) · [Rendering guide](references/classic-oil.md)
+The classic oil renderer moves in for a close-up and pulls back to reveal the full painting, with a stroke counter and score. Try asking “Make a classic vertical oil painting from this photo. Move in on the eyes, then pull back to show the finished portrait.” [Watch the classic oil film](demo/jensen-huang.mp4) · [GIF preview](demo/preview.gif) · [Rendering guide](references/classic-oil.md)
 
 For lettering, ornamental patterns or a specific drawing order, author a JSON mark plan and pass it to the renderer with `--plan`. [Technique guide](references/media.md) · [Mark plan format](references/marks.md)
 

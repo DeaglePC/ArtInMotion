@@ -8,9 +8,22 @@
 
 **[用马斯克肖像挑画风 · 20 种 / 30 秒](demo/musk-style-atlas.mp4)**　·　**[看完 68 种转场 · 60 秒](demo/transition-atlas.mp4)**　·　**[戴上耳机看一幅彩铅怎样画成 · 24 秒](demo/ribbon-portrait.mp4)**
 
+## 用提示词生成第一条视频
+
+在 Codex 或其他能运行本地技能的助手里附上一张照片，复制下面这段提示词发送。
+
+```text
+请用 $art-in-motion 把我附的原照画成 24 秒的彩铅视频，保留原构图。
+如果还没安装，请先从 https://github.com/DeaglePC/ArtInMotion 安装技能并配好依赖。
+开头先展示成画，再转回白纸。绘制时让我看清笔尖，只有前三笔配铅笔声，之后只留钢琴。
+完成后给我 MP4 视频和 PNG 成画。
+```
+
+看中其他画风，可以接着说「用同一张照片再画一版，换成 06 号水彩，颜色浓一点」。
+
 ## 按画风看 14 条完整版
 
-先看同一张马斯克肖像在每种画风下怎样画成。点动图或画风名称，就能播放对应的 24 秒有声完整版。想用自己的照片试画，把编号填到 `--style` 即可。
+先看同一张马斯克肖像在每种画风下怎样画成。点动图或画风名称，就能播放对应的 24 秒有声完整版。想用自己的照片试画，直接告诉助手画风编号即可。
 
 <table>
   <tr>
@@ -86,39 +99,13 @@
 
 两种渲染模式都接受中文名、英文 ID 和编号。只点一种，进退场共用；分别点两种，可以让墨色晕开进场、柔焦退场。不指定时，每条视频从本机可用效果中随机选一种。共收录 10 种绘画专用效果和 58 种 FFmpeg 转场。[完整转场编号表](references/transitions.md)
 
-## 在 Codex 里试一张照片
-
-把照片和这段话一起发给能安装技能、执行本地命令的助手：
-
-> 从 https://github.com/DeaglePC/ArtInMotion 安装技能并配置依赖。用 $art-in-motion 把我附的原照画成 24 秒彩铅视频，保留构图。03 号纸角翻页进场，08 号柔焦显影退场。开头几笔慢一点，最后给我 MP4 和 PNG。
-
-## 在终端生成第一条视频
-
-建议使用 Python 3.11 或 3.12。导出视频需要 PATH 中可用的 FFmpeg，带 libx264 和 AAC 编码器。仅导出静态图只需 Python 依赖。
-
-```sh
-git clone https://github.com/DeaglePC/ArtInMotion.git ~/.codex/skills/art-in-motion
-cd ~/.codex/skills/art-in-motion
-python -m venv .venv
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-```
-
-Windows PowerShell 可将仓库克隆到本地技能目录，用 `.\.venv\Scripts\Activate.ps1` 激活环境。在仓库根目录运行以下命令，用自带底稿同时导出水彩视频和成画：
-
-```sh
-python scripts/render_art.py --input demo/jensen-huang.png --style watercolor --seconds 6 --size 480 --transition ink-bloom --transition-out focus --video renders/watercolor.mp4 --image renders/watercolor.png
-```
-
-打开 `renders/watercolor.mp4` 即可看片。下次把 `--input` 换成自己的照片；输出路径请使用新文件名。
-
 ## 同一张参考图，20 种画法
 
 [![马斯克同照画风选片册，每屏四幅，标有编号和中英文名称](demo/musk-style-picker.gif)](demo/musk-style-atlas.mp4)
 
 **[播放 30 秒画风对照 MP4](demo/musk-style-atlas.mp4)** · [查看另一张参考图的 20 格静态总览](demo/styles.jpg)
 
-同一张马斯克原照，同一裁切。每屏并排四种画法，先看成画，再看四幅肖像同步画出。**0:00** 看 01–04，**0:06** 看 05–08，**0:12** 看 09–12，**0:18** 看 13–16，**0:24** 看 17–20。喜欢哪一幅，就用它旁边的编号，例如 `--style 04` 选彩铅。
+同一张马斯克原照，同一裁切。每屏并排四种画法，先看成画，再看四幅肖像同步画出。**0:00** 看 01–04，**0:06** 看 05–08，**0:12** 看 09–12，**0:18** 看 13–16，**0:24** 看 17–20。喜欢哪一幅，就用它旁边的编号，例如「用 04 号彩铅画这张照片」。
 
 对照视频与动图使用 Duncan.Hull / The Royal Society 的《Elon Musk Royal Society.jpg》，经统一裁切、逐笔重绘和并排编排，衍生素材同以 CC BY-SA 4.0 分享。[原照及署名](https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg) · [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
@@ -156,7 +143,7 @@ python scripts/render_art.py --input demo/jensen-huang.png --style watercolor --
 
 ## 经典竖屏油画与自定义画法
 
-经典油画模式把镜头推近到人物细节，再拉回完整成画，带笔数计数和配乐。安装 Chromium（`python -m playwright install chromium`）后，在支持 WebGL 2 的环境运行。[观看经典油画 MP4](demo/jensen-huang.mp4) · [动图预览](demo/preview.gif) · [渲染说明](references/classic-oil.md)
+经典油画模式把镜头推近到人物细节，再拉回完整成画，带笔数计数和配乐。可以直接说「把这张照片做成经典竖屏油画，镜头推近眼睛，最后拉回全景」。[观看经典油画 MP4](demo/jensen-huang.mp4) · [动图预览](demo/preview.gif) · [渲染说明](references/classic-oil.md)
 
 要画书法、纹样或自定落笔顺序，可以编写 JSON 笔触计划，用 `--plan` 交给同一渲染器。[画法选择表](references/media.md) · [笔触计划格式](references/marks.md)
 
