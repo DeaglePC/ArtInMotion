@@ -8,6 +8,29 @@
 
 **[用马斯克肖像挑画风 · 20 种 / 30 秒](demo/musk-style-atlas.mp4)**　·　**[看完 68 种转场 · 60 秒](demo/transition-atlas.mp4)**　·　**[戴上耳机看一幅彩铅怎样画成 · 24 秒](demo/ribbon-portrait.mp4)**
 
+## 按画风看 14 条完整版
+
+点击画风名称，即可播放对应的 24 秒有声完整版。每条都用同一张马斯克肖像、同一裁切。想用自己的照片试画，把编号填到 `--style` 即可。
+
+| 编号 | 画风 · 点击播放 |
+|:---:|---|
+| 03 | [黑白明暗素描](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/03-charcoal.mp4) |
+| 05 | [黑白水墨](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/05-ink-wash.mp4) |
+| 07 | [工笔设色与重彩](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/07-gongbi.mp4) |
+| 08 | [细腻写实绘画](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/08-realist.mp4) |
+| 09 | [可见笔触与厚涂](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/09-impasto.mp4) |
+| 10 | [干粉柔绘](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/10-pastel.mp4) |
+| 11 | [蜡笔与油画棒](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/11-crayon.mp4) |
+| 12 | [平涂插画与漫画](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/12-flat.mp4) |
+| 13 | [黑白刻印与剪影](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/13-woodcut.mp4) |
+| 15 | [点描与网点](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/15-stipple.mp4) |
+| 16 | [拼贴与镶嵌](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/16-collage.mp4) |
+| 18 | [流体与拓纹](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/18-marbling.mp4) |
+| 19 | [几何切面](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/19-facets.mp4) |
+| 20 | [像素与字符](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/20-pixel.mp4) |
+
+这 14 条影片均由 Duncan.Hull / The Royal Society 的肖像照片裁切、重绘而成，以 CC BY-SA 4.0 分享。[原照与署名](https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg) · [许可](https://creativecommons.org/licenses/by-sa/4.0/)
+
 ## 挑一个开场
 
 同一张合照、同一幅成画，换一种进场和退场，直接看差别。视频上的编号可以直接交给技能使用。
