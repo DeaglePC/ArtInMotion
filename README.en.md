@@ -46,7 +46,7 @@ Colored pencil plays recorded pencil-on-paper sounds only during the slow openin
 
 ## Choose a transition
 
-Each movie randomly picks one of ten transitions for both the artwork entrance and the return to paper. Choose a pair with `--transition page-curl`, or specify a separate exit as shown below. Both renderers accept an English ID, Chinese name or number. Use `--list-transitions` for the [full catalog](references/transitions.md).
+Each movie randomly picks one of up to 68 transitions (10 art-specific effects and 58 named FFmpeg xfade presets) for both the artwork entrance and the return to paper. Choose a pair with `--transition page-curl`, or specify a separate exit as shown below. Both renderers accept an English ID, Chinese name or number. Use `--list-transitions` for the [full catalog](references/transitions.md).
 
 ```sh
 python scripts/render_art.py --input photo.jpg --style colored-pencil --transition ink-bloom --transition-out focus --video renders/portrait.mp4

@@ -56,7 +56,7 @@ python scripts/render_art.py --input photo.jpg --style block-print --seconds 10 
 
 ## 选择转场
 
-默认每条视频随机选一种，成画进场和回到纸面使用同一套效果。可以直接说「用纸角翻页」，也可以说「水墨晕染进场，柔焦显影退场」。两个渲染入口都支持中文名、英文 ID 或编号。运行 `--list-transitions` 查看全部 10 种，或打开[转场表](references/transitions.md)。
+默认每条视频随机选一种，成画进场和回到纸面使用同一套效果。可以直接说「用纸角翻页」，也可以说「水墨晕染进场，柔焦显影退场」。两个渲染入口都支持中文名、英文 ID 或编号。运行 `--list-transitions` 查看本机可用的转场（共收录 68 种，其中 10 种为绘画专用，58 种来自 FFmpeg），或打开[转场表](references/transitions.md)。
 
 ```sh
 python scripts/render_art.py --input photo.jpg --style colored-pencil --transition ink-bloom --transition-out focus --video renders/portrait.mp4

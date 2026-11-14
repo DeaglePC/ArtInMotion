@@ -4,6 +4,7 @@ import argparse
 import secrets
 
 import numpy as np
+import xfade_transitions as xfade
 from PIL import Image, ImageFilter
 
 TRANSITIONS = {
@@ -17,6 +18,7 @@ TRANSITIONS = {
     "focus": "柔焦显影",
     "charcoal": "炭粉聚散",
     "silk-fan": "折扇开合",
+    **xfade.PRESETS,
 }
 
 
@@ -24,6 +26,10 @@ def transition_id(value):
     key = value.strip().lower()
     for number, (slug, name) in enumerate(TRANSITIONS.items(), 1):
         if key in (slug, name, str(number), f"{number:02}"):
+            if slug in xfade.PRESETS and slug not in xfade.available():
+                raise argparse.ArgumentTypeError(
+                    f"This FFmpeg build does not support {slug}; see --list-transitions"
+                )
             return slug
     raise argparse.ArgumentTypeError(
         f"Unknown transition {value!r}. Choose from " + ", ".join(TRANSITIONS.values())
@@ -41,16 +47,25 @@ def transition_options(parser):
         type=transition_id,
         help="Optional different transition back to paper",
     )
-    listing = "\n".join(
-        f"{i:02}  {key:12}  {name}"
-        for i, (key, name) in enumerate(TRANSITIONS.items(), 1)
-    )
-    parser.add_argument("--list-transitions", action="version", version=listing)
+
+    class ListTransitions(argparse.Action):
+        def __call__(self, parser, namespace, values, option_string=None):
+            supported = xfade.available()
+            for i, (key, name) in enumerate(TRANSITIONS.items(), 1):
+                if key not in xfade.PRESETS or key in supported:
+                    print(f"{i:02}  {key:12}  {name}")
+            parser.exit()
+
+    parser.add_argument("--list-transitions", nargs=0, action=ListTransitions)
     parser.formatter_class = argparse.RawDescriptionHelpFormatter
 
 
 def choose_transitions(entrance, exit_effect):
-    entrance = entrance or secrets.choice(tuple(TRANSITIONS))
+    if entrance is None:
+        supported = xfade.available()
+        entrance = secrets.choice(
+            [key for key in TRANSITIONS if key not in xfade.PRESETS or key in supported]
+        )
     return entrance, exit_effect or entrance
 
 
@@ -198,12 +213,18 @@ def intro_images(art, paper, count, entrance, exit_effect):
         return
     enter = max(1, round(count * 5 / 23))
     leave = max(1, round(count * 6 / 23))
-    reveal = Reveal(art, paper, entrance)
-    for i in range(enter):
-        yield reveal.frame((i + 1) / enter)
+    if entrance in xfade.PRESETS:
+        yield from xfade.frames(paper, art, enter, entrance)
+    else:
+        reveal = Reveal(art, paper, entrance)
+        for i in range(enter):
+            yield reveal.frame((i + 1) / enter)
     for _ in range(count - enter - leave):
         yield art
-    if exit_effect != entrance:
-        reveal = Reveal(art, paper, exit_effect)
-    for i in range(leave):
-        yield reveal.frame(1 - (i + 1) / leave)
+    if exit_effect in xfade.PRESETS:
+        yield from xfade.frames(art, paper, leave, exit_effect)
+    else:
+        if exit_effect != entrance:
+            reveal = Reveal(art, paper, exit_effect)
+        for i in range(leave):
+            yield reveal.frame(1 - (i + 1) / leave)
