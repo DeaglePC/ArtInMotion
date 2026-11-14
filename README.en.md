@@ -14,20 +14,20 @@ Choose a style to play its full 24-second film with sound. Each film uses the sa
 
 | No. | Style · play film |
 |:---:|---|
-| 03 | [Charcoal tonal drawing](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/03-charcoal.mp4) |
-| 05 | [Monochrome ink wash](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/05-ink-wash.mp4) |
-| 07 | [Gongbi painting in rich color](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/07-gongbi.mp4) |
-| 08 | [Realist painting](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/08-realist.mp4) |
-| 09 | [Impasto brushwork](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/09-impasto.mp4) |
-| 10 | [Soft pastel](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/10-pastel.mp4) |
-| 11 | [Crayon and oil pastel](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/11-crayon.mp4) |
-| 12 | [Flat-color illustration and comics](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/12-flat.mp4) |
-| 13 | [Woodcut and silhouette](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/13-woodcut.mp4) |
-| 15 | [Stippling and halftone](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/15-stipple.mp4) |
-| 16 | [Collage and mosaic](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/16-collage.mp4) |
-| 18 | [Fluid painting and marbling](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/18-marbling.mp4) |
-| 19 | [Geometric facets](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/19-facets.mp4) |
-| 20 | [Pixel and character art (pixel demo)](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/20-pixel.mp4) |
+| 03 | [Charcoal tonal drawing](https://deaglepc.github.io/ArtInMotion/03-charcoal.mp4) |
+| 05 | [Monochrome ink wash](https://deaglepc.github.io/ArtInMotion/05-ink-wash.mp4) |
+| 07 | [Gongbi painting in rich color](https://deaglepc.github.io/ArtInMotion/07-gongbi.mp4) |
+| 08 | [Realist painting](https://deaglepc.github.io/ArtInMotion/08-realist.mp4) |
+| 09 | [Impasto brushwork](https://deaglepc.github.io/ArtInMotion/09-impasto.mp4) |
+| 10 | [Soft pastel](https://deaglepc.github.io/ArtInMotion/10-pastel.mp4) |
+| 11 | [Crayon and oil pastel](https://deaglepc.github.io/ArtInMotion/11-crayon.mp4) |
+| 12 | [Flat-color illustration and comics](https://deaglepc.github.io/ArtInMotion/12-flat.mp4) |
+| 13 | [Woodcut and silhouette](https://deaglepc.github.io/ArtInMotion/13-woodcut.mp4) |
+| 15 | [Stippling and halftone](https://deaglepc.github.io/ArtInMotion/15-stipple.mp4) |
+| 16 | [Collage and mosaic](https://deaglepc.github.io/ArtInMotion/16-collage.mp4) |
+| 18 | [Fluid painting and marbling](https://deaglepc.github.io/ArtInMotion/18-marbling.mp4) |
+| 19 | [Geometric facets](https://deaglepc.github.io/ArtInMotion/19-facets.mp4) |
+| 20 | [Pixel and character art (pixel demo)](https://deaglepc.github.io/ArtInMotion/20-pixel.mp4) |
 
 Each film redraws a [photograph by Duncan.Hull / The Royal Society](https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg) and is shared under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 

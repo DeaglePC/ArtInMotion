@@ -14,20 +14,20 @@
 
 | 编号 | 画风 · 点击播放 |
 |:---:|---|
-| 03 | [黑白明暗素描](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/03-charcoal.mp4) |
-| 05 | [黑白水墨](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/05-ink-wash.mp4) |
-| 07 | [工笔设色与重彩](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/07-gongbi.mp4) |
-| 08 | [细腻写实绘画](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/08-realist.mp4) |
-| 09 | [可见笔触与厚涂](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/09-impasto.mp4) |
-| 10 | [干粉柔绘](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/10-pastel.mp4) |
-| 11 | [蜡笔与油画棒](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/11-crayon.mp4) |
-| 12 | [平涂插画与漫画](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/12-flat.mp4) |
-| 13 | [黑白刻印与剪影](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/13-woodcut.mp4) |
-| 15 | [点描与网点](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/15-stipple.mp4) |
-| 16 | [拼贴与镶嵌](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/16-collage.mp4) |
-| 18 | [流体与拓纹](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/18-marbling.mp4) |
-| 19 | [几何切面](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/19-facets.mp4) |
-| 20 | [像素与字符](https://cdn.jsdelivr.net/gh/DeaglePC/ArtInMotion@9ae7d1947b66331720389ae4282c7fadc1b2349c/demo/musk-styles/20-pixel.mp4) |
+| 03 | [黑白明暗素描](https://deaglepc.github.io/ArtInMotion/03-charcoal.mp4) |
+| 05 | [黑白水墨](https://deaglepc.github.io/ArtInMotion/05-ink-wash.mp4) |
+| 07 | [工笔设色与重彩](https://deaglepc.github.io/ArtInMotion/07-gongbi.mp4) |
+| 08 | [细腻写实绘画](https://deaglepc.github.io/ArtInMotion/08-realist.mp4) |
+| 09 | [可见笔触与厚涂](https://deaglepc.github.io/ArtInMotion/09-impasto.mp4) |
+| 10 | [干粉柔绘](https://deaglepc.github.io/ArtInMotion/10-pastel.mp4) |
+| 11 | [蜡笔与油画棒](https://deaglepc.github.io/ArtInMotion/11-crayon.mp4) |
+| 12 | [平涂插画与漫画](https://deaglepc.github.io/ArtInMotion/12-flat.mp4) |
+| 13 | [黑白刻印与剪影](https://deaglepc.github.io/ArtInMotion/13-woodcut.mp4) |
+| 15 | [点描与网点](https://deaglepc.github.io/ArtInMotion/15-stipple.mp4) |
+| 16 | [拼贴与镶嵌](https://deaglepc.github.io/ArtInMotion/16-collage.mp4) |
+| 18 | [流体与拓纹](https://deaglepc.github.io/ArtInMotion/18-marbling.mp4) |
+| 19 | [几何切面](https://deaglepc.github.io/ArtInMotion/19-facets.mp4) |
+| 20 | [像素与字符](https://deaglepc.github.io/ArtInMotion/20-pixel.mp4) |
 
 这 14 条影片均由 Duncan.Hull / The Royal Society 的肖像照片裁切、重绘而成，以 CC BY-SA 4.0 分享。[原照与署名](https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg) · [许可](https://creativecommons.org/licenses/by-sa/4.0/)
 
