@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" width="960" height="220" role="img" aria-label="ArtInMotion — Stroke-by-Stroke Drawing Studio">
+  <defs>
+    <linearGradient id="darkBgEn" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#171513"/>
+      <stop offset="100%" stop-color="#100F0E"/>
+    </linearGradient>
+    <linearGradient id="strokeGradDarkEn" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#C84B39" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#C89D66" stop-opacity="0.65"/>
+      <stop offset="100%" stop-color="#EFEAE0" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="1" y="1" width="958" height="218" rx="12" fill="url(#darkBgEn)" stroke="#2C2824" stroke-width="1.5"/>
+  <rect x="14" y="14" width="932" height="192" rx="6" fill="none" stroke="#221F1C" stroke-width="1"/>
+  <path d="M28 40 V28 H40 M932 40 V28 H920 M28 180 V192 H40 M932 180 V192 H920" fill="none" stroke="#574F46" stroke-width="1.2" stroke-linecap="round"/>
+
+  <path d="M210 154 C 350 142, 570 144, 750 154" fill="none" stroke="url(#strokeGradDarkEn)" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="210" cy="154" r="2.6" fill="#C84B39"/>
+
+  <text x="480" y="54" text-anchor="middle" fill="#9E9385" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="11" letter-spacing="3.5">LOCAL ALGORITHMIC ATELIER · 20 MEDIA · 68 TRANSITIONS</text>
+
+  <text x="462" y="112" text-anchor="middle" fill="#F3EEE4" font-family="Georgia, 'Times New Roman', serif" font-size="44" font-weight="600" letter-spacing="1.5">ArtInMotion</text>
+
+  <g transform="translate(612, 79)">
+    <rect x="0" y="0" width="38" height="38" rx="4" fill="#B83E2E"/>
+    <rect x="2.5" y="2.5" width="33" height="33" rx="2" fill="none" stroke="#F3EEE4" stroke-width="1" stroke-opacity="0.65"/>
+    <text x="19" y="17" text-anchor="middle" fill="#FAF7F0" font-family="'Noto Serif SC', 'Songti SC', Georgia, serif" font-size="12" font-weight="700">逐笔</text>
+    <text x="19" y="31" text-anchor="middle" fill="#FAF7F0" font-family="'Noto Serif SC', 'Songti SC', Georgia, serif" font-size="12" font-weight="700">成画</text>
+  </g>
+
+  <text x="480" y="142" text-anchor="middle" fill="#D5CCBF" font-family="Georgia, 'Times New Roman', serif" font-style="italic" font-size="17" letter-spacing="0.6">Turn any photograph into a 24-second stroke-by-stroke drawing film with sound</text>
+
+  <text x="480" y="182" text-anchor="middle" fill="#8E8477" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="12.5" letter-spacing="0.5">Zero Generative Models · Zero API Keys · Real Foley &amp; Local Piano Score · Clean Stills + MP4</text>
+</svg>
