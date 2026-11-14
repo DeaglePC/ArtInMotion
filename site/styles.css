@@ -53,6 +53,8 @@
   --radius-md: 10px;
   --radius-lg: 14px;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --cursor-default: url("./cursor-pen.svg") 3 3, auto;
+  --cursor-pointer: url("./cursor-pen-pointer.svg") 3 3, pointer;
 }
 
 *,
@@ -65,6 +67,7 @@ html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  cursor: var(--cursor-default);
 }
 
 body {
@@ -76,6 +79,16 @@ body {
   line-height: 1.68;
   transition: background-color 0.35s var(--ease-out), color 0.35s var(--ease-out);
   overflow-x: hidden;
+  cursor: var(--cursor-default);
+}
+
+.ink-trail-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 998;
 }
 
 /* Tactile fine paper noise overlay */
@@ -91,6 +104,20 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+  cursor: var(--cursor-pointer);
+}
+
+button,
+select,
+summary,
+[role="button"] {
+  cursor: var(--cursor-pointer);
+}
+
+input[type="search"],
+input[type="text"],
+textarea {
+  cursor: text;
 }
 
 button,
@@ -218,7 +245,7 @@ input {
   color: var(--ink-primary);
   font-size: 12.5px;
   font-weight: 500;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.2s ease;
 }
 
@@ -315,7 +342,7 @@ input {
   font-size: 14px;
   font-weight: 600;
   border: 1px solid var(--accent-vermilion);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.22s var(--ease-out);
   box-shadow: 0 6px 20px rgba(182, 59, 43, 0.22);
 }
@@ -336,7 +363,7 @@ input {
   font-size: 14px;
   font-weight: 500;
   border: 1px solid var(--border-strong);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.22s var(--ease-out);
 }
 
@@ -398,7 +425,7 @@ input {
   color: var(--ink-muted);
   font-size: 12.5px;
   font-weight: 500;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.2s ease;
 }
 
@@ -447,7 +474,7 @@ input {
   color: #f7f3eb;
   font-size: 12px;
   font-weight: 500;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.2s ease;
 }
 
@@ -502,7 +529,7 @@ input {
   color: var(--ink-primary);
   display: grid;
   place-items: center;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   flex-shrink: 0;
   transition: all 0.18s ease;
 }
@@ -526,7 +553,7 @@ input {
   border-radius: 99px;
   background: var(--bg-inset);
   outline: none;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
 }
 
 .scrubber::-webkit-slider-thumb {
@@ -535,7 +562,7 @@ input {
   height: 12px;
   border-radius: 50%;
   background: var(--accent-vermilion);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: transform 0.15s ease;
 }
 
@@ -602,7 +629,7 @@ input {
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-hairline);
   background: var(--bg-primary);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.22s var(--ease-out);
 }
 
@@ -715,7 +742,7 @@ input {
   background: rgba(255, 255, 255, 0.03);
   color: #c7beb2;
   font-size: 12.5px;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.2s ease;
 }
 
@@ -781,7 +808,7 @@ input {
   position: relative;
   aspect-ratio: 1 / 1;
   background: #0d0c0b;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   overflow: hidden;
 }
 
@@ -867,7 +894,7 @@ input {
   background: rgba(255, 255, 255, 0.04);
   color: #e5ded3;
   font-size: 12px;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.18s ease;
 }
 
@@ -975,7 +1002,7 @@ input {
   border: 1px solid var(--border-hairline);
   background: var(--bg-primary);
   color: var(--ink-primary);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.2s ease;
 }
 
@@ -1014,7 +1041,7 @@ input {
   border-radius: var(--radius-md);
   border: 1px solid var(--border-hairline);
   background: var(--bg-elevated);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.2s var(--ease-out);
   display: flex;
   flex-direction: column;
@@ -1104,7 +1131,7 @@ input {
   position: relative;
   border-radius: var(--radius-md);
   overflow: hidden;
-  cursor: crosshair;
+  cursor: var(--cursor-pointer);
   aspect-ratio: 940 / 1672;
   max-height: 560px;
   margin: 0 auto;
@@ -1253,7 +1280,7 @@ input {
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-hairline);
   background: var(--bg-elevated);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.18s ease;
 }
 
@@ -1335,7 +1362,7 @@ input {
   background: var(--bg-primary);
   color: var(--ink-primary);
   font-size: 12px;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1403,7 +1430,7 @@ input {
   background: var(--bg-primary);
   color: var(--ink-primary);
   font-size: 13.5px;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
 }
 
 .check-pills {
@@ -1419,7 +1446,7 @@ input {
   background: var(--bg-primary);
   color: var(--ink-secondary);
   font-size: 12.5px;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.18s ease;
 }
 
@@ -1469,7 +1496,7 @@ input {
   color: #faf6ee;
   font-size: 12px;
   font-weight: 500;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: all 0.18s ease;
 }
 

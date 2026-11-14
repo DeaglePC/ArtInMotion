@@ -1116,6 +1116,89 @@ function initTopControls() {
   });
 }
 
+function initInkNibTrail() {
+  const canvas = document.getElementById("inkTrailCanvas");
+  if (!canvas) return;
+  if (!window.matchMedia("(pointer: fine)").matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
+  const ctx = canvas.getContext("2d");
+  let dpr = Math.min(window.devicePixelRatio || 1, 2);
+  let points = [];
+  let rafId = 0;
+  let isPressed = false;
+  const maxAge = 360;
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.floor(window.innerWidth * dpr);
+    canvas.height = Math.floor(window.innerHeight * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+  window.addEventListener("resize", resize);
+
+  window.addEventListener("mousedown", () => { isPressed = true; });
+  window.addEventListener("mouseup", () => { isPressed = false; });
+
+  window.addEventListener("mousemove", (e) => {
+    const target = e.target;
+    if (target && (target.tagName === "VIDEO" || target.closest(".loupe-container"))) {
+      points.push({ x: e.clientX, y: e.clientY, t: performance.now(), brk: true, pressed: isPressed });
+      return;
+    }
+    const now = performance.now();
+    const last = points[points.length - 1];
+    if (last && !last.brk && Math.hypot(e.clientX - last.x, e.clientY - last.y) < 2.2) {
+      return;
+    }
+    const overDark = state.theme === "dark" || Boolean(target && target.closest(".screening-section, .output-card, .lightbox"));
+    points.push({ x: e.clientX, y: e.clientY, t: now, brk: false, pressed: isPressed, dark: overDark });
+    if (points.length > 64) points.shift();
+    if (!rafId) rafId = requestAnimationFrame(render);
+  }, { passive: true });
+
+  function render(now) {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    points = points.filter((p) => now - p.t < maxAge);
+
+    if (points.length >= 2) {
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      for (let i = 1; i < points.length; i++) {
+        const p0 = points[i - 1];
+        const p1 = points[i];
+        if (p0.brk || p1.brk) continue;
+        const life = 1 - (now - p1.t) / maxAge;
+        if (life <= 0) continue;
+
+        ctx.beginPath();
+        ctx.moveTo(p0.x, p0.y);
+        ctx.lineTo(p1.x, p1.y);
+
+        if (p1.pressed) {
+          ctx.strokeStyle = `rgba(182, 59, 43, ${(life * 0.42).toFixed(3)})`;
+          ctx.lineWidth = 0.8 + life * 1.45;
+        } else if (p1.dark) {
+          ctx.strokeStyle = `rgba(218, 178, 122, ${(life * 0.22).toFixed(3)})`;
+          ctx.lineWidth = 0.6 + life * 0.95;
+        } else {
+          ctx.strokeStyle = `rgba(36, 30, 25, ${(life * 0.17).toFixed(3)})`;
+          ctx.lineWidth = 0.6 + life * 0.95;
+        }
+        ctx.stroke();
+      }
+    }
+
+    if (points.length > 0) {
+      rafId = requestAnimationFrame(render);
+    } else {
+      rafId = 0;
+    }
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initTopControls();
   initHeroStage();
@@ -1128,5 +1211,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initImpastoLoupe();
   initTransitionsSection();
   initStudio();
+  initInkNibTrail();
   applyLanguage();
 });

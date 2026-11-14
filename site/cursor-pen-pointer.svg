@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+  <defs>
+    <linearGradient id="nibMetalActive" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#9A6D2E"/>
+      <stop offset="45%" stop-color="#ECC989"/>
+      <stop offset="78%" stop-color="#FFF0CF"/>
+      <stop offset="100%" stop-color="#C6964B"/>
+    </linearGradient>
+    <linearGradient id="woodBarrelActive" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1A1210"/>
+      <stop offset="45%" stop-color="#472D24"/>
+      <stop offset="76%" stop-color="#6D4639"/>
+      <stop offset="100%" stop-color="#2C1B16"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Interactive vermilion ink ripple centered at hotspot (3,3) -->
+  <circle cx="3.3" cy="3.3" r="2.6" fill="#D14330" fill-opacity="0.22" stroke="#D14330" stroke-width="0.85" stroke-opacity="0.78"/>
+
+  <!-- Universal vector ambient shadow -->
+  <g transform="translate(1.0, 1.5)" opacity="0.26" fill="#0D0B09" stroke="#0D0B09" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M3 3 L12.0 7.4 L13.5 10.3 L10.3 13.5 L7.4 12.0 Z"/>
+    <path d="M13.1 10.0 L15.1 12.0 L12.0 15.1 L10.0 13.1 Z"/>
+    <path d="M13.3 10.2 L29.6 26.5 C30.6 27.5 30.6 29.2 29.6 30.2 C28.6 31.2 26.9 31.2 25.9 30.2 L9.6 13.9 Z"/>
+  </g>
+
+  <g stroke="#FAF6EE" stroke-width="2.1" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M3 3 L12.0 7.4 L13.5 10.3 L10.3 13.5 L7.4 12.0 Z" fill="#FAF6EE"/>
+    <path d="M13.1 10.0 L15.1 12.0 L12.0 15.1 L10.0 13.1 Z" fill="#FAF6EE"/>
+    <path d="M13.3 10.2 L29.6 26.5 C30.6 27.5 30.6 29.2 29.6 30.2 C28.6 31.2 26.9 31.2 25.9 30.2 L9.6 13.9 Z" fill="#FAF6EE"/>
+  </g>
+
+  <!-- Rosewood Barrel -->
+  <path d="M13.3 10.2 L28.1 25.0 L24.4 28.7 L9.6 13.9 Z" fill="url(#woodBarrelActive)"/>
+  <line x1="14.1" y1="11.9" x2="27.0" y2="24.8" stroke="#9B6F5D" stroke-width="0.85" stroke-linecap="round" stroke-opacity="0.82"/>
+
+  <!-- Vermilion Lacquer Finial -->
+  <path d="M27.4 24.3 L29.6 26.5 C30.6 27.5 30.6 29.1 29.6 30.1 C28.6 31.1 27.0 31.1 26.0 30.1 L23.8 27.9 Z" fill="#CF4432"/>
+  <line x1="27.4" y1="24.4" x2="23.9" y2="27.9" stroke="#F0CF95" stroke-width="1.0"/>
+
+  <!-- Brass Collar -->
+  <path d="M13.1 10.0 L15.1 12.0 L11.4 15.7 L9.4 13.7 Z" fill="url(#nibMetalActive)" stroke="#5E4019" stroke-width="0.45"/>
+
+  <!-- Sculpted Split Nib -->
+  <path d="M3 3 L12.0 7.4 L13.5 10.3 L10.3 13.5 L7.4 12.0 Z" fill="url(#nibMetalActive)" stroke="#4A3314" stroke-width="0.55" stroke-linejoin="round"/>
+
+  <!-- Vermilion-Dipped Nib Tip at (3,3) -->
+  <path d="M3 3 L7.6 5.2 L5.2 7.6 Z" fill="#C93B29"/>
+
+  <!-- Nib Slit & Vermilion Breather Hole -->
+  <line x1="3.35" y1="3.35" x2="8.7" y2="8.7" stroke="#7A1F14" stroke-width="0.68" stroke-linecap="round"/>
+  <circle cx="9.0" cy="9.0" r="1.12" fill="#B63B2B"/>
+</svg>
