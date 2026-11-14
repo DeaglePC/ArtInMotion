@@ -1,34 +1,21 @@
 ---
 name: oil-painting-video
-description: 将照片、人物肖像或生成的油画底稿做成从空白画布一笔一笔画出来的竖屏 MP4。适用于“逐笔画油画”“油画生成过程视频”“像上次黄仁勋那样画出来”等请求。
+description: 把用户的原照、插画或用代码设计的图形逐笔画成视频或静态成画。支持水彩、彩铅、油画、素描、钢笔排线、版画、拼贴等多种画法，适用于看绘制过程、全程显示笔尖、换画风或只导出图片的请求。
 ---
 
-# 逐笔油画视频
+# 多画风逐笔绘制
 
-从一张目标图计算六层曲线笔触，再在熟褐色画布上依次落笔。交付可播放的 MP4。若用户明确只要静态油画，按静态图像请求处理。
+Use the bundled Python renderer to create the actual requested files. It runs locally without model inference, image generation services or API keys. Treat the supplied original as the reference. Preserve its framing unless the user asks for a different crop.
 
-## 选图和取景
+1. Locate this skill directory. Use its virtual environment if installed. For setup see [README.md](README.md) or [README.en.md](README.en.md). All script paths below are relative to this directory. Pass absolute input/output paths when calling from elsewhere.
+2. Run `python scripts/render_art.py --list-styles` to map the requested name, number or technique. Use the closest preset for a straightforward match. For a genuinely different technique or a text-only drawing, construct an ordered [custom mark plan](references/marks.md). A custom plan can specify linework, pigment, grounds, regions and placement order. For a photo-specific likeness, use the user's reference. Consult the [technique guide](references/media.md) for unfamiliar medium names and extension recipes.
+3. Choose outputs from the request. `--image` writes a clean still, `--video` animates the marks, and supplying both shares the exact same canvas. For a drawing-process video use 24 seconds by default, with slow opening marks, accelerated work and a final hold. The active tool stays visible throughout by default. For a slower opening, set `--opening-seconds`. For stronger color in transparent media, raise `--pigment` from 1 to around 1.25. Placement media use a cursor. An optional local audio file can accompany the video.
 
-- 用户给了图或明确引用上一轮的肖像，直接使用那张图。只有人物名字时，可用图像生成工具制作底稿；若指定某次活动、某张照片或某个姿态，优先使用对应素材。
-- 参考是视频时，先查看开头、中段和最后的画面，确认用户想延续的笔触、画幅与节奏。成片沿用参考中与本次请求相关的部分。
-- 默认竖屏 9:16。脚本读取图像方向后等比居中裁切。先确认裁后保留头顶、下巴和主体；横图或偏置构图需要时先另存合适的竖版取景图。其他画幅须同步调整画布尺寸、视口、镜头和文字位置。
-- 在**裁后的画面**上估计坐标，左上为 `0 0`、右下为 `1 1`。`--focus X Y` 放在脸部或主体中心，`--radius RX RY` 是细画椭圆的水平、垂直半径占整幅宽高的比例，`--detail X Y` 是特写目标，例如双眼中点。默认特写沿用主体中心。
-
-## 渲染
-
-以本技能目录为工作目录执行，或将脚本替换为绝对路径。用户的输入和输出都传绝对路径；选择尚不存在的输出文件。若技能目录已有按 README 安装的 .venv，优先用该环境的 Python 运行。例：
-
-```powershell
-python scripts/paint_video.py "D:/素材/肖像.png" "D:/成片/肖像_逐笔油画.mp4" --title "人物肖像" --focus .53 .35 --radius .25 .21 --detail .54 .30
+```sh
+python scripts/render_art.py --input "/path/photo.jpg" --style colored-pencil --seconds 24 --video "/path/new.mp4" --image "/path/new.png"
+python scripts/render_art.py --input "/path/photo.jpg" --style watercolor --image "/path/watercolor.png"
+python scripts/render_art.py --plan "/path/drawing.json" --image "/path/drawing.png"
 ```
 
-- 默认 1080 × 1920、30 fps、32.5 秒。前 14 笔慢画，之后逐层加速；背景与衣服先铺色，细笔刻画五官，最后镜头拉回并保留干净全景。画笔沿当前笔迹移动，计数来自实际落笔数据；更换底稿后总数会变。
-- `--title` 是计数上方的短题签。`--no-overlay` 隐藏题签和数字。`--seconds 20` 将完整过程压到 20 秒；开头落笔的可辨度会随时长变化。
-- 默认使用随技能附带的钢琴配乐与刷笔音效。换时长时，内置音轨随画面变速并保留音高。`--music "配乐.wav"` 使用自选音乐，较短音轨循环；`--silent` 导出无声版。
-- 运行需要 Python、Pillow、NumPy、SciPy、Playwright、支持 WebGL 2 的 Chromium 或 Chrome，以及 PATH 中带 libx264 和 AAC 编码器的 FFmpeg。若缺 Python 包，在使用的 Python 环境中运行 `python -m pip install pillow numpy scipy playwright`。缺浏览器时可指定 `--browser "浏览器可执行文件路径"` 或运行 `python -m playwright install chromium`。
-
-## 验片和交付
-
-在导出的 MP4 内抽查开头一笔的两帧、中段、眼部特写和结尾。检查笔迹是否沿笔尖逐渐延伸、细节是否落在指定位置、文字是否挡脸、最后能否看清完整构图。用 ffprobe 核对分辨率、时长和音轨。交付验证过的视频链接；用户要求笔数时，取本次渲染日志的 `total`。
-
-需要改变视觉风格时，笔宽、误差阈值和走向在 [strokes.py](scripts/strokes.py)，笔毛、厚度光照、镜头和动画时间线在 [oil.js](assets/oil.js)。日常换图直接使用 [paint_video.py](scripts/paint_video.py)。
+4. Choose unused output paths. Check the exported dimensions, duration and streams with ffprobe. Inspect the opening, middle and end and verify the subject, medium and visible tool where requested. Return links to the requested artifacts. When comparing media, use the same source, seed, framing and timing.
+5. For the original cinematic vertical oil demo with camera moves, stroke counter and bundled score, use `scripts/paint_video.py` with the original photo. See [the legacy oil recipe](references/classic-oil.md). The portable `impasto` preset also exports stills and keeps the input aspect ratio.
