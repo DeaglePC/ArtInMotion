@@ -18,7 +18,7 @@
 python scripts/paint_video.py "D:/素材/肖像.png" "D:/成片/肖像_逐笔油画.mp4" --title "人物肖像" --focus .53 .35 --radius .25 .21 --detail .54 .30
 ```
 
-- 默认 1080 × 1920、30 fps、32.5 秒。前 14 笔慢画，之后逐层加速；背景与衣服先铺色，细笔刻画五官，最后镜头拉回并保留干净全景。画笔沿当前笔迹移动，计数来自实际落笔数据；更换底稿后总数会变。
+- 默认 1080 × 1920、30 fps、32.5 秒。默认先展示成画 1.2 秒，计入总时长；`--no-preview` 可跳过。前 14 笔慢画，之后逐层加速；背景与衣服先铺色，细笔刻画五官，最后镜头拉回并保留干净全景。画笔沿当前笔迹移动，计数来自实际落笔数据；更换底稿后总数会变。
 - `--title` 是计数上方的短题签。`--no-overlay` 隐藏题签和数字。`--seconds 20` 将完整过程压到 20 秒；开头落笔的可辨度会随时长变化。
 - 默认使用随技能附带的钢琴配乐与刷笔音效。换时长时，内置音轨随画面变速并保留音高。`--music "配乐.wav"` 使用自选音乐，较短音轨循环；`--silent` 导出无声版。
 - 运行需要 Python、Pillow、NumPy、SciPy、Playwright、支持 WebGL 2 的 Chromium 或 Chrome，以及 PATH 中带 libx264 和 AAC 编码器的 FFmpeg。若缺 Python 包，在使用的 Python 环境中运行 `python -m pip install pillow numpy scipy playwright`。缺浏览器时可指定 `--browser "浏览器可执行文件路径"` 或运行 `python -m playwright install chromium`。

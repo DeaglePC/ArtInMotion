@@ -81,7 +81,8 @@ class ExportTest(unittest.TestCase):
             cwd=self.folder,
         )
         frames = np.frombuffer(raw, dtype=np.uint8).reshape(8, 70, 48, 3)
-        self.assertLess(frames[0].std(axis=(0, 1)).max(), 1)
+        self.assertLess(np.abs(frames[0] - expected).mean(), 5)
+        self.assertLess(frames[1].std(axis=(0, 1)).max(), 1)
         self.assertLess(np.abs(frames[-1] - expected).mean(), 5)
 
     def test_pencil_covers_dark_regions_and_preserves_small_highlights(self):

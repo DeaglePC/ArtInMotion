@@ -14,6 +14,7 @@ import numpy as np
 from art_styles import STYLES, Mark, Study
 from drawing_audio import CONTACT, TOOL_MEDIUM, write_soundtrack
 from PIL import Image, ImageDraw, ImageOps
+from video_intro import preview_frames
 
 
 def arguments():
@@ -31,6 +32,9 @@ def arguments():
         "--image", type=Path, help="PNG, JPEG or WebP, clean final canvas"
     )
     parser.add_argument("--video", type=Path, help="MP4, full drawing process")
+    parser.add_argument(
+        "--no-preview", action="store_true", help="Start directly on paper"
+    )
     parser.add_argument("--seconds", type=float, default=24)
     parser.add_argument(
         "--opening-seconds",
@@ -361,12 +365,21 @@ def movie(path, canvas, marks, tool, ground, texture, style, args):
         "-i",
         "pipe:0",
     ]
+    intro = preview_frames(count, args.fps, not args.no_preview)
+    if args.opening_seconds is not None:
+        # Leave room for the requested slow strokes and the final reveal.
+        intro = min(
+            intro, max(0, count - math.ceil(args.opening_seconds * args.fps / 0.95))
+        )
+    draw_count = count - intro
     opening = (
-        0.20 if args.opening_seconds is None else args.opening_seconds / args.seconds
+        0.20
+        if args.opening_seconds is None
+        else args.opening_seconds * args.fps / draw_count
     )
-    positions = [
-        advance(i / max(1, count - 1), len(marks), opening) if marks else 0
-        for i in range(count)
+    positions = [0] * intro + [
+        advance(i / max(1, draw_count - 1), len(marks), opening) if marks else 0
+        for i in range(draw_count)
     ]
     positions[-1] = len(marks)
     if not args.silent:
@@ -380,7 +393,7 @@ def movie(path, canvas, marks, tool, ground, texture, style, args):
             style or TOOL_MEDIUM[tool],
             args.seed,
             not (args.no_music or args.music),
-            opening_end=math.floor(opening * (count - 1)) / args.fps,
+            opening_end=(intro + math.floor(opening * (draw_count - 1))) / args.fps,
         )
         cmd += ["-i", str(soundtrack)]
         if args.music:
@@ -415,8 +428,17 @@ def movie(path, canvas, marks, tool, ground, texture, style, args):
     completed = 0
     with subprocess.Popen(cmd, stdin=subprocess.PIPE) as proc:
         try:
-            for i, pos in enumerate(positions):
-                t = i / max(1, count - 1)
+            if intro:
+                preview = canvas.copy()
+                for mark in marks:
+                    paint(preview, mark)
+                if texture is not None:
+                    preview.paste(ground, (0, 0, *preview.size), texture)
+                pixels = preview.tobytes()
+                for _ in range(intro):
+                    proc.stdin.write(pixels)
+            for i, pos in enumerate(positions[intro:]):
+                t = i / max(1, draw_count - 1)
                 while completed < int(pos):
                     paint(canvas, marks[completed])
                     completed += 1

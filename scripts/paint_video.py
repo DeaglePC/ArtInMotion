@@ -13,6 +13,7 @@ import tempfile
 import threading
 
 from playwright.sync_api import sync_playwright
+from video_intro import preview_frames
 
 ASSETS = Path(__file__).resolve().parents[1] / "assets"
 FPS = 30
@@ -27,6 +28,7 @@ def arguments():
     parser.add_argument("--focus", nargs=2, type=float, default=(.5, .37), metavar=("X", "Y"))
     parser.add_argument("--detail", nargs=2, type=float, metavar=("X", "Y"))
     parser.add_argument("--radius", nargs=2, type=float, default=(.26, .21), metavar=("RX", "RY"))
+    parser.add_argument("--no-preview", action="store_true", help="Start directly on canvas")
     parser.add_argument("--seconds", type=float, default=DEFAULT_SECONDS)
     parser.add_argument("--browser", type=Path, help="Optional Chrome/Chromium executable")
     parser.add_argument("--no-overlay", action="store_true")
@@ -82,6 +84,8 @@ def encode(page, args, destination):
       };
     }""")
     count = round(args.seconds * FPS)
+    intro = preview_frames(count, FPS, not args.no_preview)
+    draw_count = count - intro
     duration = count / FPS
     cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "image2pipe",
            "-framerate", str(FPS), "-vcodec", "mjpeg", "-i", "pipe:0"]
@@ -94,21 +98,25 @@ def encode(page, args, destination):
             audio_filter = f"afade=t=out:st={duration-fade}:d={fade}"
         else:
             cmd.extend(["-i", str(music)])
-            tempo = DEFAULT_SECONDS / duration
+            tempo = DEFAULT_SECONDS * FPS / draw_count
             chain = []
             while tempo < .5 or tempo > 2:
                 step = .5 if tempo < .5 else 2
                 chain.append(f"atempo={step}")
                 tempo /= step
-            audio_filter = ",".join([*chain, f"atempo={tempo}", "apad"])
+            audio_filter = ",".join([*chain, f"atempo={tempo}", f"adelay={round(intro * 1000 / FPS)}:all=1", "apad"])
         cmd.extend(["-map", "0:v:0", "-map", "1:a:0", "-af", audio_filter,
                     "-c:a", "aac", "-b:a", "192k"])
     cmd.extend(["-c:v", "libx264", "-preset", "veryfast", "-crf", "17", "-pix_fmt", "yuv420p",
                 "-movflags", "+faststart", "-t", str(duration), str(destination)])
     with subprocess.Popen(cmd, stdin=subprocess.PIPE) as encoder:
         try:
-            for i in range(count):
-                data = page.evaluate("t => jpegAt(t)", i * DEFAULT_SECONDS / count)
+            if intro:
+                preview = base64.b64decode(page.evaluate("() => jpegAt(window.DUR)"))
+                for _ in range(intro):
+                    encoder.stdin.write(preview)
+            for i in range(draw_count):
+                data = page.evaluate("t => jpegAt(t)", i * DEFAULT_SECONDS / draw_count)
                 encoder.stdin.write(base64.b64decode(data))
                 if i % 90 == 0:
                     print(f"Frame {i+1}/{count}", flush=True)
