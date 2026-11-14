@@ -1,68 +1,60 @@
 # ArtInMotion · 逐笔绘画工作室
 
-[English](README.en.md) · [给 AI 助手的执行说明](SKILL.md)
+[English](README.en.md) · [技能说明](SKILL.md) · [转场编号表](references/transitions.md)
 
-把一张照片从空白纸面逐步画出来。可以交付一段 **MP4 绘画过程**、一张 **PNG / JPEG / WebP 成画**，也可以一次导出两者。笔触来自原图的颜色、边缘和局部走向。整个绘制过程在本机运行，无需 AI 生图、模型下载或 API Key。
+**把一张照片画成一部 24 秒的短片。** 观众先看到成画，再回到纸面，看第一笔落在哪里、颜色如何一层层叠起来。ArtInMotion 从原照提取颜色、轮廓和笔触方向，在本机逐笔绘制，同时导出带声音的 MP4 和一张干净的成画。无需生图模型或 API Key。
 
-![20 种画法对同一参考图的实际渲染](demo/styles.jpg)
+[![四种转场同步演示：水墨晕染、纸角翻页、棱镜折光和柔焦显影](demo/transition-preview.gif)](demo/transition-atlas.mp4)
 
-图例采用仓库自带的黄仁勋底稿，编号与下面的画风表一致。上传自己的摄影原片即可直接绘制，支持单人、合照、风景、静物及横竖画幅。
+**[看完 68 种转场 · 60 秒](demo/transition-atlas.mp4)**　·　**[戴上耳机看一幅彩铅怎样画成 · 24 秒](demo/ribbon-portrait.mp4)**
 
-## 让另一个 AI 直接使用
+## 挑一个开场
 
-把下面这段话和照片一起交给能执行本地命令的助手：
+同一张合照、同一幅成画，换一种进场和退场，直接看差别。视频上的编号可以直接交给技能使用。
 
-> 从 https://github.com/DeaglePC/ArtInMotion 安装这个技能，读取仓库根目录的 SKILL.md，配置依赖。直接用我附的原照画彩色铅笔，保留构图，导出 24 秒 MP4 和一张 PNG。开头慢画，全程能看到笔尖。实际执行并把两个文件给我。
+| Demo | 时长 | 看什么 |
+|---|---:|---|
+| [68 种转场动态选片册](demo/transition-atlas.mp4) | 60 秒 | 每屏 4 种，17 屏看完全部。适合按编号挑进场和退场。 |
+| [10 种绘画专用转场](demo/painting-transitions.mp4) | 31 秒 | 每次放大看一种，能看清水墨晕开的边缘、干刷的笔毛和翻页的投影。 |
+| [绸带交错 · 彩铅有声成片](demo/ribbon-portrait.mp4) | 24 秒 | 横带引出双人肖像，回到纸面后，前四笔带铅笔声，快画段只留钢琴。 |
+| [成画预览 · 直接切回白纸](demo/portrait-preview.mp4) | 24 秒 | 早期的直切样片，方便和绸带版对照开场节奏。 |
 
-已安装的助手可以直接说「用 `$art-in-motion` 把这张照片画成水彩，只给我成画」。其他代理可以把仓库放在任意位置，按 SKILL.md 调用相同的命令行。
+两种渲染模式都接受中文名、英文 ID 和编号。只点一种，进退场共用；分别点两种，可以让墨色晕开进场、柔焦退场。不指定时，每条视频从本机可用效果中随机选一种。共收录 10 种绘画专用效果和 58 种 FFmpeg 转场。[完整转场编号表](references/transitions.md)
 
-## 安装与首跑
+## 在 Codex 里试一张照片
 
-下面的命令把 ArtInMotion 安装到与 `SKILL.md` 中技能名一致的 `art-in-motion` 目录。其他助手也可以克隆到自己的工作区。
+把照片和这段话一起发给能安装技能、执行本地命令的助手：
+
+> 从 https://github.com/DeaglePC/ArtInMotion 安装技能并配置依赖。用 $art-in-motion 把我附的原照画成 24 秒彩铅视频，保留构图。03 号纸角翻页进场，08 号柔焦显影退场。开头几笔慢一点，最后给我 MP4 和 PNG。
+
+## 在终端生成第一条视频
+
+建议使用 Python 3.11 或 3.12。导出视频需要 PATH 中可用的 FFmpeg，带 libx264 和 AAC 编码器。仅导出静态图只需 Python 依赖。
 
 ```sh
 git clone https://github.com/DeaglePC/ArtInMotion.git ~/.codex/skills/art-in-motion
 cd ~/.codex/skills/art-in-motion
-```
-
-建议 Python 3.11 或 3.12。视频另需 PATH 中可用的 FFmpeg（带 libx264）。仅渲染静态图时只需 Python 依赖。在仓库根目录执行：
-
-```sh
 python -m venv .venv
-# macOS / Linux
 source .venv/bin/activate
-# Windows PowerShell 使用 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
-python scripts/render_art.py --list-styles
-python scripts/render_art.py --input demo/jensen-huang.png --style watercolor --size 480 --fps 12 --seconds 3 --image renders/test.png --video renders/test.mp4
 ```
 
-## 日常使用
+Windows PowerShell 可将仓库克隆到本地技能目录，用 `.\.venv\Scripts\Activate.ps1` 激活环境。在仓库根目录运行以下命令，用自带底稿同时导出水彩视频和成画：
 
 ```sh
-# 同一批笔触同时生成视频和干净的成画
-python scripts/render_art.py --input photo.jpg --style colored-pencil --video renders/pencil.mp4 --image renders/pencil.png
-
-# 只出图片，无需启动浏览器或视频编码器
-python scripts/render_art.py --input photo.jpg --style 02 --image renders/hatching.webp
-
-# 用本地音频配乐，按指定时长裁切或循环
-python scripts/render_art.py --input photo.jpg --style block-print --seconds 10 --music music.wav --video renders/print.mp4
+python scripts/render_art.py --input demo/jensen-huang.png --style watercolor --seconds 6 --size 480 --transition ink-bloom --transition-out focus --video renders/watercolor.mp4 --image renders/watercolor.png
 ```
 
-默认 24 秒、30 fps、长边 960 像素。自动校正 EXIF 方向，保持构图并将边长取偶数。用 `--size 1920` 提高长边分辨率，`--seed` 固定笔触变化。视频先用转场引出成画，停留 1.2 秒，再转回空白纸面慢画，中段加速，结尾停留。预览计入总时长，短片会自动缩短预览；用 `--no-preview` 可直接从纸面开始。用 `--opening-seconds 6` 给开头几笔留出六秒，用 `--pigment 1.25` 加浓原照绘制时的笔触。绘画工具全程可见，拼贴、像素与沙画使用放置光标。`--no-tool` 输出纯画面。20 种画风默认配有各自的绘画音效和本地合成的轻钢琴。运笔、点触或放置材料的声音跟随绘制时间线，收笔停留时只剩配乐。用 `--no-music` 单听绘画声，`--music 文件` 替换背景音乐，`--silent` 导出静音视频。相同的 `--seed` 可复现配乐。输出文件必须使用新名字，可用 `--help` 查看完整选项。
+打开 `renders/watercolor.mp4` 即可看片。下次把 `--input` 换成自己的照片；输出路径请使用新文件名。
 
-彩铅只在开头几笔慢画时播放铅笔划纸实录，进入快画段后只留背景音乐。设为 `--opening-seconds 0` 时全片只留配乐。音源采用 CC0 授权。 [zakkolar · pencil.wav](https://freesound.org/people/zakkolar/sounds/431438/)
+## 同一张参考图，20 种画法
 
-## 选择转场
+![仓库自带底稿的 20 种实际渲染，从轮廓线描到彩铅、木刻和像素画](demo/styles.jpg)
 
-默认每条视频随机选一种，成画进场和回到纸面使用同一套效果。可以直接说「用纸角翻页」，也可以说「水墨晕染进场，柔焦显影退场」。两个渲染入口都支持中文名、英文 ID 或编号。运行 `--list-transitions` 查看本机可用的转场（共收录 68 种，其中 10 种为绘画专用，58 种来自 FFmpeg），或打开[转场表](references/transitions.md)。
+油画厚涂用笔触叠出体积，钢笔排线用线距表达明暗，拼贴则逐片放置色块。横照和竖照都会保留原构图，支持 PNG、JPEG 和 WebP 成画。
 
-```sh
-python scripts/render_art.py --input photo.jpg --style colored-pencil --transition ink-bloom --transition-out focus --video renders/portrait.mp4
-```
-
-## 画风
+<details>
+<summary>展开 20 种画风与命令行名称</summary>
 
 | 编号 | 画法 | 命令中的名称 | 编号 | 画法 | 命令中的名称 |
 |---|---|---|---|---|---|
@@ -77,10 +69,24 @@ python scripts/render_art.py --input photo.jpg --style colored-pencil --transiti
 |09|可见笔触与厚涂|impasto|19|几何切面|facets|
 |10|干粉柔绘|pastel|20|像素与字符（像素示例）|pixel|
 
-画风可用英文 ID、表中两位编号或 `--list-styles` 列出的中文全名。每组提供一种程序化演绎，例如 16 用纸片效果、20 用像素格。自定义画法或从文字构图时，可由助手编写 [笔触计划](references/marks.md)，用 `--plan` 直接输出图片或视频；也可按该文档加入新的取色和运笔算法。 更多材料和画法（含书法、喷绘、壁画、彩窗与字符画）的映射与扩展思路见[画法选择表](references/media.md)。
+</details>
 
-## 经典油画模式
+用 `--list-styles` 列出画风，`--list-transitions` 列出当前 FFmpeg 支持的转场。默认视频为 24 秒、30 fps、长边 960 像素。成画预览和转场都计入总时长。
 
-原有的竖屏油画、镜头推拉、笔数计数、配乐与刷笔声仍有独立入口。需要 Playwright Chromium 和支持 WebGL 2 的环境。执行 `python -m playwright install chromium` 后按[经典油画说明](references/classic-oil.md)运行。
+| 想调整什么 | 参数 |
+|---|---|
+| 开头六秒慢画，再逐渐加快 | `--opening-seconds 6` |
+| 加浓颜料，或提高输出分辨率 | `--pigment 1.25`、`--size 1920` |
+| 直接从白纸开始，或隐藏笔尖 | `--no-preview`、`--no-tool` |
+| 只听绘画声、替换背景音乐、全片静音 | `--no-music`、`--music music.wav`、`--silent` |
+| 固定笔触和配乐 | `--seed 42`；复现整个开场还需指定转场 |
 
-[![经典黄仁勋油画预览](demo/preview.gif)](demo/jensen-huang.mp4)
+彩铅的慢笔使用真实铅笔划纸录音，其他画风有各自的落笔、刷涂或材料放置音效。背景钢琴在本机合成。[彩铅录音与 CC0 授权](https://freesound.org/people/zakkolar/sounds/431438/)
+
+## 经典竖屏油画与自定义画法
+
+经典油画模式把镜头推近到人物细节，再拉回完整成画，带笔数计数和配乐。安装 Chromium（`python -m playwright install chromium`）后，在支持 WebGL 2 的环境运行。[观看经典油画 MP4](demo/jensen-huang.mp4) · [动图预览](demo/preview.gif) · [渲染说明](references/classic-oil.md)
+
+要画书法、纹样或自定落笔顺序，可以编写 JSON 笔触计划，用 `--plan` 交给同一渲染器。[画法选择表](references/media.md) · [笔触计划格式](references/marks.md)
+
+如果你想在下一张照片上试试不同画风，欢迎给 **ArtInMotion** 点一颗 **Star**，下次回来就能从选片册接着挑。

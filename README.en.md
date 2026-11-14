@@ -1,58 +1,60 @@
 # ArtInMotion
 
-[简体中文](README.md) · [Agent instructions](SKILL.md)
+[简体中文](README.md) · [Agent instructions](SKILL.md) · [Transition catalog](references/transitions.md)
 
-Render a photograph into a **drawing-process MP4**, a **clean PNG, JPEG or WebP**, or both from the same sequence of marks. The renderer samples color, edges and local direction from the source and builds the canvas locally. No image-generation model, API key or network service is needed at render time.
+**Turn a photograph into a 24-second drawing film.** Show the finished piece, return to the paper, and let the viewer follow the first pencil stroke into the layers of color. ArtInMotion samples color, edges and stroke direction from your reference and renders every mark locally. The same marks produce a movie with sound and a clean still. No image-generation model or API key is needed.
 
-![Twenty actual renders of the bundled reference, numbered in preset order](demo/styles.jpg)
+[![Four transitions on the same portrait: ink bloom, page curl, prism and soft focus](demo/transition-preview.gif)](demo/transition-atlas.mp4)
 
-## Give this to your agent
+**[Browse all 68 transitions in 60 seconds](demo/transition-atlas.mp4)** · **[Watch the 24-second colored-pencil film with sound](demo/ribbon-portrait.mp4)**
 
-> Install https://github.com/DeaglePC/ArtInMotion, read SKILL.md and set up its dependencies. Use my attached original photo to draw a colored-pencil portrait. Keep the framing, start slowly, and show the pencil tip throughout a 24-second movie. Run the renderer and return both the MP4 and the clean PNG.
+## Find an opening for your film
 
-After installation, try “Use `$art-in-motion` to render this photo in watercolor and return the finished image.” Any assistant with local command execution can run the same CLI from a checkout. It supports portraits, groups, landscapes and other subjects without face coordinates.
+Each demo uses the same portrait so you can compare the transitions directly. The numbers on screen work as selectors in the renderer.
 
-## Install and try it
+| Demo | Runtime | What to watch for |
+|---|---:|---|
+| [The complete transition atlas](demo/transition-atlas.mp4) | 60 sec | Four effects play side by side on each of 17 screens. Pick an entrance and an exit by number. |
+| [Ten transitions designed for paintings](demo/painting-transitions.mp4) | 31 sec | See each effect at full frame, from the feathered edge of an ink bloom to the shadow beneath a curling page. |
+| [Ribbon reveal · finished pencil film](demo/ribbon-portrait.mp4) | 24 sec | Alternating ribbons reveal the portrait. Listen for pencil on paper during the first four strokes and solo piano through the time-lapse. |
+| [Finished-art preview · straight cut](demo/portrait-preview.mp4) | 24 sec | An earlier edit that cuts directly from the finished portrait to blank paper. Compare its pacing with the ribbon reveal. |
 
-The commands below install ArtInMotion in the Codex directory named for the skill ID in `SKILL.md`, `art-in-motion`. Other agents can clone into their own workspace.
+Both renderers accept a number, an English ID or a Chinese name. Choose one effect for both directions, or pair an ink-bloom entrance with a soft-focus exit. Omit both choices to draw one at random from the effects available on your machine. The catalog includes 10 art-specific transitions and 58 FFmpeg presets. [Browse the numbered catalog](references/transitions.md)
+
+## Try it with a coding agent
+
+Attach a photo and send this to an assistant that can install skills and run local commands:
+
+> Install the skill from https://github.com/DeaglePC/ArtInMotion and set up its dependencies. Use $art-in-motion to draw my attached photo in colored pencil. Keep the framing. Make a 24-second film with a page-curl entrance (03), a soft-focus exit (08), and slow opening strokes. Return the finished MP4 and PNG.
+
+## Render your first film from the terminal
+
+Use Python 3.11 or 3.12. Movie export also needs FFmpeg on PATH with the libx264 and AAC encoders. Still-image export needs only the Python dependencies.
 
 ```sh
 git clone https://github.com/DeaglePC/ArtInMotion.git ~/.codex/skills/art-in-motion
 cd ~/.codex/skills/art-in-motion
-```
-
-Use Python 3.11 or 3.12. Video also needs FFmpeg with libx264 on PATH. Still-image export needs only the Python dependencies. From the repository root:
-
-```sh
 python -m venv .venv
 source .venv/bin/activate
-# Windows PowerShell: .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
-python scripts/render_art.py --list-styles
-python scripts/render_art.py --input demo/jensen-huang.png --style watercolor --size 480 --fps 12 --seconds 3 --image renders/test.png --video renders/test.mp4
 ```
 
-## Render
+On Windows, clone into your local skill directory and activate the environment with `.\.venv\Scripts\Activate.ps1` in PowerShell. From the repository root, use the bundled reference to export a watercolor movie and still together:
 
 ```sh
-python scripts/render_art.py --input photo.jpg --style colored-pencil --video renders/pencil.mp4 --image renders/pencil.png
-python scripts/render_art.py --input photo.jpg --style 02 --image renders/hatching.webp
-python scripts/render_art.py --input photo.jpg --style block-print --seconds 10 --music music.wav --video renders/print.mp4
+python scripts/render_art.py --input demo/jensen-huang.png --style watercolor --seconds 6 --size 480 --transition ink-bloom --transition-out focus --video renders/watercolor.mp4 --image renders/watercolor.png
 ```
 
-Defaults are 24 seconds, 30 fps and 960 pixels on the long edge. EXIF orientation is applied and the aspect ratio is preserved to the nearest even dimensions. Set `--size 1920` for a larger canvas and `--seed` for repeatability. The finished artwork transitions into view, holds for 1.2 seconds, then transitions back to blank paper. The preview fits inside the requested runtime and scales down for short clips. Use `--no-preview` to start directly on paper. The first marks are drawn slowly, followed by accelerated work and a final hold. Set `--opening-seconds 6` to spend six seconds on the opening marks and `--pigment 1.25` for denser pigment when drawing from a photo. The tool stays visible, with a placement cursor for collage, sand and pixels. Use `--no-tool` to hide it. All 20 presets mix medium-specific drawing sounds with a soft synthesized piano score. Contact follows the mark timeline and the final hold leaves only music. Use `--no-music` for drawing sounds alone, `--music FILE` to replace the piano, or `--silent` for a silent MP4. The seed also controls the score. Choose unused output names. See `--help` for options.
+Open `renders/watercolor.mp4` to watch. For your next render, point `--input` at your photo and choose new output filenames.
 
-Colored pencil plays recorded pencil-on-paper sounds only during the slow opening strokes. The accelerated passage has backing music alone. Set `--opening-seconds 0` for a music-only pencil movie. The recording is available under CC0. [zakkolar · pencil.wav](https://freesound.org/people/zakkolar/sounds/431438/)
+## One reference, 20 ways to draw it
 
-## Choose a transition
+![Actual renders of the bundled reference across all twenty presets, from contour to pixel art](demo/styles.jpg)
 
-Each movie randomly picks one of up to 68 transitions (10 art-specific effects and 58 named FFmpeg xfade presets) for both the artwork entrance and the return to paper. Choose a pair with `--transition page-curl`, or specify a separate exit as shown below. Both renderers accept an English ID, Chinese name or number. Use `--list-transitions` for the [full catalog](references/transitions.md).
+Impasto builds volume with overlapping strokes. Hatching builds shadows with crossing lines. Collage places pieces of color one at a time. The renderer preserves the framing of landscape and portrait photos and exports stills as PNG, JPEG or WebP.
 
-```sh
-python scripts/render_art.py --input photo.jpg --style colored-pencil --transition ink-bloom --transition-out focus --video renders/portrait.mp4
-```
-
-## Presets and authored media
+<details>
+<summary>Show all 20 drawing preset IDs</summary>
 
 | No. | Preset | No. | Preset |
 |---|---|---|---|
@@ -67,8 +69,24 @@ python scripts/render_art.py --input photo.jpg --style colored-pencil --transiti
 |09|impasto|19|facets|
 |10|pastel|20|pixel|
 
-Each preset implements one procedural interpretation of a medium. Select it by ID, two-digit number or the full Chinese label from `--list-styles`. For an original composition from text or another technique, an agent can author an ordered [mark plan](references/marks.md) and render it with `--plan`. The same reference describes how to add a photo-driven generator. The [technique guide](references/media.md) maps additional media and describes the marks needed for custom treatments.
+</details>
 
-## Classic oil movie
+Run `--list-styles` for the drawing presets or `--list-transitions` for the transitions supported by your FFmpeg build. A default film runs 24 seconds at 30 fps, with 960 pixels on the long edge. The opening preview and transitions fit inside the requested duration.
 
-The original portrait-format oil renderer with camera moves, a stroke counter and synchronized sound remains available. Install Chromium with `python -m playwright install chromium`, then run `python scripts/paint_video.py demo/jensen-huang.png renders/classic.mp4`. It requires WebGL 2. See the [original movie](demo/jensen-huang.mp4) and [classic options](references/classic-oil.md).
+| What to change | Option |
+|---|---|
+| Spend six seconds on the opening strokes | `--opening-seconds 6` |
+| Deepen the pigment or increase the resolution | `--pigment 1.25`, `--size 1920` |
+| Start on blank paper or hide the drawing tool | `--no-preview`, `--no-tool` |
+| Keep drawing sounds only, supply music, or mute the film | `--no-music`, `--music music.wav`, `--silent` |
+| Reproduce the marks and piano score | `--seed 42`. Specify the transitions to reproduce the opening, too. |
+
+The pencil preset uses recorded pencil on paper for its slow opening strokes. Other presets have their own contact, brushing or placement sounds. The piano accompaniment is synthesized locally. [Pencil recording and CC0 dedication](https://freesound.org/people/zakkolar/sounds/431438/)
+
+## Classic portrait film and custom mark plans
+
+The classic oil renderer moves in for a close-up and pulls back to reveal the full painting, with a stroke counter and score. Install Chromium with `python -m playwright install chromium` and run it in a WebGL 2 environment. [Watch the classic oil film](demo/jensen-huang.mp4) · [GIF preview](demo/preview.gif) · [Rendering guide](references/classic-oil.md)
+
+For lettering, ornamental patterns or a specific drawing order, author a JSON mark plan and pass it to the renderer with `--plan`. [Technique guide](references/media.md) · [Mark plan format](references/marks.md)
+
+If you see a style you want to try on your next photo, **star ArtInMotion** to keep the transition atlas and drawing presets handy.
