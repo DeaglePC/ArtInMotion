@@ -10,26 +10,68 @@
 
 ## 按画风看 14 条完整版
 
-点击画风名称，即可播放对应的 24 秒有声完整版。每条都用同一张马斯克肖像、同一裁切。想用自己的照片试画，把编号填到 `--style` 即可。
+先看同一张马斯克肖像在每种画风下怎样画成。点动图或画风名称，就能播放对应的 24 秒有声完整版。想用自己的照片试画，把编号填到 `--style` 即可。
 
-| 编号 | 画风 · 点击播放 |
-|:---:|---|
-| 03 | [黑白明暗素描](https://deaglepc.github.io/ArtInMotion/03-charcoal.mp4) |
-| 05 | [黑白水墨](https://deaglepc.github.io/ArtInMotion/05-ink-wash.mp4) |
-| 07 | [工笔设色与重彩](https://deaglepc.github.io/ArtInMotion/07-gongbi.mp4) |
-| 08 | [细腻写实绘画](https://deaglepc.github.io/ArtInMotion/08-realist.mp4) |
-| 09 | [可见笔触与厚涂](https://deaglepc.github.io/ArtInMotion/09-impasto.mp4) |
-| 10 | [干粉柔绘](https://deaglepc.github.io/ArtInMotion/10-pastel.mp4) |
-| 11 | [蜡笔与油画棒](https://deaglepc.github.io/ArtInMotion/11-crayon.mp4) |
-| 12 | [平涂插画与漫画](https://deaglepc.github.io/ArtInMotion/12-flat.mp4) |
-| 13 | [黑白刻印与剪影](https://deaglepc.github.io/ArtInMotion/13-woodcut.mp4) |
-| 15 | [点描与网点](https://deaglepc.github.io/ArtInMotion/15-stipple.mp4) |
-| 16 | [拼贴与镶嵌](https://deaglepc.github.io/ArtInMotion/16-collage.mp4) |
-| 18 | [流体与拓纹](https://deaglepc.github.io/ArtInMotion/18-marbling.mp4) |
-| 19 | [几何切面](https://deaglepc.github.io/ArtInMotion/19-facets.mp4) |
-| 20 | [像素与字符](https://deaglepc.github.io/ArtInMotion/20-pixel.mp4) |
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/03-charcoal.mp4"><img src="demo/musk-styles/previews/03-charcoal.gif" width="280" alt="黑白明暗素描绘制过程"><br><strong>03 · 黑白明暗素描</strong></a>
+    </td>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/05-ink-wash.mp4"><img src="demo/musk-styles/previews/05-ink-wash.gif" width="280" alt="黑白水墨绘制过程"><br><strong>05 · 黑白水墨</strong></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/07-gongbi.mp4"><img src="demo/musk-styles/previews/07-gongbi.gif" width="280" alt="工笔设色与重彩绘制过程"><br><strong>07 · 工笔设色与重彩</strong></a>
+    </td>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/08-realist.mp4"><img src="demo/musk-styles/previews/08-realist.gif" width="280" alt="细腻写实绘画绘制过程"><br><strong>08 · 细腻写实绘画</strong></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/09-impasto.mp4"><img src="demo/musk-styles/previews/09-impasto.gif" width="280" alt="可见笔触与厚涂绘制过程"><br><strong>09 · 可见笔触与厚涂</strong></a>
+    </td>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/10-pastel.mp4"><img src="demo/musk-styles/previews/10-pastel.gif" width="280" alt="干粉柔绘绘制过程"><br><strong>10 · 干粉柔绘</strong></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/11-crayon.mp4"><img src="demo/musk-styles/previews/11-crayon.gif" width="280" alt="蜡笔与油画棒绘制过程"><br><strong>11 · 蜡笔与油画棒</strong></a>
+    </td>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/12-flat.mp4"><img src="demo/musk-styles/previews/12-flat.gif" width="280" alt="平涂插画与漫画绘制过程"><br><strong>12 · 平涂插画与漫画</strong></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/13-woodcut.mp4"><img src="demo/musk-styles/previews/13-woodcut.gif" width="280" alt="黑白刻印与剪影绘制过程"><br><strong>13 · 黑白刻印与剪影</strong></a>
+    </td>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/15-stipple.mp4"><img src="demo/musk-styles/previews/15-stipple.gif" width="280" alt="点描与网点绘制过程"><br><strong>15 · 点描与网点</strong></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/16-collage.mp4"><img src="demo/musk-styles/previews/16-collage.gif" width="280" alt="拼贴与镶嵌绘制过程"><br><strong>16 · 拼贴与镶嵌</strong></a>
+    </td>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/18-marbling.mp4"><img src="demo/musk-styles/previews/18-marbling.gif" width="280" alt="流体与拓纹绘制过程"><br><strong>18 · 流体与拓纹</strong></a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/19-facets.mp4"><img src="demo/musk-styles/previews/19-facets.gif" width="280" alt="几何切面绘制过程"><br><strong>19 · 几何切面</strong></a>
+    </td>
+    <td align="center">
+      <a href="https://deaglepc.github.io/ArtInMotion/20-pixel.mp4"><img src="demo/musk-styles/previews/20-pixel.gif" width="280" alt="像素与字符绘制过程"><br><strong>20 · 像素与字符</strong></a>
+    </td>
+  </tr>
+</table>
 
-这 14 条影片均由 Duncan.Hull / The Royal Society 的肖像照片裁切、重绘而成，以 CC BY-SA 4.0 分享。[原照与署名](https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg) · [许可](https://creativecommons.org/licenses/by-sa/4.0/)
+这 14 条影片及其预览动图均由 Duncan.Hull / The Royal Society 的肖像照片裁切、重绘而成，以 CC BY-SA 4.0 分享。[原照与署名](https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg) · [许可](https://creativecommons.org/licenses/by-sa/4.0/)
 
 ## 挑一个开场
 
