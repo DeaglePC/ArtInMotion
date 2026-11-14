@@ -18,15 +18,15 @@ class SoundtrackTest(unittest.TestCase):
         self.assertEqual(set(MATERIALS) | {"colored-pencil"}, set(STYLES))
         self.assertEqual(set(TOOL_MEDIUM), {medium.tool for medium in STYLES.values()})
 
-    def render(self, shape, style, music=False, opening_end=1.0):
+    def render(self, shape, style, music=False, opening_end=1.0, count=1, positions=(0, 0.5, 1, 1)):
         mark = Mark([(10, 20), (50, 45)], (20, 40, 60), shape=shape)
         # First mark runs from zero to one second, then the tool rests.
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "test.wav"
             write_soundtrack(
                 path,
-                [mark],
-                [0, 0.5, 1, 1],
+                [mark] * count,
+                positions,
                 2,
                 60,
                 style,
@@ -35,7 +35,7 @@ class SoundtrackTest(unittest.TestCase):
                 opening_end=opening_end,
             )
             with wave.open(str(path)) as reader:
-                self.assertEqual(reader.getnframes(), 2 * RATE)
+                self.assertEqual(reader.getnframes(), len(positions) * RATE // 2)
                 return np.frombuffer(
                     reader.readframes(reader.getnframes()), "<i2"
                 ).reshape(-1, 2)
@@ -57,6 +57,19 @@ class SoundtrackTest(unittest.TestCase):
         mixed = self.render("line", "colored-pencil", True, opening_end=0.25)
         piano = self.render("line", "colored-pencil", True, opening_end=0)
         np.testing.assert_array_equal(mixed[RATE // 4 :], piano[RATE // 4 :])
+
+    def test_only_first_three_marks_have_sound_in_every_style(self):
+        # Two preview frames, then five marks and a final hold.
+        timeline = (0, 0, 0, 1, 2, 3, 4, 5, 5)
+        for style, medium in STYLES.items():
+            with self.subTest(style=style):
+                shape = "tile" if medium.tool in ("tile", "piece") else "line"
+                audio = self.render(shape, style, opening_end=4, count=5, positions=timeline)
+                self.assertFalse(audio[:RATE].any())
+                for i in range(3):
+                    start = RATE + i * RATE // 2
+                    self.assertTrue(audio[start:start + RATE // 2].any())
+                self.assertFalse(audio[5 * RATE // 2:].any())
 
     def test_tile_taps_on_placement(self):
         samples = self.render("tile", "pixel")

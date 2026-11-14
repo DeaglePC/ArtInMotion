@@ -8,6 +8,7 @@ from scipy.io import wavfile
 from scipy.signal import butter, sosfilt
 
 RATE = 44100
+OPENING_SOUND_MARKS = 3
 CONTACT = 0.86  # The remaining fraction moves the tool to the next mark.
 
 # Friction band (Hz), surface roughness, level and contact resonance (Hz).
@@ -179,7 +180,8 @@ def recorded_pencil(path, marks, positions, fps, width, rng, notes, opening_end)
 def write_soundtrack(
     path, marks, positions, fps, width, style, seed, with_piano, *, opening_end
 ):
-    """Integrate contact occupancy across audio samples, even in accelerated passages."""
+    """Score the whole film, with contact sounds on at most three slow opening marks."""
+    marks = marks[:OPENING_SOUND_MARKS]
     rng, music_rng = [
         np.random.default_rng(s) for s in np.random.SeedSequence(seed).spawn(2)
     ]
@@ -212,8 +214,8 @@ def write_soundtrack(
             boundary = np.arange(offset, min(offset + RATE, total) + 1) / RATE
             t = boundary[:-1]
             stereo = piano_block(t, notes, duration)
-            if marks:
-                pos = np.interp(boundary, frame_times, positions)
+            if marks and t[0] < opening_end:
+                pos = np.minimum(np.interp(boundary, frame_times, positions), len(marks))
                 index = np.minimum(pos.astype(int), len(marks) - 1)
                 phase = pos - index
                 integral = occupancy[index] + np.clip(
@@ -223,23 +225,7 @@ def write_soundtrack(
                 gate = np.divide(
                     np.diff(integral), delta, out=np.zeros_like(delta), where=delta > 0
                 )
-                # Resolve very fast time-lapse marks over a short acoustic window.
-                # Repeated sub-millisecond lift gates would otherwise buzz at a fixed pitch.
-                fast = delta * RATE > 100
-                if np.any(fast):
-                    span = np.maximum(1.0, delta[fast] * RATE * 0.012)
-                    left = np.maximum(0.0, pos[:-1][fast] - span / 2)
-                    right = np.minimum(len(marks), left + span)
-
-                    def contact_total(at):
-                        i = np.minimum(at.astype(int), len(marks) - 1)
-                        return occupancy[i] + np.clip(
-                            at - i - begin[i], 0, end[i] - begin[i]
-                        )
-
-                    gate[fast] = (contact_total(right) - contact_total(left)) / (
-                        right - left
-                    )
+                gate *= t < opening_end
                 # Ease the pressure at both ends on individually visible strokes.
                 age = (phase[:-1] - begin[index[:-1]]) / np.maximum(delta * RATE, 1e-8)
                 remaining = (end[index[:-1]] - phase[:-1]) / np.maximum(

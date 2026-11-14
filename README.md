@@ -152,7 +152,7 @@ python scripts/render_art.py --input demo/jensen-huang.png --style watercolor --
 | 只听绘画声、替换背景音乐、全片静音 | `--no-music`、`--music music.wav`、`--silent` |
 | 固定笔触和配乐 | `--seed 42`；复现整个开场还需指定转场 |
 
-彩铅的慢笔使用真实铅笔划纸录音，其他画风有各自的落笔、刷涂或材料放置音效。背景钢琴在本机合成。[彩铅录音与 CC0 授权](https://freesound.org/people/zakkolar/sounds/431438/)
+新生成的视频只在开头慢画的前三笔加入绘画声，抬笔时收声，从第四笔到片尾只留配乐。彩铅用真实划纸录音，其他画风使用各自的刷涂或材料放置声。背景钢琴在本机合成。[彩铅录音与 CC0 授权](https://freesound.org/people/zakkolar/sounds/431438/)
 
 ## 经典竖屏油画与自定义画法
 

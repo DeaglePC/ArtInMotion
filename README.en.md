@@ -152,7 +152,7 @@ Run `--list-styles` for the drawing presets or `--list-transitions` for the tran
 | Keep drawing sounds only, supply music, or mute the film | `--no-music`, `--music music.wav`, `--silent` |
 | Reproduce the marks and piano score | `--seed 42`. Specify the transitions to reproduce the opening, too. |
 
-The pencil preset uses recorded pencil on paper for its slow opening strokes. Other presets have their own contact, brushing or placement sounds. The piano accompaniment is synthesized locally. [Pencil recording and CC0 dedication](https://freesound.org/people/zakkolar/sounds/431438/)
+New films play drawing sounds only for the first three slow marks. The sound stops when the tool lifts, and the backing music plays alone from the fourth mark to the end. Colored pencil uses recorded pencil on paper. Other presets use their own brush or placement sounds. The piano accompaniment is synthesized locally. [Pencil recording and CC0 dedication](https://freesound.org/people/zakkolar/sounds/431438/)
 
 ## Classic portrait film and custom mark plans
 
