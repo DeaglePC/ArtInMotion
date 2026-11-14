@@ -84,6 +84,26 @@ class ExportTest(unittest.TestCase):
         self.assertLess(frames[0].std(axis=(0, 1)).max(), 1)
         self.assertLess(np.abs(frames[-1] - expected).mean(), 5)
 
+    def test_pencil_covers_dark_regions_and_preserves_small_highlights(self):
+        photo = Image.new("RGB", (160, 96), (25, 21, 30))
+        draw = ImageDraw.Draw(photo)
+        draw.rectangle((63, 23, 66, 74), fill=(248, 245, 243))
+        photo.save(self.folder / "contrast.png")
+        self.run_cli(
+            "--input",
+            "contrast.png",
+            "--style",
+            "colored-pencil",
+            "--size",
+            "160",
+            "--image",
+            "drawing.png",
+        )
+        with Image.open(self.folder / "drawing.png") as im:
+            actual = np.asarray(im).mean(axis=2)
+        self.assertLess(actual[np.asarray(photo)[:, :, 0] < 40].max(), 76)
+        self.assertGreater(actual[26:70, 64:66].mean(), 210)
+
     def test_plan_and_no_overwrite(self):
         plan = {
             "size": [96, 64],

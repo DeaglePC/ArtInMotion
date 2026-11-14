@@ -123,10 +123,46 @@ def photo_plan(args):
     size = tuple(max(2, round(n * factor / 2) * 2) for n in flat.size)
     ref = flat.resize(size, Image.Resampling.LANCZOS)
     marks = Study(ref, style, args.seed).plan()
+    if style == "colored-pencil":
+        marks.extend(pencil_touchups(ref, medium.ground, marks))
     if args.pigment != 1:
         for mark in marks:
             mark.opacity = min(255, round(mark.opacity * args.pigment))
     return size, medium.ground, medium.tool, marks, style
+
+
+def pencil_touchups(reference, ground, marks):
+    """Close bright gaps in the hatching with short, locally matched pencil strokes."""
+    proof = Image.new("RGB", reference.size, ground)
+    for mark in marks:
+        paint(proof, mark)
+    weights = np.array([0.299, 0.587, 0.114], dtype=np.float32)
+    source = np.asarray(reference)
+    excess = np.asarray(proof) @ weights - source @ weights
+    missing = excess > 24
+    max_length = max(2, round(min(reference.size) / 100))
+    repairs = []
+    for y, row in enumerate(missing):
+        bounds = np.flatnonzero(np.diff(np.r_[False, row, False])).reshape(-1, 2)
+        for left, right in bounds:
+            x = left
+            while x < right:
+                # Split at color boundaries so a repair cannot smear a highlight.
+                end = min(x + max_length, right)
+                colors = source[y, x:end].astype(int)
+                changes = np.flatnonzero(
+                    np.max(np.abs(colors - colors[0]), axis=1) > 10
+                )
+                if len(changes):
+                    end = x + changes[0]
+                color = tuple(
+                    np.rint(source[y, x:end].mean(axis=0)).astype(int).tolist()
+                )
+                repairs.append(
+                    Mark([(int(x), y), (int(end - 1), y)], color, opacity=245)
+                )
+                x = end
+    return repairs
 
 
 def ints(value, n, low, high):
@@ -283,7 +319,7 @@ def paper_texture(size, style, seed):
     # A fixed paper tooth lifts pigment at the same locations in every frame.
     # Wet media have softer mottling; dry points skip more exposed fibers.
     texture = {
-        "colored-pencil": (9, 17),
+        "colored-pencil": (3, 5),
         "charcoal": (12, 20),
         "pastel": (16, 24),
         "crayon": (17, 31),
