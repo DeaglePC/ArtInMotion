@@ -1,4 +1,4 @@
-# 逐笔绘画工作室
+# ArtInMotion · 逐笔绘画工作室
 
 [English](README.en.md) · [给 AI 助手的执行说明](SKILL.md)
 
@@ -12,16 +12,16 @@
 
 把下面这段话和照片一起交给能执行本地命令的助手：
 
-> 从 https://github.com/DeaglePC/oil-painting-video 安装这个技能，读取仓库根目录的 SKILL.md，配置依赖。直接用我附的原照画彩色铅笔，保留构图，导出 24 秒 MP4 和一张 PNG。开头慢画，全程能看到笔尖。实际执行并把两个文件给我。
+> 从 https://github.com/DeaglePC/ArtInMotion 安装这个技能，读取仓库根目录的 SKILL.md，配置依赖。直接用我附的原照画彩色铅笔，保留构图，导出 24 秒 MP4 和一张 PNG。开头慢画，全程能看到笔尖。实际执行并把两个文件给我。
 
-已安装的助手可以直接说「用 $oil-painting-video 把这张照片画成水彩，只给我成画」。其他代理可以把仓库放在任意位置，按 SKILL.md 调用相同的命令行。技能调用名沿用 `oil-painting-video`。
+已安装的助手可以直接说「用 $oil-painting-video 把这张照片画成水彩，只给我成画」。其他代理可以把仓库放在任意位置，按 SKILL.md 调用相同的命令行。
 
 ## 安装与首跑
 
-在 Codex 的技能目录安装时运行下面两行。其他助手也可以克隆到自己的工作区。
+下面的命令把 ArtInMotion 安装到与 `SKILL.md` 中技能名一致的 `oil-painting-video` 目录。其他助手也可以克隆到自己的工作区。
 
 ```sh
-git clone https://github.com/DeaglePC/oil-painting-video.git ~/.codex/skills/oil-painting-video
+git clone https://github.com/DeaglePC/ArtInMotion.git ~/.codex/skills/oil-painting-video
 cd ~/.codex/skills/oil-painting-video
 ```
 
