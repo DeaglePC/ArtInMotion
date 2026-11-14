@@ -99,7 +99,7 @@ def piano_block(t, notes, duration):
     return stereo * np.clip((duration - t) / min(1.3, duration * 0.32), 0, 1)[:, None]
 
 
-def recorded_pencil(path, marks, positions, fps, width, rng, notes):
+def recorded_pencil(path, marks, positions, fps, width, rng, notes, opening_end):
     """Place natural-speed pencil phrases on the same timeline as the drawing."""
     rate, pcm = wavfile.read(
         Path(__file__).resolve().parents[1] / "assets/pencil-strokes.wav"
@@ -111,12 +111,11 @@ def recorded_pencil(path, marks, positions, fps, width, rng, notes):
     frame_clock = np.arange(len(positions)) / fps
     duration = len(positions) / fps
     total = round(duration * RATE)
-    # At time-lapse speeds, play a few physical gestures with space between them.
-    # At readable speeds, every individual lift cuts its current gesture short.
+    # Only schedule gestures on the slow opening segment of the picture clock.
     events = []
     next_time = 0.0
     bag = []
-    while next_time < frame_clock[-1] and marks:
+    while next_time < min(opening_end, frame_clock[-1]) and marks:
         pos = np.interp(next_time, frame_clock, positions)
         index = int(pos)
         if index >= len(marks):
@@ -133,23 +132,19 @@ def recorded_pencil(path, marks, positions, fps, width, rng, notes):
             next_time = np.interp(index + 1, positions, frame_clock) + 1 / RATE
             continue
         lift = np.interp(index + CONTACT, positions, frame_clock)
-        rapid = (positions[frame + 1] - positions[frame]) * fps > 25
-        length = min(
-            rng.uniform(0.13, 0.38) if rapid else rng.uniform(0.58, 0.94),
-            (duration if rapid else lift) - next_time,
-        )
+        length = min(rng.uniform(0.58, 0.94), min(lift, opening_end) - next_time)
         start = round(next_time * RATE)
         length_samples = min(round(length * RATE), total - start)
         if length_samples > RATE * 0.012:
             if not bag:
                 bag = rng.permutation(len(takes)).tolist()
             take = bag.pop()
-            gain = rng.uniform(0.65, 0.95) * (0.8 if rapid else 1.0)
+            gain = rng.uniform(0.65, 0.95)
             pan = 0.40 + 0.20 * marks[index].points[0][0] / width
             events.append((start, start + length_samples, take, gain, pan))
         next_time += max(length, 0.006)
-        if rapid or next_time < lift - 0.002:
-            next_time += rng.uniform(0.09, 0.24) if rapid else 0.018
+        if next_time < lift - 0.002:
+            next_time += 0.018
 
     active = 0
     with wave.open(str(path), "wb") as out:
@@ -174,14 +169,16 @@ def recorded_pencil(path, marks, positions, fps, width, rng, notes):
                 writing[lo - offset : hi - offset] += (
                     z[:, None] * np.array([1 - pan, pan]) * 1.85
                 )
-            # Cut even an accelerated phrase at a true timeline pause or the final hold.
+            # Keep any pause between visible marks silent.
             f = np.minimum((t * fps).astype(int), len(positions) - 1)
             moving = positions[np.minimum(f + 1, len(positions) - 1)] > positions[f]
             stereo += writing * moving[:, None]
             out.writeframesraw((stereo.clip(-1, 1) * 32767).astype("<i2").tobytes())
 
 
-def write_soundtrack(path, marks, positions, fps, width, style, seed, with_piano):
+def write_soundtrack(
+    path, marks, positions, fps, width, style, seed, with_piano, *, opening_end
+):
     """Integrate contact occupancy across audio samples, even in accelerated passages."""
     rng, music_rng = [
         np.random.default_rng(s) for s in np.random.SeedSequence(seed).spawn(2)
@@ -189,7 +186,9 @@ def write_soundtrack(path, marks, positions, fps, width, style, seed, with_piano
     duration = len(positions) / fps
     notes = piano_notes(duration, music_rng) if with_piano else []
     if style == "colored-pencil":
-        return recorded_pencil(path, marks, positions, fps, width, rng, notes)
+        return recorded_pencil(
+            path, marks, positions, fps, width, rng, notes, opening_end
+        )
     low, high, roughness, level, resonance = MATERIALS[style]
     band = butter(2, [low, high], btype="bandpass", fs=RATE, output="sos")
     state = np.zeros((len(band), 2))

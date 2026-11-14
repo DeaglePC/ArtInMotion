@@ -18,12 +18,22 @@ class SoundtrackTest(unittest.TestCase):
         self.assertEqual(set(MATERIALS) | {"colored-pencil"}, set(STYLES))
         self.assertEqual(set(TOOL_MEDIUM), {medium.tool for medium in STYLES.values()})
 
-    def render(self, shape, style, music=False):
+    def render(self, shape, style, music=False, opening_end=1.0):
         mark = Mark([(10, 20), (50, 45)], (20, 40, 60), shape=shape)
         # First mark runs from zero to one second, then the tool rests.
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "test.wav"
-            write_soundtrack(path, [mark], [0, 0.5, 1, 1], 2, 60, style, 42, music)
+            write_soundtrack(
+                path,
+                [mark],
+                [0, 0.5, 1, 1],
+                2,
+                60,
+                style,
+                42,
+                music,
+                opening_end=opening_end,
+            )
             with wave.open(str(path)) as reader:
                 self.assertEqual(reader.getnframes(), 2 * RATE)
                 return np.frombuffer(
@@ -38,6 +48,15 @@ class SoundtrackTest(unittest.TestCase):
         self.assertFalse(samples[int(RATE * 0.87) :].any())
         mixed = self.render("line", "colored-pencil", True)
         self.assertGreater(mixed[RATE : int(RATE * 1.4)].std(), 20)
+
+    def test_pencil_only_in_slow_opening(self):
+        opening = self.render("line", "colored-pencil", opening_end=0.25)
+        self.assertTrue(opening[: RATE // 4].any())
+        self.assertFalse(opening[RATE // 4 :].any())
+        self.assertFalse(self.render("line", "colored-pencil", opening_end=0).any())
+        mixed = self.render("line", "colored-pencil", True, opening_end=0.25)
+        piano = self.render("line", "colored-pencil", True, opening_end=0)
+        np.testing.assert_array_equal(mixed[RATE // 4 :], piano[RATE // 4 :])
 
     def test_tile_taps_on_placement(self):
         samples = self.render("tile", "pixel")

@@ -52,7 +52,7 @@ python scripts/render_art.py --input photo.jpg --style block-print --seconds 10 
 
 默认 24 秒、30 fps、长边 960 像素。自动校正 EXIF 方向，保持构图并将边长取偶数。用 `--size 1920` 提高长边分辨率，`--seed` 固定笔触变化。默认开头慢画，中段加速，结尾停留。用 `--opening-seconds 6` 给开头几笔留出六秒，用 `--pigment 1.25` 加浓原照绘制时的笔触。绘画工具全程可见，拼贴、像素与沙画使用放置光标。`--no-tool` 输出纯画面。20 种画风默认配有各自的绘画音效和本地合成的轻钢琴。运笔、点触或放置材料的声音跟随绘制时间线，收笔停留时只剩配乐。用 `--no-music` 单听绘画声，`--music 文件` 替换背景音乐，`--silent` 导出静音视频。相同的 `--seed` 可复现配乐。输出文件必须使用新名字，可用 `--help` 查看完整选项。
 
-彩铅使用铅笔在纸上划动的实录，按落笔时间剪入；快画段保留短暂间隙，钢琴轻声伴奏。音源采用 CC0 授权。 [zakkolar · pencil.wav](https://freesound.org/people/zakkolar/sounds/431438/)
+彩铅只在开头几笔慢画时播放铅笔划纸实录，进入快画段后只留背景音乐。设为 `--opening-seconds 0` 时全片只留配乐。音源采用 CC0 授权。 [zakkolar · pencil.wav](https://freesound.org/people/zakkolar/sounds/431438/)
 
 ## 画风
 

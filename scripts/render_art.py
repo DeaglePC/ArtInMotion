@@ -344,6 +344,7 @@ def movie(path, canvas, marks, tool, ground, texture, style, args):
             style or TOOL_MEDIUM[tool],
             args.seed,
             not (args.no_music or args.music),
+            opening_end=math.floor(opening * (count - 1)) / args.fps,
         )
         cmd += ["-i", str(soundtrack)]
         if args.music:
