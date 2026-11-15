@@ -262,10 +262,13 @@ Compare entrance and exit transitions on the exact same portrait. Every selector
 
 ## Common Options & Audio Craft
 
-Default output runs **24 seconds at 30 fps**, `960px` on the long edge, fitting the opening preview (`1.2s`) and transitions inside the requested runtime.
+Default output runs **24 seconds at 30 fps**, `960px` on the long edge. Process videos mount the artwork onto a **wooden studio drawing board** by default (corner masking tape for paper media, wooden easel ledge for impasto/woodcut, walnut lightbox frame for sand) while preserving the source photo's natural orientation and aspect ratio; `--image` exports a clean unframed still by default.
 
 | Goal | CLI Flag |
 |---|---|
+| Choose board hardware, full-bleed video, or framed still | `--board tape\|clip\|easel\|clean`　·　`--no-board`　·　`--image-board` |
+| Set landscape (16:9), portrait (9:16), or square screen | `--orientation landscape`　·　`--orientation portrait`　·　`--orientation square` |
+| Choose artwork aspect ratio (smart crop or ground pad) | `--aspect 16:9\|9:16\|4:3\|3:4\|3:2\|2:3\|1:1`　·　`--fit pad` |
 | Linger longer on slow opening strokes | `--opening-seconds 6` |
 | Deepen transparent pigment or export HD | `--pigment 1.25`　·　`--size 1920` |
 | Start directly on blank paper or hide the tool | `--no-preview`　·　`--no-tool` |

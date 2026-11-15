@@ -28,11 +28,11 @@ const PRESETS = [
 const HERO_REELS = [
   {
     key: "ribbon",
-    zhTab: "01 · 绸带彩铅 (24s)",
-    enTab: "01 · Pencil Film (24s)",
-    src: "./demo/ribbon-portrait.mp4?v=2",
-    zhCaption: "06 号绸带交错进场 · 仅在前三笔伴随轻柔铅笔划纸原声，随后切入温暖钢琴独奏",
-    enCaption: "No. 06 Ribbon entrance · Gentle pencil foley on the first 3 strokes only, followed by solo piano"
+    zhTab: "01 · 画板彩铅 (24s)",
+    enTab: "01 · Board Pencil (24s)",
+    src: "./demo/ribbon-portrait.mp4?v=3",
+    zhCaption: "木纹画板美纹纸装裱 · 06 号绸带进退场 · 仅前三笔配轻柔铅笔原声，随后切入温暖钢琴独奏",
+    enCaption: "Mounted on studio wood board with masking tape · Gentle foley on first 3 strokes + solo piano"
   },
   {
     key: "atlas20",
@@ -195,6 +195,20 @@ const I18N = {
     lblTransOut: "退场转场 (--transition-out)",
     optRandom: "随机挑选 (默认)",
     optSameIn: "与进场保持一致",
+    lblBoard: "画板装裱 (--board)",
+    brdAuto: "自动适配木纹画板 (默认)",
+    brdTape: "美纹纸胶带木画板 (tape)",
+    brdClip: "金属写生夹木画板 (clip)",
+    brdEasel: "深色木质画架托槽 (easel)",
+    brdClean: "极简无夹木画板 (clean)",
+    brdNone: "无画板铺满全屏 (--no-board)",
+    lblOrientation: "横竖屏画幅 (--orientation)",
+    oriAuto: "跟随原图自然方向 (默认)",
+    oriLandscape: "横屏 16:9 画板 (landscape)",
+    oriPortrait: "竖屏 9:16 画板 (portrait)",
+    oriSquare: "方屏 1:1 画板 (square)",
+    lblAspect: "图片比例 (--aspect)",
+    aspOrig: "保留原图完整比例 (默认)",
     lblDuration: "影片总时长",
     lblAudio: "声音与配乐方案",
     audDefault: "前三笔落纸原声 + 钢琴独奏 (推荐)",
@@ -290,6 +304,20 @@ const I18N = {
     lblTransOut: "Exit (--transition-out)",
     optRandom: "Random per film (Default)",
     optSameIn: "Match entrance transition",
+    lblBoard: "Drawing Board (--board)",
+    brdAuto: "Auto Studio Wood Board (Default)",
+    brdTape: "Corner Masking Tape (tape)",
+    brdClip: "Brass Sketchboard Clip (clip)",
+    brdEasel: "Walnut Studio Easel (easel)",
+    brdClean: "Clean Wood Board (clean)",
+    brdNone: "Full-Bleed No Board (--no-board)",
+    lblOrientation: "Screen Orientation (--orientation)",
+    oriAuto: "Match Source Orientation (Default)",
+    oriLandscape: "Landscape 16:9 (landscape)",
+    oriPortrait: "Portrait 9:16 (portrait)",
+    oriSquare: "Square 1:1 (square)",
+    lblAspect: "Image Aspect Ratio (--aspect)",
+    aspOrig: "Keep Original Ratio (Default)",
     lblDuration: "Runtime",
     lblAudio: "Acoustic Profile",
     audDefault: "3 Opening Foley Marks + Solo Piano (Default)",
@@ -331,6 +359,9 @@ const state = {
     styleId: "colored-pencil",
     transIn: "random",
     transOut: "same",
+    board: "auto",
+    orientation: "auto",
+    aspect: "original",
     seconds: "24",
     audio: "default",
     slowOpen: false,
@@ -872,6 +903,21 @@ function initStudio() {
     updateStudioOutputs();
   });
 
+  document.getElementById("stBoard").addEventListener("change", (e) => {
+    state.studio.board = e.target.value;
+    updateStudioOutputs();
+  });
+
+  document.getElementById("stOrientation").addEventListener("change", (e) => {
+    state.studio.orientation = e.target.value;
+    updateStudioOutputs();
+  });
+
+  document.getElementById("stAspect").addEventListener("change", (e) => {
+    state.studio.aspect = e.target.value;
+    updateStudioOutputs();
+  });
+
   document.getElementById("stDuration").addEventListener("change", (e) => {
     state.studio.seconds = e.target.value;
     updateStudioOutputs();
@@ -927,12 +973,22 @@ function populateStudioDropdowns() {
 
 function syncStudioForm() {
   const s = state.studio;
+  const isPort = s.engine === "portable";
   document.getElementById("stEngine").value = s.engine;
   document.getElementById("stStyle").value = s.styleId;
-  document.getElementById("stStyleField").style.opacity = s.engine === "portable" ? "1" : "0.45";
-  document.getElementById("stStyle").disabled = s.engine !== "portable";
+  ["stStyleField", "stBoardField", "stOrientField", "stAspectField"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.style.opacity = isPort ? "1" : "0.45";
+  });
+  ["stStyle", "stBoard", "stOrientation", "stAspect"].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = !isPort;
+  });
   document.getElementById("stTransIn").value = s.transIn;
   document.getElementById("stTransOut").value = s.transOut;
+  document.getElementById("stBoard").value = s.board;
+  document.getElementById("stOrientation").value = s.orientation;
+  document.getElementById("stAspect").value = s.aspect;
   document.getElementById("stDuration").value = s.seconds;
   document.getElementById("stAudio").value = s.audio;
 
@@ -1001,6 +1057,23 @@ function updateStudioOutputs() {
     cli = args.join(" ");
   } else {
     if (state.lang === "zh") {
+      const boardMapZh = {
+        auto: "",
+        tape: "视频装裱在贴有美纹纸胶带的木纹画板上。",
+        clip: "视频装裱在带金属写生夹的木纹画板上。",
+        easel: "视频装裱在深色木质画架托槽上。",
+        clean: "视频装裱在极简无夹木纹画板上。",
+        none: "不使用画板边框，画面铺满全屏。"
+      };
+      const oriMapZh = {
+        auto: "",
+        landscape: "输出为横屏（16:9）画幅，",
+        portrait: "输出为竖屏（9:16）画幅，",
+        square: "输出为方屏（1:1）画幅，"
+      };
+      const aspectZh = s.aspect === "original"
+        ? "保留原图比例"
+        : `图片比例裁为 ${s.aspect}`;
       const openPart = s.noPreview
         ? "跳过开场预览，直接从空白纸面开始绘制。"
         : (s.transIn === "random"
@@ -1015,12 +1088,29 @@ function updateStudioOutputs() {
         : (s.audio === "foley" ? "只保留绘画落笔声，不加背景音乐。" : "全片导出为静音视频。");
 
       prompt = [
-        `请用 $art-in-motion 把我附的原照按 ${preset.no} 号「${preset.zh}」(${preset.id}) 画成 ${s.seconds} 秒的视频，保留原构图。`,
+        `请用 $art-in-motion 把我附的原照按 ${preset.no} 号「${preset.zh}」(${preset.id}) 画成 ${s.seconds} 秒的视频，${oriMapZh[s.orientation]}${aspectZh}。`,
         `如果还没安装，请先从 https://github.com/DeaglePC/ArtInMotion 安装技能并配好依赖。`,
-        `${openPart}${toolPart}${pacePart}${pigPart}${hdPart}`,
+        `${boardMapZh[s.board]}${openPart}${toolPart}${pacePart}${pigPart}${hdPart}`,
         `${audioPart}完成后给我 MP4 视频和 PNG 成画。`
       ].join("\n");
     } else {
+      const boardMapEn = {
+        auto: "",
+        tape: "Mount the paper on a wooden drawing board with corner masking tape. ",
+        clip: "Mount the paper on a wooden sketchboard with a top brass clip. ",
+        easel: "Present the canvas on a studio wooden easel ledge. ",
+        clean: "Mount on a clean wooden drawing board. ",
+        none: "Export full-bleed without a drawing board. "
+      };
+      const oriMapEn = {
+        auto: "",
+        landscape: " in 16:9 landscape orientation,",
+        portrait: " in 9:16 portrait orientation,",
+        square: " in 1:1 square format,"
+      };
+      const aspectEn = s.aspect === "original"
+        ? "keeping the original aspect ratio"
+        : `cropped to ${s.aspect} aspect ratio`;
       const openPart = s.noPreview
         ? "Start directly on blank paper without an opening preview. "
         : (s.transIn === "random"
@@ -1035,9 +1125,9 @@ function updateStudioOutputs() {
         : (s.audio === "foley" ? "Keep drawing foley only with no background music." : "Export as a silent video.");
 
       prompt = [
-        `Use $art-in-motion to turn my attached photo into a ${s.seconds}-second film in style ${preset.no}, ${preset.en} (${preset.id}). Keep the original framing.`,
+        `Use $art-in-motion to turn my attached photo into a ${s.seconds}-second film in style ${preset.no}, ${preset.en} (${preset.id}),${oriMapEn[s.orientation]} ${aspectEn}.`,
         `If the skill is missing, install it from https://github.com/DeaglePC/ArtInMotion and set up its dependencies first.`,
-        `${openPart}${toolPart}${pacePart}${pigPart}${hdPart}`.trim(),
+        `${boardMapEn[s.board]}${openPart}${toolPart}${pacePart}${pigPart}${hdPart}`.trim(),
         `${audioPart} Give me both the MP4 film and the clean PNG still.`
       ].join("\n");
     }
@@ -1048,6 +1138,10 @@ function updateStudioOutputs() {
       `--style ${preset.id}`,
       `--seconds ${s.seconds}`
     ];
+    if (s.board === "none") flags.push(`--no-board`);
+    else if (s.board !== "auto") flags.push(`--board ${s.board}`);
+    if (s.orientation !== "auto") flags.push(`--orientation ${s.orientation}`);
+    if (s.aspect !== "original") flags.push(`--aspect ${s.aspect}`);
     if (s.slowOpen) flags.push(`--opening-seconds 6`);
     if (s.richPigment) flags.push(`--pigment 1.25`);
     if (s.hd) flags.push(`--size 1920`);

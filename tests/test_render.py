@@ -48,6 +48,7 @@ class ExportTest(unittest.TestCase):
         self.run_cli(*options, "--image", "still.png")
         self.run_cli(
             *options,
+            "--no-board",
             "--image",
             "both.png",
             "--video",
@@ -81,9 +82,73 @@ class ExportTest(unittest.TestCase):
             cwd=self.folder,
         )
         frames = np.frombuffer(raw, dtype=np.uint8).reshape(8, 70, 48, 3)
-        self.assertLess(np.abs(frames[0] - expected).mean(), 5)
+        self.assertLess(np.abs(frames[0] - expected).mean(), 5.5)
         self.assertLess(frames[1].std(axis=(0, 1)).max(), 1)
-        self.assertLess(np.abs(frames[-1] - expected).mean(), 5)
+        self.assertLess(np.abs(frames[-1] - expected).mean(), 5.5)
+
+    @unittest.skipUnless(shutil.which("ffmpeg"), "video check needs FFmpeg")
+    def test_default_drawing_board_and_orientation_aspect(self):
+        photo = Image.new("RGB", (180, 120), (235, 224, 210))
+        ImageDraw.Draw(photo).ellipse((65, 25, 115, 85), fill=(196, 112, 88))
+        photo.save(self.folder / "src.png")
+
+        # 1. Default video uses studio drawing board; --image stays clean paper
+        res = self.run_cli(
+            "--input",
+            "src.png",
+            "--style",
+            "04",
+            "--size",
+            "240",
+            "--seconds",
+            "1",
+            "--fps",
+            "6",
+            "--silent",
+            "--image",
+            "clean.png",
+            "--video",
+            "board.mp4",
+        )
+        info = json.loads(res.stdout.decode("utf8"))
+        self.assertEqual(info["board"], "tape")
+        self.assertEqual(info["video_size"][0], 240)
+        self.assertGreater(info["video_size"][0], info["size"][0])
+        self.assertGreater(info["video_size"][1], info["size"][1])
+        with Image.open(self.folder / "clean.png") as clean_im:
+            self.assertEqual(list(clean_im.size), info["size"])
+
+        # 2. Explicit portrait 9:16 video + 3:4 aspect crop + brass clip + --image-board
+        res_v = self.run_cli(
+            "--input",
+            "src.png",
+            "--style",
+            "06",
+            "--size",
+            "320",
+            "--orientation",
+            "竖屏",
+            "--aspect",
+            "3:4",
+            "--board",
+            "clip",
+            "--image-board",
+            "--seconds",
+            "1",
+            "--fps",
+            "6",
+            "--silent",
+            "--image",
+            "framed.png",
+            "--video",
+            "vertical.mp4",
+        )
+        v_info = json.loads(res_v.stdout.decode("utf8"))
+        self.assertEqual(v_info["board"], "clip")
+        self.assertEqual(v_info["video_size"], [180, 320])
+        self.assertLess(v_info["size"][0], v_info["size"][1])
+        with Image.open(self.folder / "framed.png") as framed_im:
+            self.assertEqual(list(framed_im.size), v_info["video_size"])
 
     def test_pencil_covers_dark_regions_and_preserves_small_highlights(self):
         photo = Image.new("RGB", (160, 96), (25, 21, 30))

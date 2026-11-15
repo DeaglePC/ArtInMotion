@@ -14,6 +14,15 @@ from pathlib import Path
 import numpy as np
 from art_styles import STYLES, Mark, Study
 from drawing_audio import CONTACT, TOOL_MEDIUM, write_soundtrack
+from drawing_board import (
+    BoardComposer,
+    compute_layout,
+    parse_aspect,
+    parse_board,
+    parse_orientation,
+    resolve_board_mode,
+    smart_reframe,
+)
 from PIL import Image, ImageDraw, ImageOps
 from sand_table import hand_shadow
 from video_intro import (
@@ -56,7 +65,38 @@ def arguments():
     )
     parser.add_argument("--fps", type=int, default=30)
     parser.add_argument(
-        "--size", type=int, default=960, help="Longest edge of photo output"
+        "--size", type=int, default=960, help="Longest edge of output"
+    )
+    parser.add_argument(
+        "--board",
+        default="auto",
+        help="Drawing board style for video: auto (default), tape, clip, easel, clean, or none",
+    )
+    parser.add_argument(
+        "--no-board",
+        action="store_true",
+        help="Disable drawing board and export full-bleed canvas video",
+    )
+    parser.add_argument(
+        "--image-board",
+        action="store_true",
+        help="Include the drawing board on the exported --image still as well",
+    )
+    parser.add_argument(
+        "--orientation",
+        default="auto",
+        help="Output orientation: auto (default), landscape (横屏), portrait (竖屏), or square",
+    )
+    parser.add_argument(
+        "--aspect",
+        default=None,
+        help="Artwork aspect ratio: original (default) or W:H such as 16:9, 9:16, 4:3, 3:4, 1:1",
+    )
+    parser.add_argument(
+        "--fit",
+        choices=("crop", "pad"),
+        default="crop",
+        help="How --aspect reframes photos: smart crop (default) or paper ground pad",
     )
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument(
@@ -117,6 +157,14 @@ def arguments():
     for p in (args.image, args.video):
         if p and p.exists():
             parser.error(f"choose a new output name: {p}")
+    try:
+        args.orientation = parse_orientation(args.orientation)
+        args.board = parse_board(args.board, args.no_board)
+        args.aspect_ratio = parse_aspect(args.aspect)
+    except ValueError as exc:
+        parser.error(str(exc))
+    if args.plan and (args.aspect is not None or args.fit != "crop"):
+        parser.error("--plan defines its own canvas size; omit --aspect and --fit")
     return args
 
 
@@ -131,8 +179,25 @@ def photo_plan(args):
         upright = ImageOps.exif_transpose(src).convert("RGBA")
         flat = Image.new("RGB", upright.size, medium.ground)
         flat.paste(upright, mask=upright.getchannel("A"))
-    factor = args.size / max(flat.size)
-    size = tuple(max(2, round(n * factor / 2) * 2) for n in flat.size)
+
+    use_board = bool(args.video or args.image_board) and args.board != "none"
+    board_mode = resolve_board_mode(args.board, style) if use_board else "none"
+
+    target_ratio = args.aspect_ratio
+    if target_ratio is None and board_mode == "none":
+        if args.orientation == "landscape" and flat.width < flat.height:
+            target_ratio = 16.0 / 9.0
+        elif args.orientation == "portrait" and flat.width > flat.height:
+            target_ratio = 9.0 / 16.0
+        elif args.orientation == "square":
+            target_ratio = 1.0
+
+    flat = smart_reframe(flat, target_ratio, fit=args.fit, ground=medium.ground)
+    size, frame_size, offset = compute_layout(
+        flat.size, args.size, args.orientation, board_mode
+    )
+    composer = BoardComposer.create(size, frame_size, offset, board_mode, seed=args.seed)
+
     ref = flat.resize(size, Image.Resampling.LANCZOS)
     marks = Study(ref, style, args.seed).plan()
     if style == "colored-pencil":
@@ -140,7 +205,7 @@ def photo_plan(args):
     if args.pigment != 1:
         for mark in marks:
             mark.opacity = min(255, round(mark.opacity * args.pigment))
-    return size, medium.ground, medium.tool, marks, style
+    return size, medium.ground, medium.tool, marks, style, composer
 
 
 def pencil_touchups(reference, ground, marks):
@@ -187,7 +252,7 @@ def ints(value, n, low, high):
     return tuple(value)
 
 
-def read_plan(path):
+def read_plan(path, args):
     data = json.loads(path.read_text(encoding="utf8"))
     size = ints(data["size"], 2, 2, 4096)
     if any(n % 2 for n in size):
@@ -216,7 +281,25 @@ def read_plan(path):
         marks.append(
             Mark(points, ints(item["color"], 3, 0, 255), width, opacity, shape)
         )
-    return size, ground, tool, marks, None
+    use_board = bool(args.video or args.image_board) and args.board != "none"
+    board_mode = resolve_board_mode(args.board, None) if use_board else "none"
+    if board_mode == "none":
+        composer = BoardComposer.create(size, size, (0, 0), "none", seed=args.seed)
+    else:
+        margin = max(6, round(max(size) * 0.08 / 2) * 2)
+        fw, fh = size[0] + 2 * margin, size[1] + 2 * margin
+        if args.orientation == "landscape" and fw / fh < 16 / 9:
+            fw = round(fh * 16 / 9 / 2) * 2
+        elif args.orientation == "portrait" and fw / fh > 9 / 16:
+            fh = round(fw * 16 / 9 / 2) * 2
+        elif args.orientation == "square":
+            side = max(fw, fh)
+            fw = fh = side
+        ox, oy = (fw - size[0]) // 2, (fh - size[1]) // 2
+        composer = BoardComposer.create(
+            size, (fw, fh), (ox, oy), board_mode, seed=args.seed
+        )
+    return size, ground, tool, marks, None, composer
 
 
 def paint(canvas, mark, progress=1.0):
@@ -259,41 +342,53 @@ def paint(canvas, mark, progress=1.0):
     return tip
 
 
-def tool_overlay(frame, point, tool, color):
+def tool_overlay(frame, point, tool, color, ref_size=None):
     w, h = frame.size
+    rw, rh = ref_size or (w, h)
     x, y = np.clip(point, [0, 0], [w - 1, h - 1])
-    scale = min(w, h) / 600
+    scale = min(rw, rh) / 600
     angle = math.radians(32 if x < w * 0.70 else 148)
     if y > h * 0.70:
         angle = -angle
     dx, dy = math.cos(angle) * scale, math.sin(angle) * scale
 
-    def pt(a, b):
-        return (x + a * dx - b * dy, y + a * dy + b * dx)
+    def pt(a, b, sx=0.0, sy=0.0):
+        return (x + sx + a * dx - b * dy, y + sy + a * dy + b * dx)
 
-    draw = ImageDraw.Draw(frame)
+    draw = ImageDraw.Draw(frame, "RGBA")
 
-    def poly(vertices, c):
-        draw.polygon([pt(a, b) for a, b in vertices], fill=c)
+    def poly(vertices, c, sx=0.0, sy=0.0):
+        draw.polygon([pt(a, b, sx, sy) for a, b in vertices], fill=c)
 
     if tool in ("tile", "piece", "grain"):
         # Placement cursor for non-pen media.
         draw.ellipse(
             [x - 5 * scale, y - 5 * scale, x + 5 * scale, y + 5 * scale],
-            outline=(81, 65, 52),
+            outline=(81, 65, 52, 235),
             width=max(1, round(scale)),
         )
-        draw.line([pt(4, 0), pt(17, 0)], fill=(81, 65, 52), width=max(1, round(scale)))
+        draw.line([pt(4, 0), pt(17, 0)], fill=(81, 65, 52, 235), width=max(1, round(scale)))
     elif tool == "roller":
+        poly([(0, -10), (9, -10), (9, 10), (0, 10)], (22, 16, 12, 48), 3 * scale, 5 * scale)
         poly([(0, -10), (9, -10), (9, 10), (0, 10)], color)
         draw.line(
             [pt(8, -10), pt(16, -10), pt(22, 0), pt(44, 0)],
-            fill=(87, 78, 67),
+            fill=(87, 78, 67, 255),
             width=max(1, round(3 * scale)),
         )
     else:
         width = 6 if tool in ("brush", "chalk", "gouge") else 3.8
         barrel = color if tool in ("pencil", "chalk") else (92, 69, 57)
+        body_pts = [
+            (0, 0),
+            (20, -width),
+            (84, -width * 0.65),
+            (87, 0),
+            (84, width * 0.65),
+            (20, width),
+        ]
+        # Subtle hovering tool shadow over paper and wooden board
+        poly(body_pts, (24, 16, 10, 52), 3.2 * scale, 5.2 * scale)
         poly([(0, 0), (20, -width), (20, width)], (188, 148, 101))
         poly([(0, 0), (7, -width * 0.38), (7, width * 0.38)], color)
         poly(
@@ -356,8 +451,10 @@ def paper_texture(size, style, seed):
     return Image.fromarray(grain.clip(0, 96).astype(np.uint8))
 
 
-def movie(path, canvas, marks, tool, ground, texture, style, args):
+def movie(path, canvas, marks, tool, ground, texture, style, composer, args):
     count = round(args.seconds * args.fps)
+    out_w, out_h = composer.frame_size
+    ox, oy = composer.offset
     cmd = [
         "ffmpeg",
         "-hide_banner",
@@ -369,7 +466,7 @@ def movie(path, canvas, marks, tool, ground, texture, style, args):
         "-pix_fmt",
         "rgb24",
         "-s",
-        f"{canvas.width}x{canvas.height}",
+        f"{out_w}x{out_h}",
         "-r",
         str(args.fps),
         "-i",
@@ -446,14 +543,18 @@ def movie(path, canvas, marks, tool, ground, texture, style, args):
                     preview.paste(ground, (0, 0, *preview.size), texture)
                 effects = choose_transitions(args.transition, args.transition_out)
                 print("Transitions:", *effects, file=sys.stderr, flush=True)
-                for frame in intro_images(preview, canvas, intro, *effects):
-                    proc.stdin.write(frame.tobytes())
+                blank = canvas.copy()
+                if texture is not None:
+                    blank.paste(ground, (0, 0, *blank.size), texture)
+                for frame in intro_images(preview, blank, intro, *effects):
+                    proc.stdin.write(composer.compose(frame).tobytes())
             for i, pos in enumerate(positions[intro:]):
                 t = i / max(1, draw_count - 1)
                 while completed < int(pos):
                     paint(canvas, marks[completed])
                     completed += 1
                 frame = canvas.copy()
+                show_tool = not args.no_tool
                 if marks:
                     mark = marks[min(completed, len(marks) - 1)]
                     if completed < len(marks):
@@ -469,19 +570,32 @@ def movie(path, canvas, marks, tool, ground, texture, style, args):
                             mark.points[-1] if mark.shape == "line" else mark.points[0]
                         )
                         tip = np.asarray(endpoint, dtype=float)
-                        tip[0] += min(0.04, t - 0.96) * canvas.width * 0.7
+                        if composer.mode != "none":
+                            # Smoothly glide the finished pencil/brush off onto the board margin
+                            pull = min(1.0, max(0.0, (t - 0.96) / 0.032))
+                            if pull >= 1.0:
+                                show_tool = False
+                            else:
+                                tip[0] += pull * max(ox * 1.15, canvas.width * 0.09)
+                                tip[1] += pull * max(oy * 0.45, canvas.height * 0.04)
+                        else:
+                            tip[0] += min(0.04, t - 0.96) * canvas.width * 0.7
                 else:
                     tip = (canvas.width * 0.5, canvas.height * 0.5)
                 if texture is not None:
                     frame.paste(ground, (0, 0, *frame.size), texture)
-                if style == "sand" and not args.no_tool:
-                    if completed < len(marks):
-                        hand_shadow(frame, tip, mark.shape == "pour")
-                elif not args.no_tool:
+                if style == "sand" and show_tool and completed < len(marks):
+                    hand_shadow(frame, tip, mark.shape == "pour")
+                out_frame = composer.compose(frame)
+                if style != "sand" and show_tool:
                     tool_overlay(
-                        frame, tip, tool, mark.color if marks else (70, 60, 50)
+                        out_frame,
+                        (tip[0] + ox, tip[1] + oy),
+                        tool,
+                        mark.color if marks else (70, 60, 50),
+                        ref_size=canvas.size,
                     )
-                proc.stdin.write(frame.tobytes())
+                proc.stdin.write(out_frame.tobytes())
         finally:
             proc.stdin.close()
         if proc.wait():
@@ -490,8 +604,8 @@ def movie(path, canvas, marks, tool, ground, texture, style, args):
 
 def main():
     args = arguments()
-    size, ground, tool, marks, style = (
-        read_plan(args.plan) if args.plan else photo_plan(args)
+    size, ground, tool, marks, style, composer = (
+        read_plan(args.plan, args) if args.plan else photo_plan(args)
     )
     canvas = (
         marks[0].table.base.copy()
@@ -507,14 +621,27 @@ def main():
             tmp = stack.enter_context(tempfile.TemporaryDirectory(dir=p.parent))
             staged[p] = Path(tmp) / p.name
         if args.video:
-            movie(staged[args.video], canvas, marks, tool, ground, texture, style, args)
+            movie(
+                staged[args.video],
+                canvas,
+                marks,
+                tool,
+                ground,
+                texture,
+                style,
+                composer,
+                args,
+            )
         else:
             for mark in marks:
                 paint(canvas, mark)
         if args.image:
+            still = canvas.copy()
             if texture is not None:
-                canvas.paste(ground, (0, 0, *size), texture)
-            canvas.save(staged[args.image])
+                still.paste(ground, (0, 0, *size), texture)
+            if args.image_board:
+                still = composer.compose(still)
+            still.save(staged[args.image])
         # Same-filesystem, no-overwrite publication after every encoder has succeeded.
         published = []
         try:
@@ -525,12 +652,11 @@ def main():
             for path in published:
                 path.unlink()
             raise
-    print(
-        json.dumps(
-            {"size": size, "marks": len(marks), "files": list(map(str, outputs))},
-            ensure_ascii=False,
-        )
-    )
+    summary = {"size": size, "marks": len(marks), "files": list(map(str, outputs))}
+    if args.video and composer.mode != "none":
+        summary["video_size"] = composer.frame_size
+        summary["board"] = composer.mode
+    print(json.dumps(summary, ensure_ascii=False))
 
 
 if __name__ == "__main__":
