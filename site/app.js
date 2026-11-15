@@ -27,9 +27,18 @@ const PRESETS = [
 
 const HERO_REELS = [
   {
+    key: "legendsDuo",
+    zhTab: "01 · 梅罗双骄油画 (24s)",
+    enTab: "01 · Messi × CR7 Oil (24s)",
+    src: "./demo/legends/01-duo-messi-ronaldo.mp4?v=1",
+    portrait: false,
+    zhCaption: "胡桃木画架装裱 · 09 号立体厚涂油画引擎逐笔塑造 C 罗与梅西同框瞬间，配前三笔刷涂原声与即兴钢琴",
+    enCaption: "Walnut studio easel · 3D impasto oil bristle relief of Cristiano Ronaldo & Lionel Messi with brush foley & solo piano"
+  },
+  {
     key: "ribbon",
-    zhTab: "01 · 画板彩铅 (24s)",
-    enTab: "01 · Board Pencil (24s)",
+    zhTab: "02 · 画板彩铅 (24s)",
+    enTab: "02 · Board Pencil (24s)",
     src: "./demo/ribbon-portrait.mp4?v=4",
     portrait: false,
     zhCaption: "木纹画板美纹纸装裱 · 06 号绸带进退场 · 前三笔配轻柔铅笔原声，随后切入随机即兴合成钢琴",
@@ -37,8 +46,8 @@ const HERO_REELS = [
   },
   {
     key: "atlas20",
-    zhTab: "02 · 20 画风对照 (30s)",
-    enTab: "02 · 20 Styles (30s)",
+    zhTab: "03 · 20 画风对照 (30s)",
+    enTab: "03 · 20 Styles (30s)",
     src: "./demo/musk-style-atlas.mp4",
     portrait: true,
     zhCaption: "同一张肖像裁切，每屏 4 种画风同步落笔，30 秒纵览 01–20 全部媒材",
@@ -46,8 +55,8 @@ const HERO_REELS = [
   },
   {
     key: "paintTrans",
-    zhTab: "03 · 绘画转场 (31s)",
-    enTab: "03 · Art Transitions (31s)",
+    zhTab: "04 · 绘画转场 (31s)",
+    enTab: "04 · Art Transitions (31s)",
     src: "./demo/painting-transitions.mp4?v=2",
     portrait: false,
     zhCaption: "全画幅展示水墨晕染、干刷横扫、纸角翻页、折扇开合等 10 种绘画专属进退场",
@@ -55,12 +64,225 @@ const HERO_REELS = [
   },
   {
     key: "classicOil",
-    zhTab: "04 · 3D 厚涂油画 (32s)",
-    enTab: "04 · 3D Oil (32s)",
+    zhTab: "05 · 3D 特写运镜 (32s)",
+    enTab: "05 · 3D Oil Zoom (32s)",
     src: "./demo/jensen-huang.mp4",
     portrait: true,
     zhCaption: "WebGL 立体油彩笔触 · 电影级特写推镜刻画双眸，落笔计数结束后拉回完整肖像",
     enCaption: "WebGL 3D bristle relief · Camera pushes in on the eyes with live stroke counter before pulling back"
+  }
+];
+
+const LEGEND_FILMS = [
+  {
+    no: "01",
+    slug: "01-duo-messi-ronaldo",
+    player: "duo",
+    playerBadgeZh: "CR7 × MESSI",
+    playerBadgeEn: "CR7 × MESSI",
+    styleId: "impasto",
+    boardCli: "easel",
+    transIn: "silk-fan",
+    aspect: "landscape",
+    zh: "绝代双骄同框 · 2011 日内瓦国家队对决",
+    en: "Rivals Side by Side · Portugal vs Argentina (2011)",
+    subZh: "胡桃木画架 · 09 厚涂油画 · 10 折扇开合转场",
+    subEn: "Walnut Easel · 09 Impasto Oil · 10 Silk Fan Reveal",
+    storyZh: "2011 年 2 月 9 日葡萄牙对阵阿根廷，身披五盾 7 号红衫的 C 罗与蓝白 10 号的梅西并肩同框。由纯 Python 3D 猪鬃厚涂油画引擎在熟褐亚麻画布上逐层堆叠立体脊线高光，装裱于深色胡桃木画架。",
+    storyEn: "Geneva, 9 Feb 2011: Cristiano Ronaldo in Portugal #7 crimson beside Lionel Messi in Argentina #10 sky-blue stripes. Rendered stroke-by-stroke with 3D multi-bristle impasto oil relief on a dark walnut studio easel.",
+    credit: "Photo: Fanny Schertzer · CC BY 3.0"
+  },
+  {
+    no: "02",
+    slug: "02-messi-worldcup-star",
+    player: "messi",
+    playerBadgeZh: "MESSI #10",
+    playerBadgeEn: "MESSI #10",
+    styleId: "colored-pencil",
+    boardCli: "tape",
+    transIn: "ribbon",
+    aspect: "portrait",
+    zh: "梅西 · 三星蓝白与世界冠军金章",
+    en: "Messi · Three-Star World Champion #10",
+    subZh: "美纹纸木画板 · 04 彩铅细绘",
+    subEn: "Masking-Taped Board · 04 Colored Pencil",
+    credit: "Photo: Bryan Berlin · CC BY-SA 4.0"
+  },
+  {
+    no: "03",
+    slug: "03-ronaldo-captain-gaze",
+    player: "ronaldo",
+    playerBadgeZh: "RONALDO #7",
+    playerBadgeEn: "RONALDO #7",
+    styleId: "realist",
+    boardCli: "easel",
+    transIn: "iris",
+    aspect: "portrait",
+    zh: "C罗 · 五盾军团7号队长凝视",
+    en: "Ronaldo · Portugal #7 Captain's Gaze",
+    subZh: "胡桃木画架 · 08 细腻写实绘画",
+    subEn: "Walnut Easel · 08 Realist Painting",
+    credit: "Photo: Bryan Berlin · CC BY-SA 4.0"
+  },
+  {
+    no: "04",
+    slug: "04-messi-sky-celebration",
+    player: "messi",
+    playerBadgeZh: "MESSI #10",
+    playerBadgeEn: "MESSI #10",
+    styleId: "watercolor",
+    boardCli: "tape",
+    transIn: "ink-bloom",
+    aspect: "portrait",
+    zh: "梅西 · 双手指天经典庆祝",
+    en: "Messi · Iconic Skyward Celebration",
+    subZh: "美纹纸木画板 · 06 透明水彩与彩墨",
+    subEn: "Masking-Taped Board · 06 Watercolor Wash",
+    credit: "Photo: Bryan Berlin · CC BY-SA 4.0"
+  },
+  {
+    no: "05",
+    slug: "05-ronaldo-siuuu-leap",
+    player: "ronaldo",
+    playerBadgeZh: "RONALDO #7",
+    playerBadgeEn: "RONALDO #7",
+    styleId: "ink-wash",
+    boardCli: "clip",
+    transIn: "ink-bloom",
+    aspect: "portrait",
+    zh: "C罗 · 腾空跃起「SIUUU!」庆祝",
+    en: "Ronaldo · Mid-Air 'SIUUU!' Celebration",
+    subZh: "金属夹写生板 · 05 黑白水墨",
+    subEn: "Brass Clip Board · 05 Sumi Ink Wash",
+    credit: "Photo: YantsImages · CC BY-SA 4.0"
+  },
+  {
+    no: "06",
+    slug: "06-messi-barca-2005",
+    player: "messi",
+    playerBadgeZh: "MESSI · BARÇA",
+    playerBadgeEn: "MESSI · BARÇA",
+    styleId: "crayon",
+    boardCli: "tape",
+    transIn: "dry-brush",
+    aspect: "portrait",
+    zh: "梅西 · 2005 巴萨红蓝长发少年",
+    en: "Messi · Young Barça Blaugrana (2005)",
+    subZh: "美纹纸木画板 · 11 蜡笔与油画棒",
+    subEn: "Masking-Taped Board · 11 Oil Pastel",
+    credit: "Photo: Josep Tomàs · CC BY-SA 4.0"
+  },
+  {
+    no: "07",
+    slug: "07-ronaldo-ballon-dor",
+    player: "ronaldo",
+    playerBadgeZh: "RONALDO · CR7",
+    playerBadgeEn: "RONALDO · CR7",
+    styleId: "sand",
+    boardCli: "auto",
+    transIn: "focus",
+    aspect: "portrait",
+    zh: "C罗 · 伯纳乌高举金球奖",
+    en: "Ronaldo · Bernabéu Golden Ballon d'Or",
+    subZh: "暖光背光沙画台 · 17 灯箱沙画",
+    subEn: "Warm Backlit Lightbox · 17 Sand Art",
+    credit: "Photo: Anish Morarji · CC BY 2.0"
+  },
+  {
+    no: "08",
+    slug: "08-messi-wcfinal-strike",
+    player: "messi",
+    playerBadgeZh: "MESSI #10",
+    playerBadgeEn: "MESSI #10",
+    styleId: "flat",
+    boardCli: "clip",
+    transIn: "prism",
+    aspect: "portrait",
+    zh: "梅西 · 世界杯决赛左脚劲射",
+    en: "Messi · World Cup Final Left-Foot Strike",
+    subZh: "金属夹写生板 · 12 平涂插画与漫画",
+    subEn: "Brass Clip Board · 12 Graphic Illustration",
+    credit: "Photo: Agência Brasil · CC BY 3.0 br"
+  },
+  {
+    no: "09",
+    slug: "09-ronaldo-euro-leap",
+    player: "ronaldo",
+    playerBadgeZh: "RONALDO #7",
+    playerBadgeEn: "RONALDO #7",
+    styleId: "hatching",
+    boardCli: "easel",
+    transIn: "page-curl",
+    aspect: "portrait",
+    zh: "C罗 · 2016 欧洲杯逆天滞空头槌",
+    en: "Ronaldo · Euro 2016 Gravity-Defying Leap",
+    subZh: "胡桃木画架 · 02 钢笔密线排绘",
+    subEn: "Walnut Easel · 02 Cross Hatching",
+    credit: "Photo: Chensiyuan · CC BY-SA 4.0"
+  },
+  {
+    no: "10",
+    slug: "10-messi-ucl-dribble",
+    player: "messi",
+    playerBadgeZh: "MESSI #10",
+    playerBadgeEn: "MESSI #10",
+    styleId: "block-print",
+    boardCli: "clean",
+    transIn: "mosaic",
+    aspect: "portrait",
+    zh: "梅西 · 2015 欧冠决赛单骑突破",
+    en: "Messi · 2015 UCL Final Solo Dribble",
+    subZh: "极简原木画板 · 14 套色版画",
+    subEn: "Clean Oak Board · 14 Multi-Plate Block Print",
+    credit: "Photo: Biser Todorov · CC BY 3.0"
+  },
+  {
+    no: "11",
+    slug: "11-ronaldo-manutd-7",
+    player: "ronaldo",
+    playerBadgeZh: "RONALDO #7",
+    playerBadgeEn: "RONALDO #7",
+    styleId: "gongbi",
+    boardCli: "tape",
+    transIn: "silk-fan",
+    aspect: "portrait",
+    zh: "C罗 · 重返梦剧场曼联红衣7号",
+    en: "Ronaldo · Old Trafford Man United #7",
+    subZh: "美纹纸木画板 · 07 工笔设色与重彩",
+    subEn: "Masking-Taped Board · 07 Gongbi Rich Color",
+    credit: "Photo: Ardfern · CC BY-SA 4.0"
+  },
+  {
+    no: "12",
+    slug: "12-messi-miami-pink",
+    player: "messi",
+    playerBadgeZh: "MESSI #10",
+    playerBadgeEn: "MESSI #10",
+    styleId: "pastel",
+    boardCli: "tape",
+    transIn: "silk-fan",
+    aspect: "portrait",
+    zh: "梅西 · 迈阿密国际粉衣10号队长",
+    en: "Messi · Inter Miami #10 Pink Kit",
+    subZh: "美纹纸木画板 · 10 干粉柔绘",
+    subEn: "Masking-Taped Board · 10 Soft Pastel",
+    credit: "Photo: Hayden Schiff · CC BY 4.0"
+  },
+  {
+    no: "13",
+    slug: "13-ronaldo-worldcup-roar",
+    player: "ronaldo",
+    playerBadgeZh: "RONALDO #7",
+    playerBadgeEn: "RONALDO #7",
+    styleId: "charcoal",
+    boardCli: "clip",
+    transIn: "charcoal",
+    aspect: "portrait",
+    zh: "C罗 · 2022 世界杯握拳怒吼",
+    en: "Ronaldo · World Cup 2022 Fist-Pump Roar",
+    subZh: "金属夹写生板 · 03 黑白明暗素描",
+    subEn: "Brass Clip Board · 03 Charcoal Chiaroscuro",
+    credit: "Photo: Hossein Zohrevand · CC BY 4.0"
   }
 ];
 
@@ -129,7 +351,7 @@ const ANATOMY_SEGMENTS = [
 const I18N = {
   zh: {
     brandSub: "逐笔绘画工作室",
-    navFilms: "14 部成片",
+    navFilms: "27 部放映厅",
     navTaxonomy: "20 种画法",
     navImpasto: "3D 厚涂",
     navTransitions: "68 种转场",
@@ -140,7 +362,7 @@ const I18N = {
     heroTitleHtml: "把一张照片，<br>画成一部 <em>24 秒</em>的有声短片。",
     heroLead: "观众先凝视成画，再随转场回到空白纸面，看第一笔落在哪里、色彩如何层层叠起。ArtInMotion 直接从原照计算轮廓、色相与笔触走向，无需生图大模型或 API Key，同步导出带配乐的 MP4 与干净成画。",
     ctaStudio: "定制专属提示词与命令",
-    ctaFilms: "进入 14 部有声放映室",
+    ctaFilms: "进入双馆有声放映室 (27 部)",
     m1Label: "手绘媒材预设",
     m2Label: "进退场转场效果",
     m3Label: "大模型与云端依赖",
@@ -150,8 +372,19 @@ const I18N = {
     anatomyHeader: "一部 24 秒短片的声画时间轴（点击分段查看设计细节）",
     anatomyHint: "默认 30 FPS · 长边 960px（可调至 1920px）",
     sec2Index: "EXHIBITION I · DARK SCREENING ROOM",
-    sec2Title: "十四部有声完整版 · 逐笔放映室",
-    sec2Desc: "同一张肖像在 14 种底纸与画具上逐笔成形。点击任意画作即可在暗房剧场播放 24 秒有声完整版 MP4，或一键载入工坊。",
+    sec2Title: "二十七部有声完整版 · 双馆暗房放映厅",
+    sec2Desc: "特设「绿茵双骄 · 梅西 × C罗传奇画廊」与「单像 14 种媒材对照」两大展厅。点击任意画作即可播放 24 秒落笔与钢琴原声成片，或一键将同款画风与木纹画板送入工坊。",
+    wingLegendsTitle: "绿茵双骄特展 · 梅西 × C罗",
+    wingLegendsCount: "13 部有声成片",
+    wingLegendsSub: "1 幅双骄同框厚涂镇馆作 + 梅西 6 大瞬间 + C罗 6 大瞬间，横跨 13 种手绘媒材与木画板",
+    wingMuskTitle: "单像媒材对照 · 同一肖像 14 种画法",
+    wingMuskCount: "14 部有声成片",
+    wingMuskSub: "同一张肖像在 14 种底纸、颜料与画具上的纯粹质感对照实验",
+    legFilterAll: "全部典藏 (13)",
+    legFilterDuo: "双骄同框 (1)",
+    legFilterMessi: "梅西 · Messi (6)",
+    legFilterRonaldo: "C罗 · Ronaldo (6)",
+    featuredKicker: "CENTERPIECE · 绿茵双骄镇馆之作",
     filterAll: "全部展品 (14)",
     filterLine: "素描与刀刻 (3)",
     filterInk: "水墨与丹青 (2)",
@@ -159,7 +392,9 @@ const I18N = {
     filterConstruct: "拼贴与构成 (4)",
     playFilmBtn: "▶ 播放有声成片",
     useStyleBtn: "选用此画风",
-    creditFilmsHtml: "以上 14 部影片改编自 Duncan.Hull / The Royal Society 拍摄的 <a href='https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg' target='_blank' rel='noopener'>Elon Musk 肖像原照</a>，衍生作品依 <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' rel='noopener'>CC BY-SA 4.0</a> 协议分享。",
+    creditLegendsHtml: "「绿茵双骄特展」13 部影片改编自 Wikimedia Commons 自由版权摄影（摄影师：Fanny Schertzer、Bryan Berlin、YantsImages、Josep Tomàs、Anish Morarji、Agência Brasil、Chensiyuan、Biser Todorov、Ardfern、Hayden Schiff、Hossein Zohrevand），衍生画作依 <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' rel='noopener'>CC BY / CC BY-SA 4.0</a> 协议署名分享。",
+    creditMuskHtml: "「单像媒材对照」14 部影片改编自 Duncan.Hull / The Royal Society 拍摄的 <a href='https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg' target='_blank' rel='noopener'>Elon Musk 肖像原照</a>，衍生作品依 <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' rel='noopener'>CC BY-SA 4.0</a> 协议分享。",
+    creditFilmsHtml: "衍生有声绘画短片均基于 Wikimedia Commons 开放授权摄影纯本地算法绘制，依 <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' rel='noopener'>CC BY-SA 4.0</a> 协议分享。",
     sec3Index: "CATALOGUE II · COMPLETE 20-MEDIA TAXONOMY",
     sec3Title: "一图二十画 · 全媒材色卡与笔触图谱",
     sec3Desc: "左侧可按章节跳看 20 种画风四宫格同步落笔，下方完整收录 01–20 号预设的真实底纸色卡、画具与技法特征。点击任意色卡即可送入下方工坊。",
@@ -238,7 +473,7 @@ const I18N = {
   },
   en: {
     brandSub: "Stroke-by-Stroke Studio",
-    navFilms: "14 Sound Films",
+    navFilms: "27 Sound Films",
     navTaxonomy: "20 Media",
     navImpasto: "3D Impasto",
     navTransitions: "68 Transitions",
@@ -249,7 +484,7 @@ const I18N = {
     heroTitleHtml: "Turn a photograph into<br>a <em>24-second</em> drawing film.",
     heroLead: "Open on the finished artwork, transition back to blank paper, and watch the first stroke build into layered color. ArtInMotion computes contours, palette, and brushwork locally—exporting both a scored MP4 and a clean still.",
     ctaStudio: "Open Prompt & CLI Studio",
-    ctaFilms: "Watch 14 Full Sound Films",
+    ctaFilms: "Enter Screening Room (27 Films)",
     m1Label: "Tactile Drawing Media",
     m2Label: "Entrance & Exit Effects",
     m3Label: "Cloud Models or Keys",
@@ -259,8 +494,19 @@ const I18N = {
     anatomyHeader: "Acoustic & Visual Architecture of a 24s Film (Click any phase)",
     anatomyHint: "Default 30 FPS · 960px long edge (up to 1920px HD)",
     sec2Index: "EXHIBITION I · DARK SCREENING ROOM",
-    sec2Title: "14 Full-Length Sound Films",
-    sec2Desc: "One portrait rendered across 14 grounds and tools. Click any piece to screen the full 24-second MP4 with audio, or load its preset into the Studio.",
+    sec2Title: "27 Full-Length Sound Films · Two Gallery Wings",
+    sec2Desc: "Explore the Football Legends Wing (Messi × Cristiano Ronaldo across 13 media & wooden boards) or the 14-Media Single-Portrait Study. Click any artwork to play the scored 24-second MP4 or load its exact preset into the Studio.",
+    wingLegendsTitle: "Football Legends · Messi × Ronaldo",
+    wingLegendsCount: "13 Sound Films",
+    wingLegendsSub: "1 iconic rivalry oil centerpiece + 6 Messi moments + 6 Ronaldo moments across 13 media & studio boards",
+    wingMuskTitle: "Single-Portrait Study · 14 Media",
+    wingMuskCount: "14 Sound Films",
+    wingMuskSub: "One reference portrait compared side-by-side across 14 distinct grounds, pigments & tools",
+    legFilterAll: "All Legends (13)",
+    legFilterDuo: "Iconic Duo (1)",
+    legFilterMessi: "Lionel Messi (6)",
+    legFilterRonaldo: "Cristiano Ronaldo (6)",
+    featuredKicker: "CENTERPIECE · RIVALRY MASTERWORK",
     filterAll: "All Works (14)",
     filterLine: "Line & Relief (3)",
     filterInk: "Ink & Gongbi (2)",
@@ -268,7 +514,9 @@ const I18N = {
     filterConstruct: "Collage & Construct (4)",
     playFilmBtn: "▶ Watch with Sound",
     useStyleBtn: "Use Preset",
-    creditFilmsHtml: "These 14 films adapt <a href='https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg' target='_blank' rel='noopener'>Elon Musk Royal Society.jpg</a> by Duncan.Hull / The Royal Society under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' rel='noopener'>CC BY-SA 4.0</a>.",
+    creditLegendsHtml: "The 13 Legends Wing films adapt Wikimedia Commons photographs by Fanny Schertzer, Bryan Berlin, YantsImages, Josep Tomàs, Anish Morarji, Agência Brasil, Chensiyuan, Biser Todorov, Ardfern, Hayden Schiff & Hossein Zohrevand under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' rel='noopener'>CC BY / CC BY-SA 4.0</a>.",
+    creditMuskHtml: "These 14 films adapt <a href='https://commons.wikimedia.org/wiki/File:Elon_Musk_Royal_Society.jpg' target='_blank' rel='noopener'>Elon Musk Royal Society.jpg</a> by Duncan.Hull / The Royal Society under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' rel='noopener'>CC BY-SA 4.0</a>.",
+    creditFilmsHtml: "All sound drawing films adapt open-licensed Wikimedia Commons photography under <a href='https://creativecommons.org/licenses/by-sa/4.0/' target='_blank' rel='noopener'>CC BY-SA 4.0</a>.",
     sec3Index: "CATALOGUE II · COMPLETE 20-MEDIA TAXONOMY",
     sec3Title: "One Reference, 20 Ways to Draw It",
     sec3Desc: "Jump through chapters of the 4-up comparison reel on the left, or explore all 20 tactile grounds, tools, and preset IDs below. Click any card to load it into the Studio.",
@@ -356,7 +604,9 @@ const state = {
   theme: "paper",
   heroReelIdx: 0,
   anatomyIdx: 3,
+  filmWing: "legends",
   filmFilter: "all",
+  lightboxWing: "legends",
   lightboxFilmIdx: 0,
   studio: {
     engine: "portable",
@@ -541,17 +791,65 @@ function renderAnatomy() {
 }
 
 /* ==========================================================================
-   14 Full-Length Sound Films Screening Room & Lightbox
+   Dual-Wing Full-Length Sound Films Screening Room & Lightbox
    ========================================================================== */
 
-function renderFilmFilters() {
-  const filters = [
-    { key: "all", label: t("filterAll") },
-    { key: "line", label: t("filterLine") },
-    { key: "ink", label: t("filterInk") },
-    { key: "paint", label: t("filterPaint") },
-    { key: "construct", label: t("filterConstruct") }
+function renderFilmWings() {
+  const wrap = document.getElementById("filmWingBar");
+  if (!wrap) return;
+  const wings = [
+    {
+      key: "legends",
+      title: t("wingLegendsTitle"),
+      count: t("wingLegendsCount"),
+      sub: t("wingLegendsSub")
+    },
+    {
+      key: "musk",
+      title: t("wingMuskTitle"),
+      count: t("wingMuskCount"),
+      sub: t("wingMuskSub")
+    }
   ];
+
+  wrap.innerHTML = wings.map((w) => `
+    <button type="button" role="tab" aria-selected="${state.filmWing === w.key}" class="wing-btn ${state.filmWing === w.key ? "active" : ""}" data-wing="${w.key}">
+      <div class="wing-top">
+        <span class="wing-title">${w.title}</span>
+        <span class="wing-count">${w.count}</span>
+      </div>
+      <div class="wing-sub">${w.sub}</div>
+    </button>
+  `).join("");
+
+  wrap.querySelectorAll(".wing-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (state.filmWing === btn.dataset.wing) return;
+      state.filmWing = btn.dataset.wing;
+      state.filmFilter = "all";
+      renderFilmWings();
+      renderFilmFilters();
+      renderFilmsGrid();
+    });
+  });
+}
+
+function renderFilmFilters() {
+  const filters = state.filmWing === "legends"
+    ? [
+        { key: "all", label: t("legFilterAll") },
+        { key: "duo", label: t("legFilterDuo") },
+        { key: "messi", label: t("legFilterMessi") },
+        { key: "ronaldo", label: t("legFilterRonaldo") }
+      ]
+    : [
+        { key: "all", label: t("filterAll") },
+        { key: "line", label: t("filterLine") },
+        { key: "ink", label: t("filterInk") },
+        { key: "paint", label: t("filterPaint") },
+        { key: "construct", label: t("filterConstruct") }
+      ];
+
   const wrap = document.getElementById("filmFilterBar");
   wrap.innerHTML = filters.map((f) => `
     <button type="button" class="filter-chip ${state.filmFilter === f.key ? "active" : ""}" data-filter="${f.key}">
@@ -568,8 +866,105 @@ function renderFilmFilters() {
   });
 }
 
+function updateFilmsAttribution() {
+  const note = document.getElementById("creditFilmsNote");
+  if (!note) return;
+  note.innerHTML = state.filmWing === "legends" ? t("creditLegendsHtml") : t("creditMuskHtml");
+}
+
 function renderFilmsGrid() {
   const grid = document.getElementById("filmsGrid");
+  updateFilmsAttribution();
+
+  if (state.filmWing === "legends") {
+    const items = state.filmFilter === "all"
+      ? LEGEND_FILMS
+      : LEGEND_FILMS.filter((item) => item.player === state.filmFilter);
+
+    grid.innerHTML = items.map((item) => {
+      const idx = LEGEND_FILMS.findIndex((lf) => lf.slug === item.slug);
+      const preset = PRESETS.find((p) => p.id === item.styleId) || PRESETS[0];
+      const title = state.lang === "zh" ? item.zh : item.en;
+      const sub = state.lang === "zh" ? item.subZh : item.subEn;
+      const presetName = state.lang === "zh" ? preset.zh : preset.en;
+      const badge = state.lang === "zh" ? item.playerBadgeZh : item.playerBadgeEn;
+
+      if (item.player === "duo") {
+        const story = state.lang === "zh" ? item.storyZh : item.storyEn;
+        return `
+          <article class="film-card legend-featured">
+            <div class="film-thumb-wrap" data-open-legend="${idx}">
+              <img src="./demo/legends/previews/${item.slug}.webp?v=2" alt="${title}" loading="eager">
+              <div class="film-play-veil">
+                <span class="play-pill">${t("playFilmBtn")}</span>
+                <span style="font-family:var(--font-mono);font-size:11px;color:#f2ede4;">24s · AAC · 960p</span>
+              </div>
+            </div>
+            <div class="legend-featured-info">
+              <div class="legend-kicker">
+                <span class="player-dot duo"></span>
+                <span>${t("featuredKicker")}</span>
+              </div>
+              <h3 class="legend-featured-title">${title}</h3>
+              <p class="legend-featured-desc">${story}</p>
+              <div class="legend-specs">
+                <span class="legend-spec-pill">NO. ${preset.no} · ${presetName}</span>
+                <span class="legend-spec-pill">--board ${item.boardCli}</span>
+                <span class="legend-spec-pill">--transition ${item.transIn}</span>
+                <span class="legend-spec-pill">${item.credit}</span>
+              </div>
+              <div class="film-actions" style="margin-top:6px;">
+                <button type="button" class="film-btn primary" data-open-legend="${idx}">${t("playFilmBtn")}</button>
+                <button type="button" class="film-btn" data-select-legend="${idx}">${t("useStyleBtn")}</button>
+              </div>
+            </div>
+          </article>
+        `;
+      }
+
+      return `
+        <article class="film-card">
+          <div class="film-card-meta-top">
+            <span class="player-tag">
+              <span class="player-dot ${item.player}"></span>
+              <span>${badge}</span>
+            </span>
+            <span class="ground-badge">
+              <span class="ground-dot" style="background:${preset.ground}"></span>
+              <span>${preset.no} · ${presetName}</span>
+            </span>
+          </div>
+          <div class="film-thumb-wrap legend-thumb" data-open-legend="${idx}">
+            <img src="./demo/legends/previews/${item.slug}.webp?v=2" alt="${title}" loading="lazy">
+            <div class="film-play-veil">
+              <span class="play-pill">${t("playFilmBtn")}</span>
+              <span style="font-family:var(--font-mono);font-size:11px;color:#f2ede4;">24s · AAC</span>
+            </div>
+          </div>
+          <div class="film-card-body">
+            <div class="film-title-row">
+              <span class="film-name">${title}</span>
+            </div>
+            <div class="film-subnote">${sub}</div>
+            <div class="film-actions">
+              <button type="button" class="film-btn primary" data-open-legend="${idx}">${t("playFilmBtn")}</button>
+              <button type="button" class="film-btn" data-select-legend="${idx}">${t("useStyleBtn")}</button>
+            </div>
+          </div>
+        </article>
+      `;
+    }).join("");
+
+    grid.querySelectorAll("[data-open-legend]").forEach((el) => {
+      el.addEventListener("click", () => openLightbox("legends", parseInt(el.dataset.openLegend, 10)));
+    });
+
+    grid.querySelectorAll("[data-select-legend]").forEach((el) => {
+      el.addEventListener("click", () => selectLegendPresetAndScroll(parseInt(el.dataset.selectLegend, 10)));
+    });
+    return;
+  }
+
   const items = state.filmFilter === "all"
     ? FILM_PRESETS
     : FILM_PRESETS.filter((p) => p.family === state.filmFilter);
@@ -609,12 +1004,28 @@ function renderFilmsGrid() {
   }).join("");
 
   grid.querySelectorAll("[data-open-film]").forEach((el) => {
-    el.addEventListener("click", () => openLightbox(parseInt(el.dataset.openFilm, 10)));
+    el.addEventListener("click", () => openLightbox("musk", parseInt(el.dataset.openFilm, 10)));
   });
 
   grid.querySelectorAll("[data-select-style]").forEach((el) => {
     el.addEventListener("click", () => selectStyleAndScroll(el.dataset.selectStyle));
   });
+}
+
+function selectLegendPresetAndScroll(legendIdx) {
+  const item = LEGEND_FILMS[legendIdx];
+  if (!item) return;
+  const p = PRESETS.find((pr) => pr.id === item.styleId);
+  if (!p) return;
+  state.studio.engine = "portable";
+  state.studio.styleId = item.styleId;
+  state.studio.board = item.boardCli || "auto";
+  state.studio.transIn = item.transIn || "random";
+  syncStudioForm();
+  renderPresetsMatrix();
+  updateStudioOutputs();
+  showToast(`${t("styleLoadedToast")}${p.no} · ${state.lang === "zh" ? p.zh : p.en} (--board ${state.studio.board})`);
+  document.getElementById("studio").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 function initLightbox() {
@@ -631,17 +1042,23 @@ function initLightbox() {
   });
 
   prevBtn.addEventListener("click", () => {
-    openLightbox((state.lightboxFilmIdx - 1 + FILM_PRESETS.length) % FILM_PRESETS.length);
+    const list = state.lightboxWing === "legends" ? LEGEND_FILMS : FILM_PRESETS;
+    openLightbox(state.lightboxWing, (state.lightboxFilmIdx - 1 + list.length) % list.length);
   });
 
   nextBtn.addEventListener("click", () => {
-    openLightbox((state.lightboxFilmIdx + 1) % FILM_PRESETS.length);
+    const list = state.lightboxWing === "legends" ? LEGEND_FILMS : FILM_PRESETS;
+    openLightbox(state.lightboxWing, (state.lightboxFilmIdx + 1) % list.length);
   });
 
   useBtn.addEventListener("click", () => {
-    const p = FILM_PRESETS[state.lightboxFilmIdx];
     closeLightbox();
-    selectStyleAndScroll(p.id);
+    if (state.lightboxWing === "legends") {
+      selectLegendPresetAndScroll(state.lightboxFilmIdx);
+    } else {
+      const p = FILM_PRESETS[state.lightboxFilmIdx];
+      if (p) selectStyleAndScroll(p.id);
+    }
   });
 
   document.addEventListener("keydown", (e) => {
@@ -658,17 +1075,32 @@ function initLightbox() {
   });
 }
 
-function openLightbox(filmIdx) {
+function openLightbox(wing, filmIdx) {
+  state.lightboxWing = wing;
   state.lightboxFilmIdx = filmIdx;
-  const p = FILM_PRESETS[filmIdx];
   const modal = document.getElementById("lightbox");
   const video = document.getElementById("lightboxVideo");
+  const box = video.parentElement;
   const titleEl = document.getElementById("lightboxTitle");
   const metaEl = document.getElementById("lightboxMeta");
 
-  titleEl.textContent = `${p.no} · ${state.lang === "zh" ? p.zh : p.en}`;
-  metaEl.textContent = `--style ${p.id}  ·  24s Sound Film`;
-  video.src = `./demo/musk-styles/${p.no}-${p.id}.mp4?v=5`;
+  box.classList.remove("is-landscape", "is-portrait");
+
+  if (wing === "legends") {
+    const item = LEGEND_FILMS[filmIdx];
+    const preset = PRESETS.find((pr) => pr.id === item.styleId) || PRESETS[0];
+    const title = state.lang === "zh" ? item.zh : item.en;
+    box.classList.add(item.aspect === "landscape" ? "is-landscape" : "is-portrait");
+    titleEl.textContent = `${item.no} · ${title}`;
+    metaEl.textContent = `--style ${item.styleId} (${state.lang === "zh" ? preset.zh : preset.en})  ·  --board ${item.boardCli}  ·  ${item.credit}`;
+    video.src = `./demo/legends/${item.slug}.mp4?v=2`;
+  } else {
+    const p = FILM_PRESETS[filmIdx];
+    titleEl.textContent = `${p.no} · ${state.lang === "zh" ? p.zh : p.en}`;
+    metaEl.textContent = `--style ${p.id}  ·  24s Sound Film`;
+    video.src = `./demo/musk-styles/${p.no}-${p.id}.mp4?v=5`;
+  }
+
   video.muted = false;
   modal.classList.add("open");
   video.play().catch(() => {});
@@ -1199,6 +1631,7 @@ function applyLanguage() {
   document.getElementById("heroCaption").textContent = state.lang === "zh" ? reel.zhCaption : reel.enCaption;
   updateSoundBadge();
   renderAnatomy();
+  renderFilmWings();
   renderFilmFilters();
   renderFilmsGrid();
   renderPresetsMatrix();
@@ -1309,6 +1742,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initTopControls();
   initHeroStage();
   renderAnatomy();
+  renderFilmWings();
   renderFilmFilters();
   renderFilmsGrid();
   initLightbox();
