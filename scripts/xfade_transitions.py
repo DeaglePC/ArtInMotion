@@ -95,8 +95,8 @@ def frames(start, end, count, effect):
     # gbrp avoids a YUV round trip at the transition boundaries.
     graph = (
         "[0:v]format=gbrp,split[a][b];"
-        "[a]trim=end_frame=1,loop=-1:1:0,setpts=N[a0];"
-        "[b]trim=start_frame=1:end_frame=2,loop=-1:1:0,setpts=N[b0];"
+        f"[a]trim=end_frame=1,loop={count - 1}:1:0,setpts=N[a0];"
+        f"[b]trim=start_frame=1:end_frame=2,loop={count - 1}:1:0,setpts=N[b0];"
         f"[a0][b0]xfade=transition={effect}:duration={count / 25:.6f},trim=start_frame=1,format=rgb24"
     )
     cmd = [

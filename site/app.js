@@ -30,9 +30,9 @@ const HERO_REELS = [
     key: "ribbon",
     zhTab: "01 · 绸带彩铅 (24s)",
     enTab: "01 · Pencil Film (24s)",
-    src: "./demo/ribbon-portrait.mp4",
-    zhCaption: "06 号绸带交错进场 · 前四笔伴随真实铅笔划纸原声，延时段切入本机合成钢琴独奏",
-    enCaption: "No. 06 Ribbon entrance · Real pencil foley on opening strokes, followed by solo synthesized piano"
+    src: "./demo/ribbon-portrait.mp4?v=2",
+    zhCaption: "06 号绸带交错进场 · 仅在前三笔伴随轻柔铅笔划纸原声，随后切入温暖钢琴独奏",
+    enCaption: "No. 06 Ribbon entrance · Gentle pencil foley on the first 3 strokes only, followed by solo piano"
   },
   {
     key: "atlas20",
@@ -46,7 +46,7 @@ const HERO_REELS = [
     key: "paintTrans",
     zhTab: "03 · 绘画转场 (31s)",
     enTab: "03 · Art Transitions (31s)",
-    src: "./demo/painting-transitions.mp4",
+    src: "./demo/painting-transitions.mp4?v=2",
     zhCaption: "全画幅展示水墨晕染、干刷横扫、纸角翻页、折扇开合等 10 种绘画专属进退场",
     enCaption: "Full-frame showcase of ink bloom, dry brush, page curl, silk fan, and 6 more painting transitions"
   },
@@ -625,7 +625,7 @@ function openLightbox(filmIdx) {
 
   titleEl.textContent = `${p.no} · ${state.lang === "zh" ? p.zh : p.en}`;
   metaEl.textContent = `--style ${p.id}  ·  24s Sound Film`;
-  video.src = `./demo/musk-styles/${p.no}-${p.id}.mp4`;
+  video.src = `./demo/musk-styles/${p.no}-${p.id}.mp4?v=2`;
   video.muted = false;
   modal.classList.add("open");
   video.play().catch(() => {});
@@ -775,14 +775,14 @@ function initTransitionsSection() {
   btn10.addEventListener("click", () => {
     btn10.classList.add("active");
     btn68.classList.remove("active");
-    video.src = "./demo/painting-transitions.mp4";
+    video.src = "./demo/painting-transitions.mp4?v=2";
     video.play().catch(() => {});
   });
 
   btn68.addEventListener("click", () => {
     btn68.classList.add("active");
     btn10.classList.remove("active");
-    video.src = "./demo/transition-atlas.mp4";
+    video.src = "./demo/transition-atlas.mp4?v=2";
     video.play().catch(() => {});
   });
 

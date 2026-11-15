@@ -14,25 +14,25 @@ CONTACT = 0.86  # The remaining fraction moves the tool to the next mark.
 # Friction band (Hz), surface roughness, level and contact resonance (Hz).
 # Wider, lower bands give wet media a softer swish; dry points have more grain.
 MATERIALS = {
-    "contour": (1350, 5400, 0.35, 0.19, 1400),
-    "hatching": (1650, 6200, 0.62, 0.18, 1700),
-    "charcoal": (310, 2800, 0.84, 0.24, 440),
-    "ink-wash": (180, 1550, 0.22, 0.17, 330),
-    "watercolor": (290, 2400, 0.18, 0.18, 460),
-    "gongbi": (650, 3300, 0.26, 0.17, 730),
-    "realist": (350, 2850, 0.37, 0.18, 530),
-    "impasto": (210, 2050, 0.76, 0.24, 300),
-    "pastel": (510, 3500, 0.75, 0.21, 580),
-    "crayon": (250, 2250, 0.88, 0.23, 420),
-    "flat": (540, 3100, 0.36, 0.17, 680),
-    "woodcut": (370, 4200, 0.91, 0.23, 760),
-    "block-print": (110, 1550, 0.72, 0.23, 240),
-    "stipple": (1350, 6700, 0.31, 0.20, 1830),
-    "collage": (740, 4400, 0.67, 0.22, 530),
-    "sand": (420, 4300, 0.74, 0.065, 420),
-    "marbling": (145, 1400, 0.27, 0.17, 355),
-    "facets": (460, 3500, 0.37, 0.19, 950),
-    "pixel": (1150, 4900, 0.20, 0.17, 2080),
+    "contour": (1350, 5400, 0.35, 0.038, 1400),
+    "hatching": (1650, 6200, 0.62, 0.036, 1700),
+    "charcoal": (310, 2800, 0.84, 0.046, 440),
+    "ink-wash": (180, 1550, 0.22, 0.035, 330),
+    "watercolor": (290, 2400, 0.18, 0.036, 460),
+    "gongbi": (650, 3300, 0.26, 0.035, 730),
+    "realist": (350, 2850, 0.37, 0.036, 530),
+    "impasto": (210, 2050, 0.76, 0.046, 300),
+    "pastel": (510, 3500, 0.75, 0.042, 580),
+    "crayon": (250, 2250, 0.88, 0.045, 420),
+    "woodcut": (370, 4200, 0.91, 0.044, 760),
+    "flat": (540, 3100, 0.36, 0.035, 680),
+    "block-print": (110, 1550, 0.72, 0.045, 240),
+    "stipple": (1350, 6700, 0.31, 0.040, 1830),
+    "collage": (740, 4400, 0.67, 0.044, 530),
+    "sand": (420, 4300, 0.74, 0.026, 420),
+    "marbling": (145, 1400, 0.27, 0.035, 355),
+    "facets": (460, 3500, 0.37, 0.038, 950),
+    "pixel": (1150, 4900, 0.20, 0.042, 2080),
 }
 TOOL_MEDIUM = {
     "pen": "contour",
@@ -57,11 +57,11 @@ def piano_notes(duration, rng):
     for bar in range(int(duration / (4 * beat)) + 1):
         bass, third, fifth, top = voicings[bar % 4]
         phrase = [
-            (0, bass - 12, 0.105),
-            (0.52, fifth, 0.075),
-            (1.03, third, 0.083),
-            (2.03, top + 12, 0.088),
-            (3.05, fifth + 12, 0.061),
+            (0, bass - 12, 0.34),
+            (0.52, fifth, 0.255),
+            (1.03, third, 0.275),
+            (2.03, top + 12, 0.29),
+            (3.05, fifth + 12, 0.21),
         ]
         if bar % 4 == 3:
             phrase.pop()
@@ -153,7 +153,7 @@ def recorded_pencil(path, marks, positions, fps, width, rng, notes, opening_end)
         for offset in range(0, total, RATE):
             stop = min(total, offset + RATE)
             t = np.arange(offset, stop) / RATE
-            stereo = piano_block(t, notes, duration) * 0.35
+            stereo = piano_block(t, notes, duration)
             writing = np.zeros_like(stereo)
             while active < len(events) and events[active][1] <= offset:
                 active += 1
@@ -168,13 +168,13 @@ def recorded_pencil(path, marks, positions, fps, width, rng, notes, opening_end)
                 )
                 z = takes[take, lo - start : hi - start] * fade * gain
                 writing[lo - offset : hi - offset] += (
-                    z[:, None] * np.array([1 - pan, pan]) * 1.85
+                    z[:, None] * np.array([1 - pan, pan]) * 1.10
                 )
             # Keep any pause between visible marks silent.
             f = np.minimum((t * fps).astype(int), len(positions) - 1)
             moving = positions[np.minimum(f + 1, len(positions) - 1)] > positions[f]
             stereo += writing * moving[:, None]
-            out.writeframesraw((stereo.clip(-1, 1) * 32767).astype("<i2").tobytes())
+            out.writeframesraw((np.tanh(stereo * 1.55) * 32760).astype("<i2").tobytes())
 
 
 def write_soundtrack(
