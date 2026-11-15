@@ -30,15 +30,17 @@ const HERO_REELS = [
     key: "ribbon",
     zhTab: "01 · 画板彩铅 (24s)",
     enTab: "01 · Board Pencil (24s)",
-    src: "./demo/ribbon-portrait.mp4?v=3",
-    zhCaption: "木纹画板美纹纸装裱 · 06 号绸带进退场 · 仅前三笔配轻柔铅笔原声，随后切入温暖钢琴独奏",
-    enCaption: "Mounted on studio wood board with masking tape · Gentle foley on first 3 strokes + solo piano"
+    src: "./demo/ribbon-portrait.mp4?v=4",
+    portrait: false,
+    zhCaption: "木纹画板美纹纸装裱 · 06 号绸带进退场 · 前三笔配轻柔铅笔原声，随后切入随机即兴合成钢琴",
+    enCaption: "Mounted on studio wood board with masking tape · Gentle foley on first 3 strokes + random improvised piano"
   },
   {
     key: "atlas20",
     zhTab: "02 · 20 画风对照 (30s)",
     enTab: "02 · 20 Styles (30s)",
     src: "./demo/musk-style-atlas.mp4",
+    portrait: true,
     zhCaption: "同一张肖像裁切，每屏 4 种画风同步落笔，30 秒纵览 01–20 全部媒材",
     enCaption: "One reference crop rendered side by side across all 20 media presets (01–20)"
   },
@@ -47,6 +49,7 @@ const HERO_REELS = [
     zhTab: "03 · 绘画转场 (31s)",
     enTab: "03 · Art Transitions (31s)",
     src: "./demo/painting-transitions.mp4?v=2",
+    portrait: false,
     zhCaption: "全画幅展示水墨晕染、干刷横扫、纸角翻页、折扇开合等 10 种绘画专属进退场",
     enCaption: "Full-frame showcase of ink bloom, dry brush, page curl, silk fan, and 6 more painting transitions"
   },
@@ -55,6 +58,7 @@ const HERO_REELS = [
     zhTab: "04 · 3D 厚涂油画 (32s)",
     enTab: "04 · 3D Oil (32s)",
     src: "./demo/jensen-huang.mp4",
+    portrait: true,
     zhCaption: "WebGL 立体油彩笔触 · 电影级特写推镜刻画双眸，落笔计数结束后拉回完整肖像",
     enCaption: "WebGL 3D bristle relief · Camera pushes in on the eyes with live stroke counter before pulling back"
   }
@@ -425,6 +429,10 @@ function initHeroStage() {
 
   video.addEventListener("loadedmetadata", () => {
     timecode.textContent = `00:00 / ${formatTime(video.duration)}`;
+    const viewport = video.parentElement;
+    if (viewport && video.videoWidth && video.videoHeight) {
+      viewport.classList.toggle("is-portrait", video.videoHeight > video.videoWidth);
+    }
   });
 
   scrubber.addEventListener("input", () => {
@@ -465,6 +473,10 @@ function loadHeroReel(idx, autoPlay) {
   const reel = HERO_REELS[idx];
   const video = document.getElementById("heroVideo");
   const caption = document.getElementById("heroCaption");
+  const viewport = video.parentElement;
+  if (viewport) {
+    viewport.classList.toggle("is-portrait", Boolean(reel.portrait));
+  }
 
   const wasMuted = video.muted;
   video.src = reel.src;
@@ -656,7 +668,7 @@ function openLightbox(filmIdx) {
 
   titleEl.textContent = `${p.no} · ${state.lang === "zh" ? p.zh : p.en}`;
   metaEl.textContent = `--style ${p.id}  ·  24s Sound Film`;
-  video.src = `./demo/musk-styles/${p.no}-${p.id}.mp4?v=2`;
+  video.src = `./demo/musk-styles/${p.no}-${p.id}.mp4?v=4`;
   video.muted = false;
   modal.classList.add("open");
   video.play().catch(() => {});

@@ -1,5 +1,6 @@
 """Synthesize drawing foley and a quiet piano score against the renderer's frame clock."""
 
+import secrets
 import wave
 from pathlib import Path
 
@@ -48,36 +49,104 @@ TOOL_MEDIUM = {
 }
 
 
+PROGRESSIONS = [
+    [(0, 4, 7, 11), (-3, 0, 4, 7), (-7, -3, 0, 4), (-5, 0, 2, 7)],
+    [(0, 4, 7, 11), (-5, -1, 2, 7), (-3, 0, 4, 9), (-7, -3, 0, 4)],
+    [(5, 9, 12, 16), (7, 11, 14, 16), (4, 7, 11, 14), (-3, 0, 4, 11)],
+    [(-3, 0, 4, 11), (-7, -3, 0, 4), (0, 2, 4, 7), (-5, 0, 2, 7)],
+    [(0, 4, 7, 14), (4, 7, 11, 14), (5, 9, 12, 16), (2, 5, 9, 12)],
+    [(2, 5, 9, 12), (-5, -1, 2, 9), (0, 4, 7, 14), (-3, 0, 4, 7)],
+    [(0, 4, 7, 11), (5, 9, 12, 16), (-3, 0, 4, 7), (-5, 0, 2, 7)],
+    [(-3, 0, 4, 7), (-8, -5, -1, 4), (-7, -3, 0, 4), (0, 4, 7, 14)],
+]
+
+
 def piano_notes(duration, rng):
-    """Voice a repeating four-chord phrase with sparse upper notes."""
-    root = int(rng.choice([48, 50, 53, 55]))
-    beat = rng.uniform(0.76, 0.89)
-    voicings = [(0, 4, 7, 11), (-3, 0, 4, 7), (-7, -3, 0, 4), (-5, 0, 2, 7)]
+    """Improvise a fresh solo piano score with random key, harmony, tempo, and melody."""
+    root = int(rng.choice([45, 46, 48, 50, 51, 53, 55, 56, 58]))
+    beat = float(rng.uniform(0.70, 0.92))
+    voicings = PROGRESSIONS[int(rng.integers(len(PROGRESSIONS)))]
+    style_idx = int(rng.integers(5))
+    pentatonic_lifts = [12, 14, 16, 19, 21]
     notes = []
-    for bar in range(int(duration / (4 * beat)) + 1):
+
+    bars = int(duration / (4 * beat)) + 2
+    for bar in range(bars):
         bass, third, fifth, top = voicings[bar % 4]
-        phrase = [
-            (0, bass - 12, 0.34),
-            (0.52, fifth, 0.255),
-            (1.03, third, 0.275),
-            (2.03, top + 12, 0.29),
-            (3.05, fifth + 12, 0.21),
-        ]
-        if bar % 4 == 3:
+        crown = int(rng.choice([top + 12, fifth + 12, third + 12, pentatonic_lifts[int(rng.integers(len(pentatonic_lifts)))]]))
+
+        if style_idx == 0:
+            # Lyrical rising arpeggio with singing top note
+            phrase = [
+                (0.00, bass - 12, 0.33),
+                (0.50, fifth, 0.245),
+                (1.02, third, 0.265),
+                (2.00, crown, 0.295),
+                (3.02, fifth + 12 if rng.random() < 0.6 else third + 12, 0.215),
+            ]
+        elif style_idx == 1:
+            # Flowing pendulum broken chord
+            phrase = [
+                (0.00, bass - 12, 0.32),
+                (0.66, third, 0.235),
+                (1.33, fifth, 0.25),
+                (2.00, crown, 0.285),
+                (2.68, fifth, 0.21),
+                (3.34, top, 0.225),
+            ]
+        elif style_idx == 2:
+            # Warm nocturne dyads + cantabile upper line
+            phrase = [
+                (0.00, bass - 12, 0.31),
+                (0.05, third, 0.22),
+                (1.25, fifth, 0.24),
+                (2.10, crown, 0.30),
+                (2.95, top + 12, 0.23),
+                (3.52, third + 12, 0.195),
+            ]
+        elif style_idx == 3:
+            # Satie-like contemplative rubato
+            phrase = [
+                (0.00, bass - 12, 0.33),
+                (0.88, third, 0.25),
+                (0.91, fifth, 0.22),
+                (2.18, crown, 0.29),
+                (3.15, bass, 0.205),
+            ]
+        else:
+            # Gentle 6-note atelier study
+            phrase = [
+                (0.00, bass - 12, 0.315),
+                (0.52, bass, 0.22),
+                (1.04, third, 0.25),
+                (1.56, fifth, 0.245),
+                (2.24, crown, 0.29),
+                (3.12, top, 0.215),
+            ]
+
+        if bar % 4 == 3 and len(phrase) > 4 and rng.random() < 0.7:
             phrase.pop()
+        if rng.random() < 0.35:
+            # Occasional delicate upper passing grace note
+            grace_pitch = int(rng.choice([top + 12, fifth + 12, third + 24]))
+            phrase.append((float(rng.uniform(2.45, 3.65)), grace_pitch, 0.185))
+
+        swell = 0.90 + 0.14 * np.sin(np.pi * ((bar % 4) + 0.5) / 4.0)
         for offset, interval, velocity in phrase:
-            start = 0.06 + (4 * bar + offset) * beat + rng.uniform(0, 0.028)
+            start = 0.06 + (4 * bar + offset) * beat + float(rng.uniform(0.0, 0.032))
+            if start >= duration:
+                continue
             notes.append(
                 (
                     start,
-                    440 * 2 ** ((root + interval - 69) / 12),
-                    velocity * rng.uniform(0.82, 1),
+                    440.0 * 2.0 ** ((root + interval - 69) / 12.0),
+                    velocity * swell * float(rng.uniform(0.82, 1.02)),
                 )
             )
     return notes
 
 
-def piano_block(t, notes, duration):
+def piano_block(t, notes, duration, brightness=1.0, detune=1.0011):
     stereo = np.zeros((len(t), 2))
     for start, frequency, velocity in notes:
         if start > t[-1] or start + 3.8 < t[0]:
@@ -86,9 +155,9 @@ def piano_block(t, notes, duration):
         age = t[section] - start
         phase = 2 * np.pi * frequency * age
         # Slightly detuned strings and quickly decaying upper partials.
-        body = np.sin(phase) + 0.34 * np.sin(phase * 1.0011)
-        body += 0.42 * np.exp(-1.5 * age) * np.sin(phase * 2.001)
-        body += 0.19 * np.exp(-2.6 * age) * np.sin(phase * 3.005)
+        body = np.sin(phase) + 0.34 * np.sin(phase * detune)
+        body += (0.40 * brightness) * np.exp(-1.5 * age) * np.sin(phase * 2.001)
+        body += (0.18 * brightness) * np.exp(-2.6 * age) * np.sin(phase * 3.005)
         note = (
             velocity
             * body
@@ -100,7 +169,9 @@ def piano_block(t, notes, duration):
     return stereo * np.clip((duration - t) / min(1.3, duration * 0.32), 0, 1)[:, None]
 
 
-def recorded_pencil(path, marks, positions, fps, width, rng, notes, opening_end):
+def recorded_pencil(
+    path, marks, positions, fps, width, rng, notes, opening_end, brightness=1.0, detune=1.0011
+):
     """Place natural-speed pencil phrases on the same timeline as the drawing."""
     rate, pcm = wavfile.read(
         Path(__file__).resolve().parents[1] / "assets/pencil-strokes.wav"
@@ -153,7 +224,7 @@ def recorded_pencil(path, marks, positions, fps, width, rng, notes, opening_end)
         for offset in range(0, total, RATE):
             stop = min(total, offset + RATE)
             t = np.arange(offset, stop) / RATE
-            stereo = piano_block(t, notes, duration)
+            stereo = piano_block(t, notes, duration, brightness=brightness, detune=detune)
             writing = np.zeros_like(stereo)
             while active < len(events) and events[active][1] <= offset:
                 active += 1
@@ -178,18 +249,42 @@ def recorded_pencil(path, marks, positions, fps, width, rng, notes, opening_end)
 
 
 def write_soundtrack(
-    path, marks, positions, fps, width, style, seed, with_piano, *, opening_end
+    path,
+    marks,
+    positions,
+    fps,
+    width,
+    style,
+    seed,
+    with_piano,
+    *,
+    opening_end,
+    music_seed=None,
 ):
-    """Score the whole film, with contact sounds on at most three slow opening marks."""
+    """Score the whole film, with contact sounds on at most three slow opening marks.
+
+    Piano accompaniment is freshly randomized on every call unless music_seed is explicitly passed.
+    """
     marks = marks[:OPENING_SOUND_MARKS]
-    rng, music_rng = [
-        np.random.default_rng(s) for s in np.random.SeedSequence(seed).spawn(2)
-    ]
+    rng = np.random.default_rng(np.random.SeedSequence(seed))
+    actual_music_seed = secrets.randbits(64) if music_seed is None else music_seed
+    music_rng = np.random.default_rng(actual_music_seed)
+    brightness = float(music_rng.uniform(0.88, 1.12))
+    detune = float(music_rng.uniform(1.0008, 1.0015))
     duration = len(positions) / fps
     notes = piano_notes(duration, music_rng) if with_piano else []
     if style == "colored-pencil":
         return recorded_pencil(
-            path, marks, positions, fps, width, rng, notes, opening_end
+            path,
+            marks,
+            positions,
+            fps,
+            width,
+            rng,
+            notes,
+            opening_end,
+            brightness=brightness,
+            detune=detune,
         )
     low, high, roughness, level, resonance = MATERIALS[style]
     band = butter(2, [low, high], btype="bandpass", fs=RATE, output="sos")
@@ -213,7 +308,7 @@ def write_soundtrack(
         for offset in range(0, total, RATE):
             boundary = np.arange(offset, min(offset + RATE, total) + 1) / RATE
             t = boundary[:-1]
-            stereo = piano_block(t, notes, duration)
+            stereo = piano_block(t, notes, duration, brightness=brightness, detune=detune)
             if marks and t[0] < opening_end:
                 pos = np.minimum(np.interp(boundary, frame_times, positions), len(marks))
                 index = np.minimum(pos.astype(int), len(marks) - 1)

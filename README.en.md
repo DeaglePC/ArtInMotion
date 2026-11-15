@@ -273,9 +273,9 @@ Default output runs **24 seconds at 30 fps**, `960px` on the long edge. Process 
 | Deepen transparent pigment or export HD | `--pigment 1.25`　·　`--size 1920` |
 | Start directly on blank paper or hide the tool | `--no-preview`　·　`--no-tool` |
 | Foley only, custom music file, or silent export | `--no-music`　·　`--music music.wav`　·　`--silent` |
-| Reproduce exact marks and synthesized piano | `--seed 42` (specify `--transition` to lock the opening too) |
+| Reproduce exact visual mark paths | `--seed 42` (specify `--transition` to lock the opening too; background piano is freshly improvised each render) |
 
-**Acoustic Design**: Films play synchronized tool foley only on the first three slow marks, cutting cleanly when the tool lifts. From the fourth mark to the final hold, a locally synthesized piano score carries the time-lapse. Colored pencil uses real pencil-on-paper recordings ([Freesound #431438 · CC0](https://freesound.org/people/zakkolar/sounds/431438/)).
+**Acoustic Design**: Films play gentle synchronized tool foley only on the first three slow marks, cutting cleanly when the tool lifts. From the fourth mark to the final hold, a locally improvised solo piano score carries the time-lapse—freshly randomized on every render across key, chord progression, tempo, and melodic figuration rather than repeating a fixed loop. Colored pencil uses real pencil-on-paper recordings ([Freesound #431438 · CC0](https://freesound.org/people/zakkolar/sounds/431438/)).
 
 ---
 

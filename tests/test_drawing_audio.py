@@ -18,7 +18,16 @@ class SoundtrackTest(unittest.TestCase):
         self.assertEqual(set(MATERIALS) | {"colored-pencil"}, set(STYLES))
         self.assertEqual(set(TOOL_MEDIUM), {medium.tool for medium in STYLES.values()})
 
-    def render(self, shape, style, music=False, opening_end=1.0, count=1, positions=(0, 0.5, 1, 1)):
+    def render(
+        self,
+        shape,
+        style,
+        music=False,
+        opening_end=1.0,
+        count=1,
+        positions=(0, 0.5, 1, 1),
+        music_seed=None,
+    ):
         mark = Mark([(10, 20), (50, 45)], (20, 40, 60), shape=shape)
         # First mark runs from zero to one second, then the tool rests.
         with tempfile.TemporaryDirectory() as tmp:
@@ -33,6 +42,7 @@ class SoundtrackTest(unittest.TestCase):
                 42,
                 music,
                 opening_end=opening_end,
+                music_seed=music_seed,
             )
             with wave.open(str(path)) as reader:
                 self.assertEqual(reader.getnframes(), len(positions) * RATE // 2)
@@ -54,9 +64,17 @@ class SoundtrackTest(unittest.TestCase):
         self.assertTrue(opening[: RATE // 4].any())
         self.assertFalse(opening[RATE // 4 :].any())
         self.assertFalse(self.render("line", "colored-pencil", opening_end=0).any())
-        mixed = self.render("line", "colored-pencil", True, opening_end=0.25)
-        piano = self.render("line", "colored-pencil", True, opening_end=0)
+        mixed = self.render("line", "colored-pencil", True, opening_end=0.25, music_seed=99)
+        piano = self.render("line", "colored-pencil", True, opening_end=0, music_seed=99)
         np.testing.assert_array_equal(mixed[RATE // 4 :], piano[RATE // 4 :])
+
+    def test_piano_is_randomized_each_time_by_default(self):
+        first = self.render("line", "colored-pencil", True, opening_end=0)
+        second = self.render("line", "colored-pencil", True, opening_end=0)
+        self.assertFalse(np.array_equal(first, second))
+        w1 = self.render("line", "watercolor", True, opening_end=0)
+        w2 = self.render("line", "watercolor", True, opening_end=0)
+        self.assertFalse(np.array_equal(w1, w2))
 
     def test_only_first_three_marks_have_sound_in_every_style(self):
         # Two preview frames, then five marks and a final hold.

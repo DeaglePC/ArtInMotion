@@ -442,8 +442,7 @@ input {
 .stage-viewport {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10.5;
-  background: #0d0c0b;
+  background: transparent;
   border-radius: var(--radius-md);
   overflow: hidden;
   display: flex;
@@ -453,9 +452,21 @@ input {
 
 .stage-viewport video {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;
   display: block;
+  border-radius: var(--radius-md);
+}
+
+.stage-viewport.is-portrait {
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.stage-viewport.is-portrait video {
+  width: auto;
+  max-width: 100%;
+  max-height: 500px;
 }
 
 .sound-invite {
@@ -955,22 +966,22 @@ input {
 }
 
 .atlas-media-stage {
-  aspect-ratio: 624 / 736;
-  max-height: 520px;
-  width: 100%;
-  background: #121110;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0 auto;
+  background: transparent;
   border-radius: var(--radius-md);
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .atlas-media-stage video,
 .atlas-media-stage img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  display: block;
+  max-height: 520px;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-md);
 }
 
 .chapter-panel {
@@ -1255,17 +1266,17 @@ input {
 }
 
 .trans-video-frame {
-  aspect-ratio: 16 / 10;
-  background: #0f0e0d;
+  width: 100%;
+  background: transparent;
   border-radius: var(--radius-md);
   overflow: hidden;
 }
 
 .trans-video-frame video {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;
   display: block;
+  border-radius: var(--radius-md);
 }
 
 .bespoke-ten-grid {
@@ -1594,11 +1605,11 @@ input {
 }
 
 .lightbox-video-box {
-  background: #090807;
+  background: transparent;
   border-radius: var(--radius-md);
   overflow: hidden;
+  width: min(100%, 66vh);
   aspect-ratio: 1 / 1;
-  max-height: 66vh;
   margin: 0 auto;
   display: flex;
   align-items: center;
