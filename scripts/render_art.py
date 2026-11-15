@@ -171,6 +171,7 @@ def arguments():
 def photo_plan(args):
     aliases = {medium.name: key for key, medium in STYLES.items()}
     aliases.update({f"{i:02}": key for i, key in enumerate(STYLES, 1)})
+    aliases.update({"可见笔触与厚涂": "impasto", "油画": "impasto", "3d油画": "impasto"})
     style = aliases.get(args.style, args.style or "impasto")
     if style not in STYLES:
         raise ValueError(f"unknown style {style!r}; use --list-styles or --plan")
@@ -302,7 +303,9 @@ def read_plan(path, args):
     return size, ground, tool, marks, None, composer
 
 
-def paint(canvas, mark, progress=1.0):
+def paint(canvas, mark, progress=1.0, transient=False):
+    if mark.shape == "impasto":
+        return mark.table.paint(canvas, mark, progress, transient=transient)
     if mark.shape in ("pour", "sweep", "rake", "groove"):
         return mark.table.paint(canvas, mark, progress)
     points = mark.points
@@ -376,6 +379,26 @@ def tool_overlay(frame, point, tool, color, ref_size=None):
             fill=(87, 78, 67, 255),
             width=max(1, round(3 * scale)),
         )
+    elif tool == "oil-brush":
+        bw = 7.4
+        # Hovering cast shadow over impasto canvas and board
+        poly(
+            [(0, -bw * 0.45), (17, -bw), (31, -bw * 0.85), (96, -bw * 0.55), (99, 0), (96, bw * 0.55), (31, bw * 0.85), (17, bw), (0, bw * 0.45)],
+            (20, 14, 10, 58),
+            3.4 * scale,
+            5.6 * scale,
+        )
+        # Cream hog-bristle tuft + wet oil pigment loaded at contact edge
+        poly([(0, -bw * 0.52), (17, -bw * 0.94), (17, bw * 0.94), (0, bw * 0.52)], (224, 211, 186))
+        poly([(0, -bw * 0.54), (8.5, -bw * 0.76), (8.5, bw * 0.76), (0, bw * 0.54)], color)
+        for off in (-0.52, -0.18, 0.18, 0.52):
+            draw.line([pt(1.5, bw * off * 0.7), pt(16.5, bw * off * 0.95)], fill=(58, 46, 36, 92), width=max(1, round(scale * 0.9)))
+        # Silver metal ferrule with specular band
+        poly([(17, -bw * 0.92), (31, -bw * 0.82), (31, bw * 0.82), (17, bw * 0.92)], (134, 138, 145))
+        poly([(17, -bw * 0.36), (31, -bw * 0.32), (31, bw * 0.12), (17, bw * 0.14)], (236, 239, 243))
+        # Varnished mahogany wooden handle
+        poly([(31, -bw * 0.80), (95, -bw * 0.52), (99, 0), (95, bw * 0.52), (31, bw * 0.80)], (118, 62, 35))
+        draw.line([pt(32, -bw * 0.42), pt(93, -bw * 0.25)], fill=(182, 114, 74, 210), width=max(1, round(scale * 1.2)))
     else:
         width = 6 if tool in ("brush", "chalk", "gouge") else 3.8
         barrel = color if tool in ("pencil", "chalk") else (92, 69, 57)
@@ -559,7 +582,9 @@ def movie(path, canvas, marks, tool, ground, texture, style, composer, args):
                     mark = marks[min(completed, len(marks) - 1)]
                     if completed < len(marks):
                         fraction = pos - completed
-                        tip = paint(frame, mark, min(1, fraction / CONTACT))
+                        tip = paint(
+                            frame, mark, min(1, fraction / CONTACT), transient=True
+                        )
                         if fraction > CONTACT and completed + 1 < len(marks):
                             dest = marks[completed + 1].points[0]
                             tip = np.array(tip) + (np.array(dest) - tip) * (
@@ -567,7 +592,9 @@ def movie(path, canvas, marks, tool, ground, texture, style, composer, args):
                             ) / (1 - CONTACT)
                     else:
                         endpoint = (
-                            mark.points[-1] if mark.shape == "line" else mark.points[0]
+                            mark.points[-1]
+                            if mark.shape in ("line", "impasto")
+                            else mark.points[0]
                         )
                         tip = np.asarray(endpoint, dtype=float)
                         if composer.mode != "none":
@@ -609,7 +636,7 @@ def main():
     )
     canvas = (
         marks[0].table.base.copy()
-        if style == "sand" and marks
+        if style in ("sand", "impasto") and marks
         else Image.new("RGB", size, ground)
     )
     texture = paper_texture(size, style, args.seed)

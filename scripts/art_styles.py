@@ -4,6 +4,7 @@ import math
 from dataclasses import dataclass
 
 import numpy as np
+from impasto_oil import ImpastoTable
 from PIL import Image
 from sand_table import SandTable
 from scipy import ndimage as nd
@@ -27,7 +28,7 @@ STYLES = {
     "watercolor": Medium("透明水彩与彩墨", "brush"),
     "gongbi": Medium("工笔设色与重彩", "brush"),
     "realist": Medium("细腻写实绘画", "brush"),
-    "impasto": Medium("可见笔触与厚涂", "brush", (139, 112, 91)),
+    "impasto": Medium("厚涂油画", "oil-brush", (139, 112, 91)),
     "pastel": Medium("干粉柔绘", "chalk", (221, 211, 195)),
     "crayon": Medium("蜡笔与油画棒", "chalk"),
     "flat": Medium("平涂插画与漫画", "brush"),
@@ -372,6 +373,8 @@ class Study:
             return self.geometry()
         if self.style == "sand":
             return SandTable(self.gray, self.rng, self.ground).plan()
+        if self.style == "impasto":
+            return ImpastoTable(self.src, self.rng, self.ground).plan()
         if self.style == "stipple":
             return self.particles()
         if self.style in ("flat", "block-print", "woodcut", "marbling"):

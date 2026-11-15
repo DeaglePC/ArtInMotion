@@ -184,3 +184,34 @@ class ExportTest(unittest.TestCase):
             self.assertEqual(im.getpixel((16, 16)), (30, 78, 119))
             self.assertEqual(im.getpixel((60, 36)), (255, 255, 255))
         self.assertNotEqual(self.run_cli(*opts, check=False).returncode, 0)
+
+    @unittest.skipUnless(shutil.which("ffmpeg"), "video check needs FFmpeg")
+    def test_impasto_oil_3d_relief_and_chinese_aliases(self):
+        photo = Image.new("RGB", (144, 144), (222, 220, 216))
+        draw = ImageDraw.Draw(photo)
+        draw.ellipse((34, 26, 110, 118), fill=(214, 156, 128))
+        photo.save(self.folder / "portrait.png")
+        self.run_cli(
+            "--input",
+            "portrait.png",
+            "--style",
+            "厚涂油画",
+            "--size",
+            "144",
+            "--no-board",
+            "--seconds",
+            "1.5",
+            "--fps",
+            "8",
+            "--silent",
+            "--image",
+            "oil.png",
+            "--video",
+            "oil.mp4",
+        )
+        with Image.open(self.folder / "oil.png") as im:
+            arr = np.asarray(im, dtype=float)
+            self.assertEqual(im.size, (144, 144))
+            # Impasto bristle ridges create tangible local luminance relief even on uniform source patches
+            self.assertGreater(arr[10:30, 10:30].std(), 3.0)
+

@@ -120,7 +120,7 @@ Watch the same portrait take shape across 14 distinct grounds and tools. **Click
   </tr>
   <tr>
     <td align="center" width="25%">
-      <a href="https://deaglepc.github.io/ArtInMotion/09-impasto.mp4"><img src="demo/musk-styles/previews/09-impasto.webp" width="196" alt="09 Impasto brushwork"><br><strong>09 · Impasto Brushwork</strong></a><br><sub><code>impasto</code> · Umber canvas</sub>
+      <a href="https://deaglepc.github.io/ArtInMotion/09-impasto.mp4"><img src="demo/musk-styles/previews/09-impasto.webp" width="196" alt="09 Impasto Oil Painting"><br><strong>09 · Impasto Oil Painting</strong></a><br><sub><code>impasto</code> · Umber linen canvas</sub>
     </td>
     <td align="center" width="25%">
       <a href="https://deaglepc.github.io/ArtInMotion/10-pastel.mp4"><img src="demo/musk-styles/previews/10-pastel.webp" width="196" alt="10 Soft pastel"><br><strong>10 · Soft Pastel</strong></a><br><sub><code>pastel</code> · Warm tinted paper</sub>
@@ -196,7 +196,7 @@ Both landscape and portrait aspect ratios are preserved, exporting stills as **P
 | **06** | Watercolor | `watercolor` | Brush · translucent glazes | **16** | Collage & Mosaic | `collage` | Placed polygonal cutouts |
 | **07** | Gongbi Rich Color | `gongbi` | Brush · color wash & line | **17** | Backlit Sand Art | `sand` | Overhead hand · warm lightbox |
 | **08** | Realist Painting | `realist` | Brush · progressive modeling | **18** | Fluid & Marbling | `marbling` | Stylus · combed flow veins |
-| **09** | Impasto Brushwork | `impasto` | Brush · raw umber ground | **19** | Geometric Facets | `facets` | Delaunay planar shards |
+| **09** | Impasto Oil Painting | `impasto` | Bristle brush · 3D relief on umber linen | **19** | Geometric Facets | `facets` | Delaunay planar shards |
 | **10** | Soft Pastel | `pastel` | Chalk · warm grey paper | **20** | Pixel & Character Art | `pixel` | Square color tiles |
 
 > See the [Technique Guide (`references/media.md`)](references/media.md) for adapting red chalk, silverpoint, screenprint, stained glass, or calligraphy.

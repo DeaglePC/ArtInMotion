@@ -119,7 +119,7 @@ python scripts/render_art.py --list-transitions
   </tr>
   <tr>
     <td align="center" width="25%">
-      <a href="https://deaglepc.github.io/ArtInMotion/09-impasto.mp4"><img src="demo/musk-styles/previews/09-impasto.webp" width="196" alt="09 可见笔触与厚涂"><br><strong>09 · 可见笔触与厚涂</strong></a><br><sub><code>impasto</code> · 熟褐画布</sub>
+      <a href="https://deaglepc.github.io/ArtInMotion/09-impasto.mp4"><img src="demo/musk-styles/previews/09-impasto.webp" width="196" alt="09 厚涂油画"><br><strong>09 · 厚涂油画</strong></a><br><sub><code>impasto</code> · 熟褐亚麻画布</sub>
     </td>
     <td align="center" width="25%">
       <a href="https://deaglepc.github.io/ArtInMotion/10-pastel.mp4"><img src="demo/musk-styles/previews/10-pastel.webp" width="196" alt="10 干粉柔绘"><br><strong>10 · 干粉柔绘</strong></a><br><sub><code>pastel</code> · 暖灰粉纸</sub>
@@ -195,7 +195,7 @@ python scripts/render_art.py --list-transitions
 | **06** | 透明水彩与彩墨 | `watercolor` | 水彩笔 · 半透明湿叠 | **16** | 拼贴与镶嵌 | `collage` | 剪纸色片 · 逐片贴合 |
 | **07** | 工笔设色与重彩 | `gongbi` | 设色毛笔 · 分区渲染勾勒 | **17** | 沙画与颗粒画 | `sand` | 背光手影 · 暖光灯箱推沙 |
 | **08** | 细腻写实绘画 | `realist` | 圆头画笔 · 渐进塑造体积 | **18** | 流体与拓纹 | `marbling` | 画针引流 · 水拓涡纹 |
-| **09** | 可见笔触与厚涂 | `impasto` | 油画笔 · 熟褐画布厚涂 | **19** | 几何切面 | `facets` | 三角与多边形切面构成 |
+| **09** | 厚涂油画 | `impasto` | 猪鬃油画笔 · 熟褐画布立体厚涂 | **19** | 几何切面 | `facets` | 三角与多边形切面构成 |
 | **10** | 干粉柔绘 | `pastel` | 色粉条 · 暖灰粉纸柔擦 | **20** | 像素与字符 | `pixel` | 方格色砖 · 秩序拼合 |
 
 > 更多媒材变体（如红垩、银尖笔、丝网版画、彩窗、十字绣等）的映射建议，详见 [画法选择指南 (`references/media.md`)](references/media.md)。

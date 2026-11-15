@@ -11,7 +11,7 @@ const PRESETS = [
   { no: "06", id: "watercolor", zh: "透明水彩与彩墨", en: "Watercolor", toolZh: "水彩圆笔", toolEn: "Wash Brush", ground: "#FBF8EE", family: "ink", hasFilm: false, noteZh: "半透明色层湿叠洇合，可通过 --pigment 加浓色泽。", noteEn: "Translucent wet-on-dry color glazes; deepen saturation with --pigment." },
   { no: "07", id: "gongbi", zh: "工笔设色与重彩", en: "Gongbi Rich Color", toolZh: "设色勾线", toolEn: "Gongbi Brush", ground: "#FBF8EE", family: "ink", hasFilm: true, noteZh: "分区多层罩染设色后再以细墨线严谨勾勒神态。", noteEn: "Structured mineral-style color washes anchored by fine contour ink lines." },
   { no: "08", id: "realist", zh: "细腻写实绘画", en: "Realist Painting", toolZh: "写实画笔", toolEn: "Round Brush", ground: "#FBF8EE", family: "paint", hasFilm: true, noteZh: "由大色块渐进收细笔触，细腻还原肤色冷暖与五官细节。", noteEn: "Progressively refines brush scale from broad underpainting to fine likeness." },
-  { no: "09", id: "impasto", zh: "可见笔触与厚涂", en: "Impasto Brushwork", toolZh: "厚涂油画笔", toolEn: "Bristle Brush", ground: "#8B705B", family: "paint", hasFilm: true, noteZh: "在熟褐色画布底上叠落饱满笔触，保留鲜明笔道走向。", noteEn: "Opaque directional strokes layered over a warm raw-umber ground." },
+  { no: "09", id: "impasto", zh: "厚涂油画", en: "Impasto Oil Painting", toolZh: "猪鬃油画笔", toolEn: "Bristle Oil Brush", ground: "#8B705B", family: "paint", hasFilm: true, noteZh: "亚麻熟褐底布上堆叠立体猪鬃油彩笔触，实时解算颜料脊线高光。", noteEn: "3D multi-bristle oil ridges with raking specular highlights over woven raw-umber linen." },
   { no: "10", id: "pastel", zh: "干粉柔绘", en: "Soft Pastel", toolZh: "色粉柔擦", toolEn: "Pastel Chalk", ground: "#DDD3C3", family: "paint", hasFilm: true, noteZh: "暖灰有色粉纸打底，粉质笔触柔和朦胧、温润透气。", noteEn: "Velvety chalk marks blended softly across warm tinted pastel paper." },
   { no: "11", id: "crayon", zh: "蜡笔与油画棒", en: "Crayon & Oil Pastel", toolZh: "油画棒", toolEn: "Oil Pastel", ground: "#FBF8EE", family: "paint", hasFilm: true, noteZh: "饱满蜡质粗笔保留纸面飞白孔隙，色彩浓郁灵动。", noteEn: "Rich waxy strokes that skip across paper tooth with vibrant energy." },
   { no: "12", id: "flat", zh: "平涂插画与漫画", en: "Flat Illustration", toolZh: "平涂墨线", toolEn: "Cel Brush", ground: "#FBF8EE", family: "paint", hasFilm: true, noteZh: "概括利落的色块分区铺设，最后压上清晰结构墨线。", noteEn: "Clean graphic color regions finished with crisp comic ink contours." },
@@ -588,7 +588,7 @@ function renderFilmsGrid() {
           </span>
         </div>
         <div class="film-thumb-wrap" data-open-film="${filmIdx}">
-          <img src="./demo/musk-styles/previews/${p.no}-${p.id}.webp" alt="${title}" loading="lazy">
+          <img src="./demo/musk-styles/previews/${p.no}-${p.id}.webp?v=5" alt="${title}" loading="lazy">
           <div class="film-play-veil">
             <span class="play-pill">${t("playFilmBtn")}</span>
             <span style="font-family:var(--font-mono);font-size:11px;color:#f2ede4;">24s · AAC</span>
@@ -668,7 +668,7 @@ function openLightbox(filmIdx) {
 
   titleEl.textContent = `${p.no} · ${state.lang === "zh" ? p.zh : p.en}`;
   metaEl.textContent = `--style ${p.id}  ·  24s Sound Film`;
-  video.src = `./demo/musk-styles/${p.no}-${p.id}.mp4?v=4`;
+  video.src = `./demo/musk-styles/${p.no}-${p.id}.mp4?v=5`;
   video.muted = false;
   modal.classList.add("open");
   video.play().catch(() => {});

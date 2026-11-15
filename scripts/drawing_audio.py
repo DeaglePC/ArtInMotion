@@ -46,6 +46,7 @@ TOOL_MEDIUM = {
     "piece": "collage",
     "tile": "pixel",
     "stylus": "marbling",
+    "oil-brush": "impasto",
 }
 
 
